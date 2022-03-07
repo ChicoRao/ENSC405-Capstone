@@ -1,4 +1,4 @@
-# CMPT405-Capstone
+# ENSC405-Capstone
 
 LocalHost is a project for our capstone.
 
