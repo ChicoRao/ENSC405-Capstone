@@ -1,3 +1,5 @@
 # CMPT405-Capstone
 
-Yoel testing commit
+LocalHost is a project for our capstone.
+
+We provide real time information of table statuses to restaurant's waiting staffs.
