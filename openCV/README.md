@@ -1,7 +1,11 @@
-Libaries needed:
+Libaries:
     OpenCV-contrib-python
     scikit-image
     imutils
+
+Run Instruction:
+Put photos and python file under the same directory
+In command prompt, use command "python imageComparison.py --first photo1.jpg --second photo2.jpg"
 
 
 

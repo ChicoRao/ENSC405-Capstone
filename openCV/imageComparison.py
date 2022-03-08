@@ -3,6 +3,7 @@ from skimage.metrics import structural_similarity as compare_ssim
 import argparse
 import imutils
 import cv2
+import os
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 # --First and --Sedond are the path of the two images
@@ -20,7 +21,8 @@ grayB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)
 
 # compute the Structural Similarity Index (SSIM) between the two
 # images, ensuring that the difference image is returned
-(score, diff) = compare_ssim(grayA, grayB, full=True)
+
+(score, diff) = compare_ssim(grayA, grayB, gaussian_weights=True, full=True, sigma=7)
 diff = (diff * 255).astype("uint8")
 print("SSIM: {}".format(score))
 
@@ -35,12 +37,23 @@ for c in cnts:
 # compute the bounding box of the contour and then draw the
 # bounding box on both input images to represent where the two
 # images differ
-    (x, y, w, h) = cv2.boundingRect(c)
-    cv2.rectangle(imageA, (x, y), (x + w, y + h), (0, 0, 255), 2)
-    cv2.rectangle(imageB, (x, y), (x + w, y + h), (0, 0, 255), 2)
+    area = cv2.contourArea(c)
+    if area < 3000:
+        continue
+    else:
+        (x, y, w, h) = cv2.boundingRect(c)
+        cv2.rectangle(imageA, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        cv2.rectangle(imageB, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+area = cv2.contourArea(c)
 # show the output images
 cv2.imshow("Original", imageA)
 cv2.imshow("Modified", imageB)
-cv2.imshow("Diff", diff)
-cv2.imshow("Thresh", thresh)
+#cv2.imshow("Diff", diff)
+#cv2.imshow("Thresh", thresh)
+cv2.waitKey(0)
+
+path = r'C:\Users\oneis\PycharmProjects\pythonProject'
+cv2.imwrite(os.path.join(path, 'pic1-result.jpg'), imageA)
+cv2.imwrite(os.path.join(path, 'pic2-result.jpg'), imageB)
 cv2.waitKey(0)
