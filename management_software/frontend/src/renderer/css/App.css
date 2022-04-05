@@ -1,7 +1,10 @@
 /*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
+ * Note: Can group common styling properties here
  */
+* {
+  margin: 0;
+}
+
 body {
   position: relative;
   color: white;
@@ -14,16 +17,18 @@ body {
   );
   font-family: sans-serif;
   overflow-y: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+}
+
+#app {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
 }
 
 button {
-  background-color: white;
+  background-color: pink;
   padding: 10px 20px;
   border-radius: 10px;
-  border: none;
+  border: 1px solid;
   appearance: none;
   font-size: 1.3rem;
   box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
@@ -54,9 +59,6 @@ a:hover {
   text-decoration: none;
 }
 
-.Hello {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+.right-content {
+  margin: 15px;
 }
