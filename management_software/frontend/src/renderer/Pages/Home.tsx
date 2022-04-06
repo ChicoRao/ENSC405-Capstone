@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/Home.css';
 
+//Layout tabs will soon be replaced with dynamic version
 export default function Home() {
     return (
       <div className="right-content">
