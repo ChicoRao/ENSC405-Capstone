@@ -3,11 +3,12 @@ from waterRefillDetection import somefunction
 from flask_socketio import SocketIO, emit
 from random import random
 from time import sleep
-
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
+cors = CORS(app)
 
 # app.register_blueprint(water)
 values = {
