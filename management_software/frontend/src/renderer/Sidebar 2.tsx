@@ -17,7 +17,7 @@ export default function Sidebar() {
       <SidebarContent>
         <Menu>
           <MenuItem>
-            Home
+            🤣 Home
             <Link to="/" />
           </MenuItem>
           <MenuItem>
@@ -29,7 +29,7 @@ export default function Sidebar() {
             <Link to="/reservations" />
           </MenuItem>
           <MenuItem>
-            Layout Editor
+            🤣 Layout Editor
             <Link to="/layouteditor" />
           </MenuItem>
         </Menu>
