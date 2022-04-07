@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from waterRefillDetection import run1
+from freeOccupiedDetection import freeOccupied
 from flask_socketio import SocketIO, emit
 from random import random
 from time import sleep
@@ -31,7 +32,7 @@ def test_connect():
     emit('after connect',  {'data':'Connected'})
 
 @socketio.on('Slider value changed')
-def value_changed(message):
+def value_changed(message, ):
     t0 = time.time()
     waterqueue = []
     while True:
@@ -46,12 +47,14 @@ def value_changed(message):
         
         water_level = run1(img)
         waterqueue.append(water_level)
-
         if (time.time() > t0+1):
             message = max(set(waterqueue), key=waterqueue.count)
             emit('update value', message, broadcast=True)
             waterqueue.clear()
             t0 = time.time()
+
+        message = freeOccupied(img)
+        emit('update value', message, broadcast=True)
 
             
 
@@ -70,6 +73,7 @@ def status():
 def message():
 
     return{"message": "Need Refill of Water"}
+
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
