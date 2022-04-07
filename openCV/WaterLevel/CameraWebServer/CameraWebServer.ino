@@ -19,8 +19,8 @@
 
 #include "camera_pins.h"
 
-const char* ssid = "Wifi Name";
-const char* password = "Wifi Password";
+const char* ssid = "122_wireless_ckn";
+const char* password = "joegilbert@122";
 
 void startCameraServer();
 

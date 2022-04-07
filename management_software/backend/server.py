@@ -1,9 +1,15 @@
 from flask import Flask, render_template
-from waterRefillDetection import somefunction
+from waterRefillDetection import run1
 from flask_socketio import SocketIO, emit
 from random import random
 from time import sleep
 from flask_cors import CORS
+import cv2
+import urllib.request
+import numpy as np
+import time
+url='http://10.0.0.102/capture?_cb=1649020515981'
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -26,11 +32,29 @@ def test_connect():
 
 @socketio.on('Slider value changed')
 def value_changed(message):
+    t0 = time.time()
+    waterqueue = []
     while True:
         # values[message['who']] = message['data']
-        sleep(2)
-        message = randomString()
-        emit('update value', message, broadcast=True)
+        # sleep(2)
+        # message = randomString()
+        # emit('update value', message, broadcast=True)
+        img_resp=urllib.request.urlopen(url)
+        imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
+        img = cv2.imdecode(imgnp,-1)
+        
+        
+        water_level = run1(img)
+        waterqueue.append(water_level)
+
+        if (time.time() > t0+1):
+            message = max(set(waterqueue), key=waterqueue.count)
+            emit('update value', message, broadcast=True)
+            waterqueue.clear()
+            t0 = time.time()
+
+            
+
 
 def randomString():
     #infinite loop of magical random numbers
@@ -44,7 +68,7 @@ def status():
 
 @app.route("/message")
 def message():
-    somefunction()
+
     return{"message": "Need Refill of Water"}
 
 if __name__ == "__main__":
