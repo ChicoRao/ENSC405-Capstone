@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from waterRefillDetection import run1
 from freeOccupiedDetection import freeOccupied
+from decision import decision
 from flask_socketio import SocketIO, emit
 from random import random
 from time import sleep
@@ -9,7 +10,7 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-url='http://10.0.0.102/capture?_cb=1649020515981'
+url='http://192.168.13.1/capture?_cb=1649362415215'
 
 
 app = Flask(__name__)
@@ -23,6 +24,16 @@ values = {
     'slider2': 0,
 }
 
+@app.route("/capture")
+def capture_photo():
+    img_resp=urllib.request.urlopen(url)
+    imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
+    img = cv2.imdecode(imgnp,-1)
+    img_name = "base_photo_.png"
+    cv2.imwrite(img_name, img)
+    print("{} written!".format(img_name))
+    return img
+
 @app.route("/")
 def index():
     return render_template('index.html', **values)
@@ -35,6 +46,9 @@ def test_connect():
 def value_changed(message, ):
     t0 = time.time()
     waterqueue = []
+    occupancyqueue = []
+    decisionqueue=[]
+    # calibration_img = capture_photo()
     while True:
         # values[message['who']] = message['data']
         # sleep(2)
@@ -44,19 +58,27 @@ def value_changed(message, ):
         imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
         img = cv2.imdecode(imgnp,-1)
         
-        
         water_level = run1(img)
         waterqueue.append(water_level)
+        occupancy = freeOccupied(img)
+        occupancyqueue.append(occupancy)
         if (time.time() > t0+1):
-            message = max(set(waterqueue), key=waterqueue.count)
-            emit('update value', message, broadcast=True)
+            people = max(set(occupancyqueue), key=occupancyqueue.count)
+            # emit('update value', people, broadcast=True)
+            decisionqueue.append(people)
+            print(people)
+            waterlevelavg = max(set(waterqueue), key=waterqueue.count)
+            # emit('update value', waterlevelavg, broadcast=True)
+            decisionqueue.append(waterlevelavg)
+            print(waterlevelavg)
+            occupancyqueue.clear()
             waterqueue.clear()
             t0 = time.time()
+        if len(decisionqueue) == 2:
+            decisionstatus = decision(decisionqueue)
+            emit('update value', decisionstatus, broadcast=True)
+            decisionqueue.clear()
 
-        message = freeOccupied(img)
-        emit('update value', message, broadcast=True)
-
-            
 
 
 def randomString():
