@@ -1,0 +1,38 @@
+#layout-tabs {
+    padding: 11px 0;
+    border-bottom: 1px solid rgb(0, 0, 0, 0.3);
+    align-items: left;
+}
+
+#layout-tabs li {
+    display: inline;
+    padding: 10px 20px;
+    /* border-bottom: 3px solid; */
+    margin: 1px;
+}
+
+#layout-tabs li.active-tab {
+    border-color: rgb(252, 150, 18);
+    color: rgb(252, 150, 18);
+    border-bottom: 3px solid;
+}
+
+#layout-tabs .edit-tab {
+    margin: 0 5px;
+    height: 10px;
+    width: 10px;
+}
+
+#layout-tabs .edit-tab:hover {
+    background-color: rgb(201, 201, 201);
+}
+
+#layout-tabs .read-tab {
+    display: none;
+}
+
+#layout-tabs li:hover {
+    border-color: rgb(252, 150, 18);
+    color: rgb(252, 150, 18);
+    border-bottom: 3px solid;
+}
