@@ -25,7 +25,7 @@ water = Blueprint('water',__name__)
 
 @water.route("/water")
 
-def waterLevel(imgcopy, bbox):
+def waterLevel(imgcopy, bbox,status):
     x1 = bbox[0]
     y1 = bbox[1]
     w1 = bbox[2]
@@ -33,7 +33,7 @@ def waterLevel(imgcopy, bbox):
     cv2.rectangle(imgcopy, (x1,y1), (w1,h1), (255,0,0), 2)
     crop_img = imgcopy[y1:h1, x1:w1]
     height, width = crop_img.shape[:2]
-    status = "Not Sure"
+    statuswater = status
     #cv2.imshow("crop_img", crop_img)
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
@@ -64,17 +64,17 @@ def waterLevel(imgcopy, bbox):
                 #cv2.rectangle(img_copy, (x1, y1), (x1 + w1, y1 +(h1-contour_height[1])), (0, 255, 0), 2)
                 #print("Full")
                 cv2.putText(imgcopy, "Full", (x1 + 10, contour_height - 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
-                status = "Full"
+                statuswater = "Full"
                 #cv2.imshow("Decision", imgcopy)
-                return (status)
+                return (statuswater)
             else:
                 #cv2.rectangle(img_copy, (x1, y1), (x1 + w1, y1 + (y1-contour_height[1])), (0, 0, 255), 2)
                 #print("Need Refill")
                 cv2.putText(imgcopy, "Low", (x1 + 10, contour_height - 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2)
-                status = "Low"
+                statuswater = "Low"
                 #cv2.imshow("Decision", imgcopy) 
-                return (status)
-    return (status)
+                return (statuswater)
+    return (statuswater)
     #await asyncio.sleep(1)
     
 
@@ -83,13 +83,13 @@ def run1(img):
     bbox, label, conf = cv.detect_common_objects(img)
     img = draw_bbox(img, bbox, label, conf)
     status = "No Cup"
-    cv2.imshow("image", img)
+    # cv2.imshow("image", img)
     if "cup" not in label:
         return status
     else: 
         for x in range(len(label)):
             if label[x] == 'cup' or label[x] == 'bottle' or label[x] == 'glass':
-                status = waterLevel(img,bbox[x])
+                status = waterLevel(img,bbox[x],status)
     return status
                 
     #cv2.destroyAllWindows()
