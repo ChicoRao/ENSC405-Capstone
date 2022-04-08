@@ -20,7 +20,14 @@ plate = Blueprint('plate',__name__)
 @plate.route("/plate")
 
 
-def dirtyPlate(img,bbox,status):
+def dirtyPlate():
+    img = img = cv2.imread('test.png')
+    img = img.object_detection
+    bbox, label, conf = cv.detect_common_objects(img)
+    img = draw_bbox(img, bbox, label, conf)
+
+    cv2.imshow('detection',img)
+
     x1 = bbox[0]
     y1 = bbox[1]
     w1 = bbox[2]
@@ -28,7 +35,7 @@ def dirtyPlate(img,bbox,status):
     cv.rectangle(img, (x1,y1), (w1,h1), (255,0,0), 2)
     crop_img = img[y1:h1, x1:w1]
 
-    statusPlate = status
+    statusPlate = "No Plate"
     #cv2.imshow("crop_img", crop_img)
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
@@ -48,17 +55,5 @@ def dirtyPlate(img,bbox,status):
     return (statusPlate)
 
 
-def run3(img):
 
-    bbox, label, conf = cv.detect_common_objects(img)
-    img = draw_bbox(img, bbox, label, conf)
-    status = "No Plate"
-    # cv2.imshow("image", img)
-    if "plate" not in label:
-        return status
-    else: 
-        for x in range(len(label)):
-            if label[x] == 'plate':
-                status = dirtyPlate(img,bbox[x],status)
-    return status
                 
