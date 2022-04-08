@@ -10,18 +10,58 @@ import argparse
 import imutils
 import cv2
 import os
+import threading
 
+
+
+from flask import Flask, render_template
+from waterRefillDetection import run1
+from freeOccupiedDetection import freeOccupied
+from decision import decision
+from flask_socketio import SocketIO, emit
+from random import random
+from time import sleep
+# @@ -9,7 +10,7 @@
+import urllib.request
+import numpy as np
+import time
+
+decisionQueue = []
 #reading image from file
 #does not work with cup 1
 #works with cup 2,3,4,5
 #kind of works with cup 11
 
-#img = cv2.imread(r'C:\Users\<username>\Desktop\ENSC405-Capstone\openCV\WaterLevel') #might need to change the path
+url='http://192.168.1.78//capture?_cb=1649362415215'
+
+@app.route("/capture")
+def capture_photo():
+    img_resp=urllib.request.urlopen(url)
+    imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
+    img_base = cv2.imdecode(imgnp,-1)
+    img_name = "base_photo_.png"
+    cv2.imwrite(img_name, img_base)
+    print("{} written!".format(img_name))
+    return img_base
+
+
+def capture_photo_for_detection():
+    threading.Timer(20.0, capture_photo_for_detection).start()
+    img_resp=urllib.request.urlopen(url)
+    imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
+    img_detection = cv2.imdecode(imgnp,-1)
+    img_name = "detection.png"
+    cv2.imwrite(img_name, img_detection)
+    print("{} written!".format(img_name))
+    return img_detection
+
 
 #empty table photo which should take at the time first setup LocalHost
-imageA = cv2.imread(r'C:\Users\Irene\Desktop\405 OpenCV\ENSC405-Capstone\openCV\Detection of empty plate\pic7_esp32cam.jpg') #might need to change the path
+# imageA = cv2.imread(r'pic7_esp32cam.jpg')              #might need to change the path
+
 #photo for comparing to empty table photo
-imageB = cv2.imread(r'C:\Users\Irene\Desktop\405 OpenCV\ENSC405-Capstone\openCV\Detection of empty plate\pic5_esp32cam.jpg') #might need to change the path
+
+# imageB = cv2.imread(r'pic5_esp32cam.jpg')             #might need to change the path
 
 #detecting the objects in the image
 bbox, label, conf = cv.detect_common_objects(imageA)
@@ -69,12 +109,10 @@ cv2.imshow("Modified", imageB)
 #cv2.imshow("Diff", diff)
 #cv2.imshow("Thresh", thresh)
 
-if score >= 0.98: #check if table is clean and available
-    print("available")
-elif label[0] == 'person' or label[1] == 'person': #check if detected human
-    print("not available")   
-else: #check if the table need to clean
-    print("need to clean")
+if label[0] == 'person' or label[1] == 'person': #check if detected person
+    decisionQueue[0] = "Occupied"
+else: #if no person
+    decisionQueue[0] = "Free"
 
 
 cv2.waitKey(0)
