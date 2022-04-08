@@ -39,9 +39,9 @@ def capture_photo():
     img_resp=urllib.request.urlopen(url)
     imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
     img_base = cv2.imdecode(imgnp,-1)
-    img_name = "base_photo_.png"
-    cv2.imwrite(img_name, img_base)
-    print("{} written!".format(img_name))
+    img_name_base = "base_photo_.png"
+    cv2.imwrite(img_name_base, img_base)
+    print("{} written!".format(img_name_base))
     return img_base
 
 
@@ -50,18 +50,18 @@ def capture_photo_for_detection():
     img_resp=urllib.request.urlopen(url)
     imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
     img_detection = cv2.imdecode(imgnp,-1)
-    img_name = "detection.png"
-    cv2.imwrite(img_name, img_detection)
-    print("{} written!".format(img_name))
+    img_name_detection = "detection.png"
+    cv2.imwrite(img_name_detection, img_detection)
+    print("{} written!".format(img_name_detection))
     return img_detection
 
 
 #empty table photo which should take at the time first setup LocalHost
-# imageA = cv2.imread(r'pic7_esp32cam.jpg')              #might need to change the path
+imageA = cv2.imread(r'img_base.jpg')              #might need to change the path
 
 #photo for comparing to empty table photo
 
-# imageB = cv2.imread(r'pic5_esp32cam.jpg')             #might need to change the path
+imageB = cv2.imread(r'img_detection.jpg')             #might need to change the path
 
 #detecting the objects in the image
 bbox, label, conf = cv.detect_common_objects(imageA)
@@ -109,10 +109,12 @@ cv2.imshow("Modified", imageB)
 #cv2.imshow("Diff", diff)
 #cv2.imshow("Thresh", thresh)
 
-if label[0] == 'person' or label[1] == 'person': #check if detected person
-    decisionQueue[0] = "Occupied"
-else: #if no person
-    decisionQueue[0] = "Free"
+for i in label:
+
+    if label[i] == 'person':
+        decisionQueue[0] = "Occupied"
+    else: #if no person
+        decisionQueue[0] = "Free"
 
 
 cv2.waitKey(0)
