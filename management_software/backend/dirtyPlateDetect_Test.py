@@ -12,12 +12,7 @@ import math
 import asyncio
 import time 
 
-url='http://10.0.0.102/capture?_cb=1649020515981'
-im=None
 
-plate = Blueprint('plate',__name__)
-
-@plate.route("/plate")
 
 
 def dirtyPlate():
