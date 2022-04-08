@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import closeLogo from '../../../assets/icons/close.png';
+import React, { useState } from 'react';
+import Tab from './Tab';
 import '../css/Tabs.css';
 
 //Hardcoded array of tabs for now
@@ -11,41 +11,36 @@ interface Tabs {
 	isEdit: boolean;
 }
 
-const Tabs: FC<Tabs> = (props): JSX.Element => {
-	const [activeTab, setActiveTab] = useState(tabs[0]);
+const Tabs = ({ isEdit }: Tabs): JSX.Element => {
+	const [tabsList, updateTabsList] = useState(tabs);
+	const [activeTab, setActiveTab] = useState(tabsList[0]);
 
 	const handleTabs = (index: number) => {
-			setActiveTab(tabs[index]);
+		if (index < tabsList.length)
+			setActiveTab(tabsList[index]);
 	};
 
-	//When we dynamically create tabs
-	//Will move className check & onClick to create dynamically too
-	//Close/Remove button will dynamically alter tabs array
+	const removeTabs = (index: number) => {
+		let tempList = tabsList;
+		updateTabsList(tabsList.filter(tab => tab !== tempList[index]))
+	};
+
+	//Dynamically creating all tabs
+	//Need to somehow store the list though
+	//To prevent deleted tab from reappearing
 	return (
 		<ul id="layout-tabs">
-			<li
-				value={tabs[0]}
-				className={activeTab === tabs[0] ? "active-tab" : ""}
-				onClick={() => handleTabs(0)}
-			>
-				<span>
-				<img className={props.isEdit === false ? "read-tab" : "edit-tab"} src={closeLogo} />
-				</span>
-				Main Dining
-			</li>
-			<li
-				value={tabs[1]}
-				className={activeTab === tabs[1] ? "active-tab" : ""}
-				onClick={() => handleTabs(1)}
-			>
-				<span>
-					<img className={props.isEdit === false ? "read-tab" : "edit-tab"} src={closeLogo} />
-				</span>
-				Outdoor
-			</li>
-			<li className={props.isEdit === false ? "read-tab" : ""}>
-				Add layout
-			</li>
+			{tabsList.map((tab, index) => {
+				return (
+					<Tab 
+						name={tab} 
+						index={index} 
+						isActive={tabsList[index] === activeTab} 
+						isEdit={isEdit} 
+						onClickSelect={handleTabs} 
+						onClickRemove={removeTabs} />
+				);
+			})}
 		</ul>
 	);
 };
