@@ -12,7 +12,7 @@ import math
 import asyncio
 import time 
 
-url='http://10.0.0.102/capture?_cb=1649020515981'
+
 im=None
 
 plate = Blueprint('plate',__name__)
@@ -25,7 +25,7 @@ def dirtyPlate(img,bbox,status):
     y1 = bbox[1]
     w1 = bbox[2]
     h1 = bbox[3]
-    cv.rectangle(img, (x1,y1), (w1,h1), (255,0,0), 2)
+    cv2.rectangle(img, (x1,y1), (w1,h1), (255,0,0), 2)
     crop_img = img[y1:h1, x1:w1]
 
     statusPlate = status
@@ -36,7 +36,7 @@ def dirtyPlate(img,bbox,status):
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray,(7,7),0)
-        ret, thresh = cv.threshold(blurred, 127, 255, 0)
+        ret, thresh = cv2.threshold(blurred, 127, 255, 0)
         #cv2.imshow("edges", edges)
         contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         #print(len(hierarchy[0]))
@@ -61,4 +61,3 @@ def run2(img):
             if label[x] == 'bowl':
                 status = dirtyPlate(img,bbox[x],status)
     return status
-                
