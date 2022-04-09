@@ -36,12 +36,9 @@ def dirtyPlate(img,bbox,status):
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray,(7,7),0)
-        (T, threshInv) = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY_INV)
-        horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (w1,1))
-        horizontal_mask = cv2.morphologyEx(threshInv, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
-        edges = cv2.Canny(horizontal_mask,60, 80)
+        ret, thresh = cv.threshold(blurred, 127, 255, 0)
         #cv2.imshow("edges", edges)
-        contours, hierarchy = cv2.findContours(edges,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         #print(len(hierarchy[0]))
         number_of_contours = len(hierarchy[0])
         if number_of_contours >= 4:
@@ -55,13 +52,13 @@ def run2(img):
 
     bbox, label, conf = cv.detect_common_objects(img)
     img = draw_bbox(img, bbox, label, conf)
-    status = "No Plate"
+    status = "No Bowl"
     # cv2.imshow("image", img)
-    if "plate" not in label:
+    if "bowl" not in label:
         return status
     else: 
         for x in range(len(label)):
-            if label[x] == 'plate':
+            if label[x] == 'bowl':
                 status = dirtyPlate(img,bbox[x],status)
     return status
                 

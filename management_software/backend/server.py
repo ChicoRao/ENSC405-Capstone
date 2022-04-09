@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from waterRefillDetection import run1
+from dirtyPlateDetection import run2
 from freeOccupiedDetection import freeOccupied
 from decision import decision
 from flask_socketio import SocketIO, emit
@@ -46,6 +47,7 @@ def test_connect():
 def value_changed(message, ):
     t0 = time.time()
     waterqueue = []
+    platequeue = []
     occupancyqueue = []
     decisionqueue=[]
     # calibration_img = capture_photo()
@@ -57,9 +59,11 @@ def value_changed(message, ):
         img_resp=urllib.request.urlopen(url)
         imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
         img = cv2.imdecode(imgnp,-1)
-        
         water_level = run1(img)
         waterqueue.append(water_level)
+        plateStatus  = run2(img)
+        platequeue.append(plateStatus)
+        
         occupancy = freeOccupied(img)
         occupancyqueue.append(occupancy)
         if (time.time() > t0+1):
@@ -71,10 +75,14 @@ def value_changed(message, ):
             # emit('update value', waterlevelavg, broadcast=True)
             decisionqueue.append(waterlevelavg)
             print(waterlevelavg)
+            plate_stat = max(set(platequeue), key=platequeue.count)
+            decisionqueue.append(plate_stat)
+            print(plate_stat)
             occupancyqueue.clear()
             waterqueue.clear()
+            platequeue.clear()
             t0 = time.time()
-        if len(decisionqueue) == 2:
+        if len(decisionqueue) == 3:
             decisionstatus = decision(decisionqueue)
             emit('update value', decisionstatus, broadcast=True)
             decisionqueue.clear()
