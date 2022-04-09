@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Tabs from '../Component/Tabs';
 import '../css/Home.css';
 
 //Layout tabs will soon be replaced with dynamic version
@@ -14,20 +15,12 @@ export default function Home() {
 
   return (
     <div className="right-content">
-      <ul id="layout-tabs">
-        <li>
-          Main Dining
-        </li>
-        <li>
-          Outdoor
-        </li>
-      </ul>
+      <Tabs isEdit={false} />
       <div id="layout">
         <div id="layout-legend-content">
           <button onClick={testFn}>
             WATER REFILL TEST
           </button>
-
           <div id="layout-legend">
             <ul id="layout-legend-elements">
               <li>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Tabs from '../Component/Tabs';
 
 /*
 -Tabs re-use
@@ -9,6 +10,7 @@ import React from 'react';
 export default function LayoutEditor() {
   return (
     <div className="right-content">
+      <Tabs isEdit={true} />
     </div>
   );
 };
