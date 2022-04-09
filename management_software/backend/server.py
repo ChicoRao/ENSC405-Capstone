@@ -60,12 +60,11 @@ def value_changed(message, ):
         imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
         img = cv2.imdecode(imgnp,-1)
         water_level = run1(img)
-        waterqueue.append(water_level)
-        plateStatus  = run2(img)
-        platequeue.append(plateStatus)
-        
+        waterqueue.append(water_level) 
         occupancy = freeOccupied(img)
         occupancyqueue.append(occupancy)
+        plateStatus  = run2(img)
+        platequeue.append(plateStatus)
         if (time.time() > t0+1):
             people = max(set(occupancyqueue), key=occupancyqueue.count)
             # emit('update value', people, broadcast=True)
