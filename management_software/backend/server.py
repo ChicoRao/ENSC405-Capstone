@@ -15,7 +15,7 @@ url='http://192.168.13.1/capture?_cb=1649362415215'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 cors = CORS(app)
 
 # app.register_blueprint(water)
@@ -50,6 +50,7 @@ def value_changed(message, ):
     decisionqueue=[]
     # calibration_img = capture_photo()
     while True:
+        emit('update button pressed', "Updated")
         # values[message['who']] = message['data']
         # sleep(2)
         # message = randomString()

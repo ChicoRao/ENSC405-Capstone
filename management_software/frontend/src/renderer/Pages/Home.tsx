@@ -3,8 +3,12 @@ import axios from 'axios';
 import Tabs from '../Component/Tabs';
 import '../css/Home.css';
 
+interface Home {
+  update: () => void
+}
+
 //Layout tabs will soon be replaced with dynamic version
-export default function Home() {
+export default function Home({ update }: Home) {
   const url = "http://127.0.0.1:5000/message";
 
   function testFn() {
@@ -18,8 +22,13 @@ export default function Home() {
       <Tabs isEdit={false} />
       <div id="layout">
         <div id="layout-legend-content">
-          <button onClick={testFn}>
+          <button id="triggerr" onClick={testFn}>
             WATER REFILL TEST
+          </button>
+          <button 
+            id="trigger" 
+            onClick={update}>
+            Update
           </button>
           <div id="layout-legend">
             <ul id="layout-legend-elements">
