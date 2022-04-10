@@ -81,6 +81,7 @@ def waterLevel(imgcopy, bbox,status):
 def run1(img):
 
     bbox, label, conf = cv.detect_common_objects(img)
+    print(bbox)
     img = draw_bbox(img, bbox, label, conf)
     status = "No Cup"
     # cv2.imshow("image", img)
