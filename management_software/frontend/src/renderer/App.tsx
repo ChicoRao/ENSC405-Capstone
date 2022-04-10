@@ -24,11 +24,15 @@ export default function App() {
 		console.log(msg);
 	})
 
-	// An event handler for a change of value 
-	const update = () => {
+	const initiateUpdate = () => {
 		socket.emit('Slider value changed', {
 			data: "Please update"
 		});
+	}
+
+	// An event handler for a change of value 
+	const update = () => {
+		setInterval(initiateUpdate, 2000);
 	}
 
   return (
