@@ -52,7 +52,6 @@ def value_changed(message, ):
     decisionqueue=[]
     # calibration_img = capture_photo()
     while True:
-        emit('update button pressed', "Updated")
         # values[message['who']] = message['data']
         # sleep(2)
         # message = randomString()

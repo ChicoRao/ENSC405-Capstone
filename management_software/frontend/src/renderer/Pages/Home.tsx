@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Tabs from '../Component/Tabs';
+import Layout from '../Component/Layout';
 import '../css/Home.css';
 
 interface Home {
@@ -55,7 +56,9 @@ export default function Home({ update }: Home) {
             </ul>
           </div>
         </div>
-        <div id="layout-content"></div>
+        <div id="layout-content">
+          <Layout />
+        </div>
       </div>
     </div>
   );
