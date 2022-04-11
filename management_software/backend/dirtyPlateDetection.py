@@ -41,7 +41,7 @@ def dirtyPlate(img,bbox,status):
         contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         #print(len(hierarchy[0]))
         number_of_contours = len(hierarchy[0])
-        if number_of_contours >= 5:
+        if number_of_contours >= 3:
             statusPlate = "Dirty"
         else:
             statusPlate = "Clean"
