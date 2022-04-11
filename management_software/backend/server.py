@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from waterRefillDetection import run1
 from dirtyPlateDetection import run2
 from freeOccupiedDetection import freeOccupied
+from colours import colours
 from decision import decision
 from flask_socketio import SocketIO, emit
 from random import random
@@ -11,7 +12,7 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-url='http://192.168.13.1/capture?_cb=1649362415215'
+url='http://10.0.0.102/capture?_cb=1649553244632'
 
 
 app = Flask(__name__)
@@ -50,7 +51,7 @@ def value_changed(message, ):
     platequeue = []
     occupancyqueue = []
     decisionqueue=[]
-    # calibration_img = capture_photo()
+    calibration_img = capture_photo()
     while True:
         # values[message['who']] = message['data']
         # sleep(2)
@@ -59,32 +60,36 @@ def value_changed(message, ):
         img_resp=urllib.request.urlopen(url)
         imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
         img = cv2.imdecode(imgnp,-1)
-        water_level = run1(img)
-        waterqueue.append(water_level) 
-        occupancy = freeOccupied(img)
-        occupancyqueue.append(occupancy)
-        plateStatus  = run2(img)
-        platequeue.append(plateStatus)
-        if (time.time() > t0+1):
-            people = max(set(occupancyqueue), key=occupancyqueue.count)
-            # emit('update value', people, broadcast=True)
-            decisionqueue.append(people)
-            print(people)
-            waterlevelavg = max(set(waterqueue), key=waterqueue.count)
-            # emit('update value', waterlevelavg, broadcast=True)
-            decisionqueue.append(waterlevelavg)
-            print(waterlevelavg)
-            plate_stat = max(set(platequeue), key=platequeue.count)
-            decisionqueue.append(plate_stat)
-            print(plate_stat)
-            occupancyqueue.clear()
-            waterqueue.clear()
-            platequeue.clear()
-            t0 = time.time()
-        if len(decisionqueue) == 3:
-            decisionstatus = decision(decisionqueue)
-            emit('update value', decisionstatus, broadcast=True)
-            decisionqueue.clear()
+        # print(img)
+        if not img.all():
+            water_level = run1(img)
+            waterqueue.append(water_level) 
+            occupancy = freeOccupied(img)
+            occupancyqueue.append(occupancy)
+            plateStatus  = run2(img)
+            platequeue.append(plateStatus)
+            if (time.time() > t0+5):
+                people = max(set(occupancyqueue), key=occupancyqueue.count)
+                # emit('update value', people, broadcast=True)
+                decisionqueue.append(people)
+                print(people)
+                waterlevelavg = max(set(waterqueue), key=waterqueue.count)
+                # emit('update value', waterlevelavg, broadcast=True)
+                decisionqueue.append(waterlevelavg)
+                print(waterlevelavg)
+                plate_stat = max(set(platequeue), key=platequeue.count)
+                decisionqueue.append(plate_stat)
+                print(plate_stat)
+                occupancyqueue.clear()
+                waterqueue.clear()
+                platequeue.clear()
+                t0 = time.time()
+                if len(decisionqueue) == 3:
+                    print(decisionqueue)
+                    decision_status = decision(decisionqueue)
+                    objectcolours = colours(decision_status)
+                    emit('update value', objectcolours, broadcast=True)
+                    decisionqueue.clear()
 
 
 

@@ -20,19 +20,17 @@ export default function App() {
 		console.log(msg);
 	});
 
-	socket.on("update button pressed", (msg: string) => {
+	socket.on("update value", (msg: Object) => {
+		// let result = JSON.parse(msg)
 		console.log(msg);
-	})
 
-	const initiateUpdate = () => {
-		socket.emit('Slider value changed', {
-			data: "Please update"
-		});
-	}
+	})
 
 	// An event handler for a change of value 
 	const update = () => {
-		setInterval(initiateUpdate, 2000);
+		socket.emit('Slider value changed', {
+			data: "Please update"
+		});
 	}
 
   return (
