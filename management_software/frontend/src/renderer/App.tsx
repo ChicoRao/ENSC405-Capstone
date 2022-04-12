@@ -11,30 +11,58 @@ import './css/App.css';
 
 export default function App() {
 	let socket = io('http://localhost:5000');
+	const [socketConnected, setSocketConnected] = useState(false);
 	const [layoutInfo, updateLayoutInfo] = useState("white");
 
-	socket.on("connect", () => {
-		console.log(socket.id);
-	});
-
-	socket.on("after connect", (msg: Object) => {
-		console.log(msg);
-	});
+	useEffect(() => {
+        // console.log("Component update")
+        // console.log("Socket connected is: ", socketConnected);
+        if (!socketConnected) {
+            socket.on("connect", () => {
+                console.log(socket.id);
+            });
+            socket.on("after connect", (msg: Object) => {
+                console.log(msg);
+                setSocketConnected(true);
+            })
+        }
+        return () => {
+            socket.off("after connect", () => {
+                setSocketConnected(true);
+            }) 
+        }
+    })
 
 	socket.on("update value", (msg: Object) => {
 		let colour = msg.colour;
 		updateLayoutInfo(colour);
-		console.log("COLOUR: ", layoutInfo);
-		console.log("Layout type: ", typeof(layoutInfo));
+		// console.log("COLOUR: ", layoutInfo);
 	})
 
-	// An event handler for a change of value 
-	const update = () => {
-		console.log("Start Update...")
-		socket.emit('Slider value changed', {
-			data: "Please update"
-		});
-	}
+    // An event handler for a change of value 
+    const update = () => {
+        console.log("Start Update...")
+        socket.emit('Slider value changed', {
+            data: "Please update"
+        });
+    }
+
+    socket.on("connect_error", () => {
+        socket.connect();
+        setSocketConnected(true);
+    })
+
+    socket.on("disconnect", (reason) => {
+        console.error("Disconnected due to: ", reason);
+        setSocketConnected(false);
+        if (reason === "io server disconnect") {
+            socket.connect();
+            socket.on("after connect", (msg: Object) => {
+                console.log(msg);
+                setSocketConnected(true);
+            })
+        }
+    })
 
   return (
     <Router>

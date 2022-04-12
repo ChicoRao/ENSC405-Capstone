@@ -16,7 +16,7 @@ import asyncio
 #the arduino software.
 #rightclick the image and open in a new tab for a still image. Doesn't work with just the IP address
 #Let me know (Angus) if you have any issues
-url='http://10.0.0.102/capture?_cb=1649020515981'
+url='http://10.0.0.102/capture?_cb=1649748796132'
 im=None
  
 
@@ -28,42 +28,44 @@ async def waterLevel(imgcopy, bbox):
     cv2.rectangle(imgcopy, (x1,y1), (w1,h1), (255,0,0), 2)
     crop_img = imgcopy[y1:h1, x1:w1]
     height, width = crop_img.shape[:2]
-    #cv2.imshow("crop_img", crop_img)
+    # cv2.imshow("crop_img", crop_img)
+    # print(crop_img)
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray,(7,7),0)
-        (T, threshInv) = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY_INV)
+        (T, threshInv) = cv2.threshold(blurred, 140, 255, cv2.THRESH_BINARY_INV)
         horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (w1,1))
         horizontal_mask = cv2.morphologyEx(threshInv, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
         edges = cv2.Canny(horizontal_mask,60, 80)
-        #cv2.imshow("edges", edges)
+        cv2.imshow("edges", edges)
         contours, hierarchy = cv2.findContours(edges,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        #print(len(hierarchy[0]))
-        number_of_contours = len(hierarchy[0])
-        if number_of_contours >= 4:
-            #cv2.drawContours(img, contours, -1, (0, 255, 0), 2)
-            cropped_height = contours[number_of_contours-4][1][0][1]
-            contour_height = y1 + contours[number_of_contours-4][1][0][1]
-            contour_x2 = contours[number_of_contours-4][1][0][0] + x1
-            contour_x1 = contours[number_of_contours-4][0][0][0] + x1
-            start_point = (contour_x1,contour_height)
-            end_point = (contour_x2, contour_height)
-            imgcopy = cv2.line(imgcopy, start_point, end_point, (0, 255, 0), 2)
-            aspectRatio = (height - cropped_height)/ float(height)
+        # cv2.drawContours(imgcopy, contours, -1, (0, 255, 0), 2)
+        if( hierarchy is not None):
+            number_of_contours = len(hierarchy[0])
+            if number_of_contours >= 4:
+                #cv2.drawContours(img, contours, -1, (0, 255, 0), 2)
+                cropped_height = contours[number_of_contours-4][1][0][1]
+                contour_height = y1 + contours[number_of_contours-4][1][0][1]
+                contour_x2 = contours[number_of_contours-4][1][0][0] + x1
+                contour_x1 = contours[number_of_contours-4][0][0][0] + x1
+                start_point = (contour_x1,contour_height)
+                end_point = (contour_x2, contour_height)
+                imgcopy = cv2.line(imgcopy, start_point, end_point, (0, 255, 0), 2)
+                aspectRatio = (height - cropped_height)/ float(height)
 
-            #print(aspectRatio)
+                #print(aspectRatio)
 
-            #if water level is below 50%, the cup is low, other wise it doesnt need refill
-            if aspectRatio > 0.5:
-                #cv2.rectangle(img_copy, (x1, y1), (x1 + w1, y1 +(h1-contour_height[1])), (0, 255, 0), 2)
-                #print("Full")
-                cv2.putText(imgcopy, "Full", (x1 + 10, contour_height - 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
-                #cv2.imshow("Decision", imgcopy)
-            else:
-                #cv2.rectangle(img_copy, (x1, y1), (x1 + w1, y1 + (y1-contour_height[1])), (0, 0, 255), 2)
-                #print("Need Refill")
-                cv2.putText(imgcopy, "Low", (x1 + 10, contour_height - 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2)
-                #cv2.imshow("Decision", imgcopy) 
+                #if water level is below 50%, the cup is low, other wise it doesnt need refill
+                if aspectRatio > 0.5:
+                    #cv2.rectangle(img_copy, (x1, y1), (x1 + w1, y1 +(h1-contour_height[1])), (0, 255, 0), 2)
+                    #print("Full")
+                    cv2.putText(imgcopy, "Full", (x1 + 10, contour_height - 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
+                    #cv2.imshow("Decision", imgcopy)
+                else:
+                    #cv2.rectangle(img_copy, (x1, y1), (x1 + w1, y1 + (y1-contour_height[1])), (0, 0, 255), 2)
+                    #print("Need Refill")
+                    cv2.putText(imgcopy, "Low", (x1 + 10, contour_height - 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2)
+                    #cv2.imshow("Decision", imgcopy) 
     return (imgcopy)
     #await asyncio.sleep(1)
     
@@ -86,7 +88,7 @@ async def run1():
         
 
         
-        cv2.imshow('detection',img)
+        #cv2.imshow('detection',img)
         cv2.imshow('result',result)
         key=cv2.waitKey(5)
         if key==ord('q'):
