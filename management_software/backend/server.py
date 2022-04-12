@@ -12,7 +12,7 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-url='http://192.168.13.1/capture?_cb=1649711431746'
+url='http://10.0.0.102/capture?_cb=1649747186380'
 
 
 app = Flask(__name__)
