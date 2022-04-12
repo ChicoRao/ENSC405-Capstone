@@ -38,7 +38,7 @@ def waterLevel(imgcopy, bbox,status):
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray,(7,7),0)
-        (T, threshInv) = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY_INV)
+        (T, threshInv) = cv2.threshold(blurred, 150, 255, cv2.THRESH_BINARY_INV)
         horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (w1,1))
         horizontal_mask = cv2.morphologyEx(threshInv, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
         edges = cv2.Canny(horizontal_mask,60, 80)
