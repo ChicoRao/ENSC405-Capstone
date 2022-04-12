@@ -12,7 +12,7 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-url='http://10.0.0.102/capture?_cb=1649553244632'
+url='http://192.168.13.1/capture?_cb=1649711431746'
 
 
 app = Flask(__name__)
@@ -47,16 +47,25 @@ def test_connect():
 @socketio.on('Slider value changed')
 def value_changed(message, ):
     t0 = time.time()
+    t1 = time.time()
     waterqueue = []
     platequeue = []
     occupancyqueue = []
     decisionqueue=[]
     calibration_img = capture_photo()
+    i = 0
+    tempTest = [
+        {'status': "Available" , 'colour': "green"},
+        {'status': "Occupied" , 'colour': "blue"},
+        {'status': "Need refill" , 'colour': "red"}
+    ]
+    print("In here")
     while True:
-        # values[message['who']] = message['data']
-        # sleep(2)
-        # message = randomString()
-        # emit('update value', message, broadcast=True)
+        # if (time.time() > t1+5):
+        #     i = i%3
+        #     emit('update value', tempTest[i], broadcast=True)
+        #     t1 = time.time()
+        #     i += 1
         img_resp=urllib.request.urlopen(url)
         imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
         img = cv2.imdecode(imgnp,-1)
