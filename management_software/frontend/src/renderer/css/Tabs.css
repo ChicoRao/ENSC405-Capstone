@@ -36,3 +36,7 @@
     color: rgb(252, 150, 18);
     border-bottom: 3px solid;
 }
+
+#layout-tabs li span:hover {
+    cursor: pointer;
+}
