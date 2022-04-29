@@ -44,6 +44,7 @@ import '../css/LayoutEditor.css';
 */
 
 interface LayoutDataCell {
+  id: number,
   type: string,
   icon: string,
   top: string,
@@ -82,15 +83,20 @@ export default function LayoutEditor() {
 
   // Function that creates the symbol and includes it in the layout data
   let createSymbolData = (name: string, icon: string) => {
+    let dataList: LayoutDataCell[] = [];
+
+    console.log(layoutData);
+    console.log(layoutData.length);
+
     let data: LayoutDataCell = {
+      id: layoutData.length,
       type: name,
       icon: icon,
       top: '115px',
       left: '565px'
     }
-    let dataList: LayoutDataCell[] = [];
 
-    console.log(layoutData);
+    //To-do: id naming should be improved
 
     if (layoutData.length <= 100) {
       dataList = [...layoutData, data];
@@ -129,13 +135,15 @@ export default function LayoutEditor() {
             return (
               <Draggable
                 grid={[25,25]}
+                bounds="parent"
               >
                 <div
-                  style={{position: 'absolute', top: data.top, left: data.left}}
+                  style={{position: 'absolute', top: '0px', left: '0px'}}
                 >
                   <img
                     src={data.icon}
                     className="editor-item"
+                    draggable="false"
                     />
                 </div>
               </Draggable>
