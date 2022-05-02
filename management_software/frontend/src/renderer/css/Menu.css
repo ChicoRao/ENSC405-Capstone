@@ -27,16 +27,16 @@
   }
   .img-holder{
     margin: auto;
-    width: 900px;
+    width: 1000px;
     height: 750px;
     border: 3px black solid;
     border-radius: 5px;
     margin-top: 1rem;
   }
   .img{
-    width: 900px;
+    width: 1000px;
     height: 750px;
-    object-fit: cover;
+    object-fit: fill;
   }
   #input[type="file"] {
       display: none;

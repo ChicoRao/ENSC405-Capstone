@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
 import '../css/Menu.css';
+//import * as fs from 'browserify-fs';
 //import * as fs from 'fs';
 //import '../../../assets/defaultImage.png';
 
 export class Menu extends Component {
   state={
-    menuImg:''
+    menuImg: getImagePath()
   }
   imageHandler = (e: { target: { files: File[]; }; }) => {
     const reader = new FileReader();
     reader.onload = () =>{
       if(reader.readyState === 2){
         this.setState({menuImg: reader.result})
+        if (typeof reader.result == "string") {
+          localStorage.setItem(KEY_MENU_IMAGE_DATA, reader.result)
+        } 
       }
     }
     reader.readAsDataURL(e.target.files[0])
-
-    // write the file path into file
-    // var fs = require('fs');
-    // fs.writeFile('Output.txt', e.target.files[0].path, () => {});
   };
 	render() {
     const {menuImg} = this.state
@@ -42,3 +42,16 @@ export class Menu extends Component {
 }
 
 export default Menu;
+
+const KEY_MENU_IMAGE_DATA = "menuImageData"
+
+function getImagePath() {
+  const defaultImagePath = "../../../assets/defaultImage.png"
+  // if path exist from local storage use local storage, or else use default image
+  let localStoredImage = localStorage.getItem(KEY_MENU_IMAGE_DATA)
+  if (localStoredImage != null) {
+    return localStoredImage
+  } else {
+    return defaultImagePath
+  }
+}
