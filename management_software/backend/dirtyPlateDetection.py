@@ -31,7 +31,7 @@ def dirtyPlate(img,bbox,status):
     statusPlate = status
 
     # For testing
-    cv2.imshow("crop_img", crop_img)
+    #cv2.imshow("crop_img", crop_img)
 
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
@@ -41,10 +41,10 @@ def dirtyPlate(img,bbox,status):
         contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         #print(len(hierarchy[0]))
         number_of_contours = len(hierarchy[0])
-        if number_of_contours >= 3:
-            statusPlate = "Dirty"
+        if number_of_contours >= 5:
+            statusPlate = "Food"
         else:
-            statusPlate = "Clean"
+            statusPlate = "Dirty"
     return (statusPlate)
 
 

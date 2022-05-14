@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Tabs from '../Component/Tabs';
 import Layout from '../Component/Layout';
@@ -6,10 +6,12 @@ import '../css/Home.css';
 
 interface Home {
   update: () => void
+  layoutInfo: string
 }
 
 //Layout tabs will soon be replaced with dynamic version
-export default function Home({ update }: Home) {
+export default function Home({ update, layoutInfo }: Home) {
+  // const [colour, updateColour] = useState(layoutInfo);
   const url = "http://127.0.0.1:5000/message";
 
   function testFn() {
@@ -57,7 +59,7 @@ export default function Home({ update }: Home) {
           </div>
         </div>
         <div id="layout-content">
-          <Layout />
+          <Layout colour={layoutInfo} />
         </div>
       </div>
     </div>

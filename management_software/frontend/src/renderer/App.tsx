@@ -1,5 +1,5 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Sidebar from './Sidebar';
 import Home from './Pages/Home';
@@ -11,36 +11,65 @@ import './css/App.css';
 
 export default function App() {
 	let socket = io('http://localhost:5000');
+	const [socketConnected, setSocketConnected] = useState(false);
+	const [layoutInfo, updateLayoutInfo] = useState("white");
 
-	socket.on("connect", () => {
-		console.log(socket.id);
-	});
+	useEffect(() => {
+        // console.log("Component update")
+        // console.log("Socket connected is: ", socketConnected);
+        if (!socketConnected) {
+            socket.on("connect", () => {
+                console.log(socket.id);
+            });
+            socket.on("after connect", (msg: Object) => {
+                console.log(msg);
+                setSocketConnected(true);
+            })
+        }
+        return () => {
+            socket.off("after connect", () => {
+                setSocketConnected(true);
+            }) 
+        }
+    })
 
-	socket.on("after connect", (msg: Object) => {
-		console.log(msg);
-	});
-
-	socket.on("update button pressed", (msg: string) => {
-		console.log(msg);
+	socket.on("update value", (msg: Object) => {
+		let colour = msg.colour;
+		updateLayoutInfo(colour);
+		// console.log("COLOUR: ", layoutInfo);
 	})
 
-	const initiateUpdate = () => {
-		socket.emit('Slider value changed', {
-			data: "Please update"
-		});
-	}
+    // An event handler for a change of value 
+    const update = () => {
+        console.log("Start Update...")
+        socket.emit('Slider value changed', {
+            data: "Please update"
+        });
+    }
 
-	// An event handler for a change of value 
-	const update = () => {
-		setInterval(initiateUpdate, 2000);
-	}
+    socket.on("connect_error", () => {
+        socket.connect();
+        setSocketConnected(true);
+    })
+
+    socket.on("disconnect", (reason) => {
+        console.error("Disconnected due to: ", reason);
+        setSocketConnected(false);
+        if (reason === "io server disconnect") {
+            socket.connect();
+            socket.on("after connect", (msg: Object) => {
+                console.log(msg);
+                setSocketConnected(true);
+            })
+        }
+    })
 
   return (
     <Router>
 			<div id="app">
 				<Sidebar />
 				<Routes>
-					<Route path="/" element={<Home update={update}/>} />
+					<Route path="/" element={<Home update={update} layoutInfo={layoutInfo}/>} />
 					<Route path="/menu" element={<Menu />} />
 					<Route path="/reservations" element={<Reservations />} />
 					<Route path="/layouteditor" element={<LayoutEditor />} />
