@@ -16,11 +16,11 @@ from PIL import Image
 
 im=None
 
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt')
+
 Plate = Blueprint('Plate',__name__)
 
 @Plate.route("/Plate")
-
-
 def plateStatus(img,bbox,status):
     x1 = bbox[0]
     y1 = bbox[1]
@@ -50,15 +50,22 @@ def plateStatus(img,bbox,status):
 
 
 def run3(img):
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt')
-    bbox, label, conf = model(img)
-    img = draw_bbox(img, bbox, label, conf)
-    status = "No Plate"
-    # cv2.imshow("image", img)
-    if "Plate" not in label:
-        return status
-    else: 
+
+    try:
+        box, label, conf = model(img)
+        img = draw_bbox(img, box, label, conf)
         for x in range(len(label)):
             if label[x] == 'Plate':
-                status = plateStatus(img,bbox[x],status)
+                status = plateStatus(img,box[x],status)
+    except:
+        # not found
+        status = "No Plate"
+
+    
+    
+    # # cv2.imshow("image", img)
+    # if "Plate" not in label:
+    #     return status
+    # else: 
+        
     return status
