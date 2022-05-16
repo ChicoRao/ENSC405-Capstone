@@ -1,16 +1,11 @@
-from flask import Blueprint
 from tracemalloc import start
 import cv2 
 import matplotlib.pyplot as plt
 import cvlib as cv
-import urllib.request
 import numpy as np
 import sys
 from cvlib.object_detection import draw_bbox
-import concurrent.futures
-import math
-import asyncio
-import time 
+
 import torch
 from PIL import Image
 
@@ -18,24 +13,29 @@ im=None
 
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt')
 
-Plate = Blueprint('Plate',__name__)
+def plateStatus():
+    img = cv2.imread('base_photo_.png')
 
-@Plate.route("/Plate")
-def plateStatus(img,box,status):
-    x1 = box[0]
-    y1 = box[1]
-    w1 = box[2]
-    h1 = box[3]
-    cv2.rectangle(img, (x1,y1), (w1,h1), (255,0,0), 2)
-    crop_img = img[y1:h1, x1:w1]
+    print ("111111111111111111111111")
+    result = model(img)
+    print ("222222222222222222222222")
+    crops = result.crop(save=True)
+    print ("333333333333333333333333")
+    
+    print ("4444444444444444444444444")
 
-    statusPlate = status
+    cv2.imshow('detection',img)
+
+
+
+
+    statusPlate = "No Plate"
 
     # For testing
     #cv2.imshow("crop_img", crop_img)
 
-    if not crop_img.all():
-        gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)
+    if not crops.all():
+        gray = cv2.cvtColor(crops, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray,(7,7),0)
         ret, thresh = cv2.threshold(blurred, 127, 255, 0)
         #cv2.imshow("edges", edges)
@@ -46,20 +46,26 @@ def plateStatus(img,box,status):
             statusPlate = "Food"
         else:
             statusPlate = "Dirty"
+    print (statusPlate)
     return (statusPlate)
+    
 
 
-def run3(img):
+def main():
+    plateStatus()
 
-    try:
-        box, label, conf = model(img)
-        img = draw_bbox(img, box, label, conf)
-        for x in range(len(label)):
-            if label[x] == 'Plate':
-                status = plateStatus(img,box[x],status)
-    except:
-        # not found
-        status = "No Plate"
+if __name__ == "__main__":
+    main()
+
+    # try:
+    #     box, label, conf = model(img)
+    #     img = draw_bbox(img, box, label, conf)
+    #     for x in range(len(label)):
+    #         if label[x] == 'Plate':
+    #             status = plateStatus(img,box[x],status)
+    # except:
+    #     # not found
+    #     status = "No Plate"
 
     
     
@@ -68,4 +74,4 @@ def run3(img):
     #     return status
     # else: 
         
-    return status
+    #return status
