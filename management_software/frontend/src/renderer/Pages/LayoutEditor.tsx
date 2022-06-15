@@ -43,8 +43,10 @@ import '../css/LayoutEditor.css';
   ]
 */
 
+//-Rotate right now causes misalginment in items
+
 interface LayoutDataCell {
-  id: number,
+  id: string,
   type: string,
   icon: string,
   top: string,
@@ -89,7 +91,7 @@ export default function LayoutEditor() {
     console.log(layoutData.length);
 
     let data: LayoutDataCell = {
-      id: layoutData.length,
+      id: 'e' + layoutData.length.toString(),
       type: name,
       icon: icon,
       top: '115px',
@@ -101,6 +103,26 @@ export default function LayoutEditor() {
     if (layoutData.length <= 100) {
       dataList = [...layoutData, data];
       updateLayout(dataList);
+    }
+  }
+
+  let rotateFunction = (id: string) => {
+    let idTag = '#' + id;
+    let el = document.querySelector(idTag + ' img');
+    if (el) {
+      if (el.classList.contains('rotate-north')) {
+        el.classList.remove('rotate-north');
+        el.classList.add('rotate-west');
+      }else if (el.classList.contains('rotate-west')) {
+        el.classList.remove('rotate-west');
+        el.classList.add('rotate-south');
+      }else if (el.classList.contains('rotate-south')) {
+        el.classList.remove('rotate-south');
+        el.classList.add('rotate-east');
+      }else if (el.classList.contains('rotate-east')) {
+        el.classList.remove('rotate-east');
+        el.classList.add('rotate-north');
+      }
     }
   }
 
@@ -139,10 +161,17 @@ export default function LayoutEditor() {
               >
                 <div
                   style={{position: 'absolute', top: '0px', left: '0px'}}
+                  id={data.id}
                 >
+                  <div 
+                    className="rotate-icon no-cursor"
+                    onClick={() => rotateFunction(data.id)}
+                  >
+                    <h6>Rotate</h6>
+                  </div>
                   <img
                     src={data.icon}
-                    className="editor-item"
+                    className="editor-item cursor rotate-north"
                     draggable="false"
                     />
                 </div>
