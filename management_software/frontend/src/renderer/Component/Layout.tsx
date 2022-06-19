@@ -5,15 +5,7 @@ interface Layout {
     colour: string
 }
 
-const Layout = ({ colour }: Layout) => {
-    // const [tableColour, updateTableColour] = useState(colour ? colour : "white");
-
-    // useEffect(() => {
-    //     updateTableColour(colour)
-    //     console.log("table-->", colour);
-    //     console.log("table state -->", tableColour);    
-    //   }, [ colour ])
- 
+const Layout = ({ colour }: Layout) => { 
     console.log("layout colour: ", colour)
     const style = {
         backgroundColor: colour ? colour : "white"
