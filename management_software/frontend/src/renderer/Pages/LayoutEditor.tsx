@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
 import Tabs from '../Component/Tabs';
-import tableLogo from '../../../assets/icons/editor/table.png';
-import chairLogo from '../../../assets/icons/editor/chair.png';
+import tableLogo from '../../../assets/icons/editor/table.svg';
+import chairLogo from '../../../assets/icons/editor/chair.svg';
+import cashierLogo from '../../../assets/icons/editor/cashier.svg';
+import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
 // import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
 // import dividerLogo from '../../../assets/icons/editor/divider.png';
 import '../css/LayoutEditor.css';
@@ -56,7 +58,7 @@ interface LayoutDataCell {
 const symbolsList = [
   {
     name: "Table",
-    icon: tableLogo
+    icon: tableLogo1
   },
   {
     name: "Chair",
@@ -72,7 +74,7 @@ const symbolsList = [
   },
   {
     name: "Cashier",
-    icon: ""
+    icon: cashierLogo
   },
   {
     name: "Door",
@@ -82,6 +84,8 @@ const symbolsList = [
 
 export default function LayoutEditor() {
   let [layoutData, updateLayout] = useState<LayoutDataCell[]>([])
+
+
 
   // Function that creates the symbol and includes it in the layout data
   let createSymbolData = (name: string, icon: string) => {
@@ -94,8 +98,8 @@ export default function LayoutEditor() {
       id: 'e' + layoutData.length.toString(),
       type: name,
       icon: icon,
-      top: '115px',
-      left: '565px'
+      top: '500px',
+      left: '1000px'
     }
 
     //To-do: id naming should be improved
@@ -126,6 +130,34 @@ export default function LayoutEditor() {
     }
   }
 
+  const [x, setX]= useState(0)
+  const [y, setY]= useState(0)
+  const [objId, setID]=useState(0)
+
+  function handleStop(e, data){
+    // console.log(data.x)
+    // console.log(data.y)
+    console.log(layoutData.findIndex(a => a.id === data.node.id))
+    let index:number = layoutData.findIndex(a => a.id === data.node.id)
+    setX(data.x)
+    setY(data.y)
+    // setID(data.node.id)
+    console.log(x)
+    console.log(y)
+    // console.log(objId)
+    // console.log(index)
+
+    // layoutData.findIndex(a => a.id === data.node.id)
+    layoutData[index].left = x.toString()+"px"
+    layoutData[index].top = y.toString()+"px"
+    console.log(layoutData[index])
+
+
+    console.log(layoutData)
+  }
+
+
+
   return (
     <div className="layout-editor">
       <div className="editor-sidetools">
@@ -135,7 +167,7 @@ export default function LayoutEditor() {
           {symbolsList.map((obj) => {
             return (
               <div
-                onClick={() => createSymbolData(obj.name, obj.icon)}
+                onClick={() => createSymbolData(obj.name, obj.icon,)}
               >
                 <img
                   src={obj.icon}
@@ -158,22 +190,34 @@ export default function LayoutEditor() {
               <Draggable
                 grid={[25,25]}
                 bounds="parent"
+                onStop={handleStop}
               >
                 <div
                   style={{position: 'absolute', top: '0px', left: '0px'}}
                   id={data.id}
+                  
+                  //onDrag={()=> console.log(x)}
+
+
                 >
                   <div 
                     className="rotate-icon no-cursor"
                     onClick={() => rotateFunction(data.id)}
+                    // onMouseUp={()=> console.log()}
+                    // onMouseUp={()=> console.log(layoutData)}
                   >
                     <h6>Rotate</h6>
                   </div>
-                  <img
-                    src={data.icon}
-                    className="editor-item cursor rotate-north"
-                    draggable="false"
-                    />
+                  <div 
+                    className = "logo"
+                  >
+                    <img
+                      src={data.icon}
+                      className="editor-item cursor rotate-north"
+                      draggable="false"
+                      
+                      />
+                  </div>
                 </div>
               </Draggable>
             )
