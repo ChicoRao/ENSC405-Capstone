@@ -4,8 +4,10 @@ import Draggable from 'react-draggable';
 import Tabs from '../Component/Tabs';
 import tableLogo from '../../../assets/icons/editor/table.png';
 import chairLogo from '../../../assets/icons/editor/chair.png';
-// import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
-// import dividerLogo from '../../../assets/icons/editor/divider.png';
+import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
+import dividerLogo from '../../../assets/icons/editor/divider.png';
+import doorLogo from '../../../assets/icons/editor/door.png';
+import cashierLogo from '../../../assets/icons/editor/cashier.png';
 import '../css/LayoutEditor.css';
 
 /*
@@ -64,21 +66,22 @@ const symbolsList = [
   },
   {
     name: "Booth Table",
-    icon: ""
+    icon: boothTableLogo
   },
   {
     name: "Divider",
-    icon: ""
+    icon: dividerLogo
   },
   {
     name: "Cashier",
-    icon: ""
+    icon: doorLogo
   },
   {
     name: "Door",
-    icon: ""
+    icon: cashierLogo
   }
 ]
+
 
 export default function LayoutEditor() {
   let [layoutData, updateLayout] = useState<LayoutDataCell[]>([])
@@ -106,22 +109,26 @@ export default function LayoutEditor() {
     }
   }
 
-  let rotateFunction = (id: string) => {
+  let rotateFunction = (id: string,e:any) => {
     let idTag = '#' + id;
     let el = document.querySelector(idTag + ' img');
     if (el) {
-      if (el.classList.contains('rotate-north')) {
-        el.classList.remove('rotate-north');
-        el.classList.add('rotate-west');
-      }else if (el.classList.contains('rotate-west')) {
-        el.classList.remove('rotate-west');
-        el.classList.add('rotate-south');
-      }else if (el.classList.contains('rotate-south')) {
-        el.classList.remove('rotate-south');
-        el.classList.add('rotate-east');
-      }else if (el.classList.contains('rotate-east')) {
-        el.classList.remove('rotate-east');
-        el.classList.add('rotate-north');
+      if (e.detail == 1) {      
+        if (el.classList.contains('rotate-north')) {
+          el.classList.remove('rotate-north');
+          el.classList.add('rotate-west');
+        }else if (el.classList.contains('rotate-west')) {
+          el.classList.remove('rotate-west');
+          el.classList.add('rotate-south');
+        }else if (el.classList.contains('rotate-south')) {
+          el.classList.remove('rotate-south');
+          el.classList.add('rotate-east');
+        }else if (el.classList.contains('rotate-east')) {
+          el.classList.remove('rotate-east');
+          el.classList.add('rotate-north');
+        }
+      } else {
+        el.remove();
       }
     }
   }
@@ -165,9 +172,9 @@ export default function LayoutEditor() {
                 >
                   <div 
                     className="rotate-icon no-cursor"
-                    onClick={() => rotateFunction(data.id)}
+                    onClick={(e) => rotateFunction(data.id,e)}
                   >
-                    <h6>Rotate</h6>
+                    <h6>Rotate/Delete</h6>
                   </div>
                   <img
                     src={data.icon}
