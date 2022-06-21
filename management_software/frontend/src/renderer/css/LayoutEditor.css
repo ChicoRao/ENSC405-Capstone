@@ -1,0 +1,103 @@
+.layout-editor {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.editor-sidetools {
+    width: 25vw;
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.sidetool-title {
+    padding: 10px;
+    text-align: center;
+    background-color: rgb(197, 197, 197);
+}
+
+.sidetool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 10px;
+    text-align: center;
+}
+
+.sidetool-grid div {
+    margin: 20px 5px;
+}
+
+.sidetool-grid img {
+    height: 60px;
+    width: 60px;
+}
+
+.sidetool-grid img:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.layout-editor-right {
+    width: 75vw;
+}
+
+.layout-editor-content {
+    margin: 50px 15px;
+    border: 3px solid black;
+    height: 495px;
+    width: 725px;
+    /* padding: 6px 4px; */
+    position: relative;
+}
+
+.editor-item {
+    height: 50px;
+    width: 50px;
+}
+
+.rotate-icon {
+    /* visibility: hidden;
+    position: absolute;
+    z-index: 2; */
+    display: none;
+}
+
+.layout-editor-content div:hover .rotate-icon, .rotate-icon:hover {
+    display: block;
+}
+
+.rotate-north {
+    transform: rotate(0deg);
+}
+
+.rotate-west {
+    transform: rotate(90deg);
+}
+
+.rotate-south {
+    transform: rotate(180deg);
+}
+
+.rotate-east {
+    transform: rotate(270deg);
+}
+
+.logo{
+    /* filter: grayscale(100%) sepia(100%) hue-rotate(90deg);
+    fill: red; */
+
+    
+    /* background-color: orange; 
+    mask: url(../../../assets/icons/editor/Table1.svg) no-repeat center / contain;
+    -webkit-mask: url(../../../assets/icons/editor/Table1.svg) no-repeat center / contain;
+*/
+
+
+    filter: invert(.5) sepia(1) saturate(100) hue-rotate(0deg);
+    /* filter: invert(.5) sepia(1) saturate(100) hue-rotate(90deg);
+    filter: invert(.5) sepia(1) saturate(100) hue-rotate(60deg);
+    filter: invert(.5) sepia(1) saturate(100) hue-rotate(240deg);
+     */
+}

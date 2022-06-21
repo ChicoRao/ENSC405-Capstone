@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 from flask import Flask, render_template
 from bowlStatusDetection import bowlStatus
 from plateStatusDetection import plateStatus
 from waterRefillDetection import run1
 from bowlStatusDetection import run2
 from plateStatusDetection import run3
+=======
+from flask import Flask, jsonify, render_template
+# from waterRefillDetection import run1
+from waterLevelDetectionBlob import run1
+from dirtyPlateDetection import run2
+>>>>>>> origin/main
 from freeOccupiedDetection import freeOccupied
 from colours import colours
 from decision import decision
@@ -17,6 +24,7 @@ import numpy as np
 import time
 url='http://192.168.1.78/capture?_cb=1649747186380'
 
+SavedLayout = []
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -128,6 +136,23 @@ def status():
 def message():
 
     return{"message": "Need Refill of Water"}
+
+
+@app.route("/SaveLayout", methods = ['POST'])
+def SaveLayout():
+    global SavedLayout 
+    SavedLayout = request.data
+    print(SavedLayout)
+    print("recieved")
+    return{"message": "Received Layout successfully"}
+
+
+@app.route("/GetLayout", methods = ['GET'])
+def GetLayout():
+    print(SavedLayout)
+    print("sending")
+    return SavedLayout
+    # return{"message": "Received Layout successfully"}
 
 
 if __name__ == "__main__":

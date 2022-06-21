@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tab from './Tab';
 import '../css/Tabs.css';
 
 //Hardcoded array of tabs for now
 //Will make it update dynamically later
-let tabs: string[] = ["Main Dining", "Outdoor"];
+let tabs: string[] = ["Main Dining", "Outdoor", "Roof"];
+
+//Will need to send as prop the current tabs list
 
 //Used to specify the prop type
 interface Tabs {
@@ -12,17 +14,31 @@ interface Tabs {
 }
 
 const Tabs = ({ isEdit }: Tabs): JSX.Element => {
-	const [tabsList, updateTabsList] = useState(tabs);
-	const [activeTab, setActiveTab] = useState(tabsList[0]);
+	// const [tabsList, updateTabsList] = useState(tabs);
+	const [tabsList, setTabsList] = useState(tabs);
+	const [activeTab, setActiveTab] = useState(0);
 
-	const handleTabs = (index: number) => {
+	const handleTabs = (name: string, index: number) => {
 		if (index < tabsList.length)
-			setActiveTab(tabsList[index]);
+			if (tabsList.includes(name)) {
+				setActiveTab(index);
+			}
+			else {
+				setActiveTab(0);
+			}
 	};
 
 	const removeTabs = (index: number) => {
-		let tempList = tabsList;
-		updateTabsList(tabsList.filter(tab => tab !== tempList[index]))
+		if (index === 0) {
+			console.log("Cannot remove Main Dining");
+			return;
+		}
+		if (index === activeTab) {
+			setActiveTab(0);	//Set active tab back to Main Dining if removed tab is active
+		}
+		let tempList = tabsList.filter(tab => tab !== tabsList[index]);
+		setTabsList(tempList);
+		tabs = tempList;
 	};
 
 	//Dynamically creating all tabs
@@ -35,7 +51,7 @@ const Tabs = ({ isEdit }: Tabs): JSX.Element => {
 					<Tab 
 						name={tab} 
 						index={index} 
-						isActive={tabsList[index] === activeTab} 
+						isActive={index === activeTab} 
 						isEdit={isEdit} 
 						onClickSelect={handleTabs} 
 						onClickRemove={removeTabs} />

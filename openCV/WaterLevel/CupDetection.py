@@ -16,7 +16,7 @@ import asyncio
 #the arduino software.
 #rightclick the image and open in a new tab for a still image. Doesn't work with just the IP address
 #Let me know (Angus) if you have any issues
-url='http://10.0.0.102/capture?_cb=1649748796132'
+url='http://10.0.0.103/capture?_cb=1649748796132'
 im=None
  
 

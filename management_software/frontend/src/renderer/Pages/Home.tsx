@@ -12,21 +12,26 @@ interface Home {
 //Layout tabs will soon be replaced with dynamic version
 export default function Home({ update, layoutInfo }: Home) {
   // const [colour, updateColour] = useState(layoutInfo);
-  const url = "http://127.0.0.1:5000/message";
+  // const url = "http://127.0.0.1:5000/message";
+  const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
-  function testFn() {
-    axios.get(url)
-    .then(data => console.log(data))
+  const [GetLayout, setLayout] = useState()
+  function UpdateLayout() {
+
+    axios.get(urlLayout)
+    .then(data => {setLayout(data.data)})
     .catch(err => console.log(err));
+    console.log(GetLayout)
   }
+
 
   return (
     <div className="right-content">
       <Tabs isEdit={false} />
       <div id="layout">
         <div id="layout-legend-content">
-          <button id="triggerr" onClick={testFn}>
-            WATER REFILL TEST
+          <button id="triggerr" onClick={UpdateLayout}>
+            Update Layout
           </button>
           <button 
             id="trigger" 
