@@ -1,5 +1,6 @@
-from flask import Flask, render_template
-from waterRefillDetection import run1
+from flask import Flask, jsonify, render_template
+# from waterRefillDetection import run1
+from waterLevelDetectionBlob import run1
 from dirtyPlateDetection import run2
 from freeOccupiedDetection import freeOccupied
 from colours import colours
@@ -12,8 +13,10 @@ import cv2
 import urllib.request
 import numpy as np
 import time
+from flask import request
 url='http://10.0.0.102/capture?_cb=1649747186380'
 
+SavedLayout = []
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -116,6 +119,23 @@ def status():
 def message():
 
     return{"message": "Need Refill of Water"}
+
+
+@app.route("/SaveLayout", methods = ['POST'])
+def SaveLayout():
+    global SavedLayout 
+    SavedLayout = request.data
+    print(SavedLayout)
+    print("recieved")
+    return{"message": "Received Layout successfully"}
+
+
+@app.route("/GetLayout", methods = ['GET'])
+def GetLayout():
+    print(SavedLayout)
+    print("sending")
+    return SavedLayout
+    # return{"message": "Received Layout successfully"}
 
 
 if __name__ == "__main__":
