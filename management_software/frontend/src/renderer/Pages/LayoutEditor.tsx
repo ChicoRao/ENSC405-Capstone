@@ -137,30 +137,23 @@ export default function LayoutEditor() {
 
   const [x, setX]= useState(0)
   const [y, setY]= useState(0)
-  const [objId, setID]=useState(0)
 
   function handleStop(e, data){
-    // console.log(data.x)
-    // console.log(data.y)
-    console.log(layoutData.findIndex(a => a.id === data.node.id))
     let index:number = layoutData.findIndex(a => a.id === data.node.id)
     setX(data.x)
     setY(data.y)
-    // setID(data.node.id)
-    console.log(x)
-    console.log(y)
-    // console.log(objId)
-    // console.log(index)
-
-    // layoutData.findIndex(a => a.id === data.node.id)
     layoutData[index].left = x.toString()+"px"
     layoutData[index].top = y.toString()+"px"
-    console.log(layoutData[index])
-
-
-    console.log(layoutData)
   }
 
+  function SaveLayout(){
+    console.log(layoutData)
+    fetch('http://127.0.0.1:5000/SaveLayout', {
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify(layoutData)
+    })
+  }
 
   return (
     <div className="layout-editor">
@@ -199,16 +192,13 @@ export default function LayoutEditor() {
                 <div
                   style={{position: 'absolute', top: '0px', left: '0px'}}
                   id={data.id}
-                  
-                  //onDrag={()=> console.log(x)}
-
-
                 >
                   <div 
                     className="rotate-icon no-cursor"
                     onClick={(e) => rotateFunction(data.id,e)}
                     // onMouseUp={()=> console.log()}
                     // onMouseUp={()=> console.log(layoutData)}
+
                   >
                     <h6>Rotate/Delete</h6>
                   </div>
@@ -224,8 +214,10 @@ export default function LayoutEditor() {
                 </div>
               </Draggable>
             )
+            
           })}
         </div>
+        <button onClick={SaveLayout}>Save Layout</button>
       </div>
     </div>
   );

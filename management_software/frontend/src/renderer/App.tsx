@@ -15,8 +15,7 @@ export default function App() {
 	const [layoutInfo, updateLayoutInfo] = useState("white");
 
 	useEffect(() => {
-        // console.log("Component update")
-        // console.log("Socket connected is: ", socketConnected);
+
         if (!socketConnected) {
             socket.on("connect", () => {
                 console.log(socket.id);
