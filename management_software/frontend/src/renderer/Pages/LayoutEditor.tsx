@@ -4,10 +4,11 @@ import Draggable from 'react-draggable';
 import Tabs from '../Component/Tabs';
 import tableLogo from '../../../assets/icons/editor/table.svg';
 import chairLogo from '../../../assets/icons/editor/chair.svg';
-import cashierLogo from '../../../assets/icons/editor/cashier.svg';
+import cashierLogo from '../../../assets/icons/editor/cashier.png';
 import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
-// import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
-// import dividerLogo from '../../../assets/icons/editor/divider.png';
+import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
+import dividerLogo from '../../../assets/icons/editor/divider.png';
+import doorLogo from '../../../assets/icons/editor/door.png';
 import '../css/LayoutEditor.css';
 
 /*
@@ -66,11 +67,11 @@ const symbolsList = [
   },
   {
     name: "Booth Table",
-    icon: ""
+    icon: boothTableLogo
   },
   {
     name: "Divider",
-    icon: ""
+    icon: dividerLogo
   },
   {
     name: "Cashier",
@@ -78,7 +79,7 @@ const symbolsList = [
   },
   {
     name: "Door",
-    icon: ""
+    icon: doorLogo
   }
 ]
 
