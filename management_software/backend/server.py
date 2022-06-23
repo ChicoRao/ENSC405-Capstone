@@ -1,7 +1,12 @@
+from flask import Flask, render_template, request
+from bowlStatusDetection import bowlStatus
+from plateStatusDetection import plateStatus
+from waterRefillDetection import run1
+from bowlStatusDetection import run2
+from plateStatusDetection import run3
 from flask import Flask, jsonify, render_template
-# from waterRefillDetection import run1
 from waterLevelDetectionBlob import run1
-from dirtyPlateDetection import run2
+# from dirtyPlateDetection import run2
 from freeOccupiedDetection import freeOccupied
 from colours import colours
 from decision import decision
@@ -13,9 +18,13 @@ import cv2
 import urllib.request
 import numpy as np
 import time
+<<<<<<< HEAD
 
 from flask import request
 url='http://10.0.0.102/capture?_cb=1649747186380'
+=======
+url='http://192.168.1.78/capture?_cb=1649747186380'
+>>>>>>> main
 
 
 SavedLayout = []
@@ -54,6 +63,7 @@ def value_changed(message, ):
     t0 = time.time()
     t1 = time.time()
     waterqueue = []
+    bowlqueue = []
     platequeue = []
     occupancyqueue = []
     decisionqueue=[]
@@ -80,7 +90,9 @@ def value_changed(message, ):
             waterqueue.append(water_level) 
             occupancy = freeOccupied(img)
             occupancyqueue.append(occupancy)
-            plateStatus  = run2(img)
+            bowlStatus  = run2(img)
+            bowlqueue.append(bowlStatus)
+            plateStatus = run3(img)
             platequeue.append(plateStatus)
             if (time.time() > t0+5):
                 people = max(set(occupancyqueue), key=occupancyqueue.count)
@@ -91,14 +103,20 @@ def value_changed(message, ):
                 # emit('update value', waterlevelavg, broadcast=True)
                 decisionqueue.append(waterlevelavg)
                 print(waterlevelavg)
+                bowl_stat = max(set(bowlqueue), key=bowlqueue.count)
+                decisionqueue.append(bowl_stat)
+                print(bowl_stat)
+
                 plate_stat = max(set(platequeue), key=platequeue.count)
                 decisionqueue.append(plate_stat)
                 print(plate_stat)
+
                 occupancyqueue.clear()
                 waterqueue.clear()
+                bowlqueue.clear()
                 platequeue.clear()
                 t0 = time.time()
-                if len(decisionqueue) == 3:
+                if len(decisionqueue) == 4:
                     print(decisionqueue)
                     decision_status = decision(decisionqueue)
                     objectcolours = colours(decision_status)
