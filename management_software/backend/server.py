@@ -18,13 +18,9 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-<<<<<<< HEAD
 
 from flask import request
-url='http://10.0.0.102/capture?_cb=1649747186380'
-=======
 url='http://192.168.1.78/capture?_cb=1649747186380'
->>>>>>> main
 
 
 SavedLayout = []
