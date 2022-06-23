@@ -1,16 +1,12 @@
-<<<<<<< HEAD
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from bowlStatusDetection import bowlStatus
 from plateStatusDetection import plateStatus
 from waterRefillDetection import run1
 from bowlStatusDetection import run2
 from plateStatusDetection import run3
-=======
 from flask import Flask, jsonify, render_template
-# from waterRefillDetection import run1
 from waterLevelDetectionBlob import run1
-from dirtyPlateDetection import run2
->>>>>>> origin/main
+# from dirtyPlateDetection import run2
 from freeOccupiedDetection import freeOccupied
 from colours import colours
 from decision import decision
