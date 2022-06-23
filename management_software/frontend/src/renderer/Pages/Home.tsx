@@ -11,15 +11,16 @@ interface Home {
 
 //Layout tabs will soon be replaced with dynamic version
 export default function Home({ update, layoutInfo }: Home) {
-  // const [colour, updateColour] = useState(layoutInfo);
-  // const url = "http://127.0.0.1:5000/message";
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
   const [GetLayout, setLayout] = useState()
   function UpdateLayout() {
 
     axios.get(urlLayout)
-    .then(data => {setLayout(data.data)})
+    .then(data => {
+      setLayout(data.data)
+      console.log(data.data)
+    })
     .catch(err => console.log(err));
     console.log(GetLayout)
   }
