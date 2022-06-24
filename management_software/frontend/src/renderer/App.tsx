@@ -13,6 +13,7 @@ export default function App() {
 	let socket = io('http://localhost:5000');
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [layoutInfo, updateLayoutInfo] = useState("white");
+    const [tableInfo, updateTableID] = useState('e')
 
 	useEffect(() => {
 
@@ -34,8 +35,11 @@ export default function App() {
 
 	socket.on("update value", (msg: Object) => {
 		let colour = msg.colour;
+        let tableID = msg.ID;
 		updateLayoutInfo(colour);
+        updateTableID(tableID);
 		// console.log("COLOUR: ", layoutInfo);
+        // console.log("TableID: ", tableInfo);
 	})
 
     // An event handler for a change of value 
@@ -68,7 +72,7 @@ export default function App() {
 			<div id="app">
 				<Sidebar />
 				<Routes>
-					<Route path="/" element={<Home update={update} layoutInfo={layoutInfo}/>} />
+					<Route path="/" element={<Home update={update} layoutInfo={layoutInfo} tableInfo={tableInfo}/>} />
 					<Route path="/menu" element={<Menu />} />
 					<Route path="/reservations" element={<Reservations />} />
 					<Route path="/layouteditor" element={<LayoutEditor />} />

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from bowlStatusDetection import bowlStatus
 from plateStatusDetection import plateStatus
-from waterRefillDetection import run1
+# from waterRefillDetection import run1
 from bowlStatusDetection import run2
 from plateStatusDetection import run3
 from flask import Flask, jsonify, render_template
@@ -20,9 +20,9 @@ import numpy as np
 import time
 
 from flask import request
-url='http://192.168.1.78/capture?_cb=1649747186380'
+url='http://10.0.0.102/capture?_cb=1656024603205'
 
-
+tableID = "e1"
 SavedLayout = []
 
 app = Flask(__name__)
@@ -43,7 +43,7 @@ def capture_photo():
     img = cv2.imdecode(imgnp,-1)
     img_name = "base_photo_.png"
     cv2.imwrite(img_name, img)
-    print("{} written!".format(img_name))
+    # print("{} written!".format(img_name))
     return img
 
 @app.route("/")
@@ -70,7 +70,6 @@ def value_changed(message, ):
         {'status': "Occupied" , 'colour': "blue"},
         {'status': "Need refill" , 'colour': "red"}
     ]
-    print("In here")
     while True:
         # if (time.time() > t1+5):
         #     i = i%3
@@ -82,6 +81,7 @@ def value_changed(message, ):
         img = cv2.imdecode(imgnp,-1)
         # print(img)
         if not img.all():
+            
             water_level = run1(img)
             waterqueue.append(water_level) 
             occupancy = freeOccupied(img)
@@ -90,22 +90,24 @@ def value_changed(message, ):
             bowlqueue.append(bowlStatus)
             plateStatus = run3(img)
             platequeue.append(plateStatus)
+
             if (time.time() > t0+5):
                 people = max(set(occupancyqueue), key=occupancyqueue.count)
                 # emit('update value', people, broadcast=True)
                 decisionqueue.append(people)
-                print(people)
+                # print(people)
                 waterlevelavg = max(set(waterqueue), key=waterqueue.count)
                 # emit('update value', waterlevelavg, broadcast=True)
                 decisionqueue.append(waterlevelavg)
-                print(waterlevelavg)
+                # print(waterlevelavg)
                 bowl_stat = max(set(bowlqueue), key=bowlqueue.count)
                 decisionqueue.append(bowl_stat)
-                print(bowl_stat)
+                # print(bowl_stat)
 
                 plate_stat = max(set(platequeue), key=platequeue.count)
                 decisionqueue.append(plate_stat)
-                print(plate_stat)
+                # print(plate_stat)
+
 
                 occupancyqueue.clear()
                 waterqueue.clear()
@@ -113,9 +115,10 @@ def value_changed(message, ):
                 platequeue.clear()
                 t0 = time.time()
                 if len(decisionqueue) == 4:
-                    print(decisionqueue)
+                    # print(decisionqueue)
                     decision_status = decision(decisionqueue)
-                    objectcolours = colours(decision_status)
+                    objectcolours = colours(decision_status, tableID)
+                    print(objectcolours)
                     emit('update value', objectcolours, broadcast=True)
                     decisionqueue.clear()
 
@@ -141,15 +144,15 @@ def message():
 def SaveLayout():
     global SavedLayout 
     SavedLayout = request.data
-    print(SavedLayout)
+    # print(SavedLayout)
     print("recieved")
     return{"message": "Received Layout successfully"}
 
 
 @app.route("/GetLayout", methods = ['GET'])
 def GetLayout():
-    print(SavedLayout)
-    print("sending")
+    # print(SavedLayout)
+    # print("sending")
     return SavedLayout
     # return{"message": "Received Layout successfully"}
 

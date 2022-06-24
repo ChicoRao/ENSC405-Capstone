@@ -1,7 +1,7 @@
 from decision import decision
 
 
-def colours(decisionstatus):
+def colours(decisionstatus, tableID):
     colour = 'white'
     if decisionstatus == 'Available':
         colour = 'green'
@@ -15,4 +15,4 @@ def colours(decisionstatus):
         colour = 'red'
     elif decisionstatus == 'Collect plate':
         colour = 'red'
-    return {'status': decisionstatus , 'colour':colour}
+    return {'ID': tableID, 'status': decisionstatus , 'colour':colour}
