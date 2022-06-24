@@ -46,6 +46,13 @@ const symbolsList = [
   }
 ]
 
+let colourDeg = new Map<string, string>([
+  ['red', '(0deg)'],
+  ['yellow', '(60deg)'],
+  ['blue', '(240deg)'],
+  ['green', '(120deg)']
+]);
+
 interface Home {
   update: () => void
   layoutInfo: string
@@ -62,7 +69,6 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
     axios.get(urlLayout)
     .then(data => {
       setLayout(data.data)
-      console.log(data.data)
     })
     .catch(err => console.log(err));
     console.log(GetLayout)
@@ -108,10 +114,35 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
           </div> */}
           <div className="layout-editor-content">
           {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
-            console.log('AAAA')
-            console.log(data.id)
+            let tablecolour = colourDeg.get(layoutInfo)
+            const styleTable = {
+              filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
+            }
+            if(data.id == tableInfo){
+              
+              return (
+                  <div
+                  style={{position: 'absolute', top: data.top, left: data.left}}
+                  id={data.id}
 
+                >
+                  <div 
+                    className = "logo"
+                  
+                  >
+                    <img 
+                      style = {styleTable}
+                      src={data.icon}
+                      className="editor-item cursor rotate-north"
+                      draggable="false"
+                      
+                      />
+                  </div>
+                </div>
+              )
+            }
             return (
+    
                 <div
                   style={{position: 'absolute', top: data.top, left: data.left}}
                   id={data.id}
@@ -124,6 +155,7 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
                       src={data.icon}
                       className="editor-item cursor rotate-north"
                       draggable="false"
+                      
                       />
                   </div>
                 </div>
