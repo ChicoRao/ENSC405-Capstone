@@ -132,6 +132,9 @@ export default function LayoutEditor() {
         }
       } else {
         el.remove();
+        updateLayout(current => current.filter(rm => {
+          return rm.id !== id;
+        }));
       }
     }
   }
