@@ -136,18 +136,18 @@ export default function LayoutEditor() {
     }
   }
 
-  const [x, setX]= useState(0)
-  const [y, setY]= useState(0)
 
   function handleStop(e, data){
     let index:number = layoutData.findIndex(a => a.id === data.node.id)
-    setX(data.x)
-    setY(data.y)
-    layoutData[index].left = x.toString()+"px"
-    layoutData[index].top = y.toString()+"px"
+    console.log("Dragged Left " +data.x)
+    console.log("Dragged Top " +data.y)
+    layoutData[index].left = data.x.toString()+"px"
+    layoutData[index].top = data.y.toString()+"px"
+    console.log("Layout Data Left" + layoutData[index].left)
+    console.log("Layout Data Right " +layoutData[index].top)
   }
 
-  function SaveLayout(){
+  function SaveLayout(e, data){
     console.log(layoutData)
     fetch('http://127.0.0.1:5000/SaveLayout', {
       method: 'POST',
@@ -182,7 +182,7 @@ export default function LayoutEditor() {
         <Tabs isEdit={true} />
         <div className="layout-editor-content">
           {layoutData.map((data: LayoutDataCell) => {
-            console.log(data.type)
+            // console.log(data.type)
 
             return (
               <Draggable

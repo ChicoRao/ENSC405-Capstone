@@ -46,13 +46,21 @@ const symbolsList = [
   }
 ]
 
+let colourDeg = new Map<string, string>([
+  ['red', '(0deg)'],
+  ['yellow', '(60deg)'],
+  ['blue', '(240deg)'],
+  ['green', '(120deg)']
+]);
+
 interface Home {
   update: () => void
   layoutInfo: string
+  tableInfo: string
 }
 
 //Layout tabs will soon be replaced with dynamic version
-export default function Home({ update, layoutInfo }: Home) {
+export default function Home({ update, layoutInfo, tableInfo }: Home) {
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
   const [GetLayout, setLayout] = useState()
@@ -61,7 +69,6 @@ export default function Home({ update, layoutInfo }: Home) {
     axios.get(urlLayout)
     .then(data => {
       setLayout(data.data)
-      console.log(data.data)
     })
     .catch(err => console.log(err));
     console.log(GetLayout)
@@ -107,20 +114,48 @@ export default function Home({ update, layoutInfo }: Home) {
           </div> */}
           <div className="layout-editor-content">
           {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
-            console.log(data.type)
+            let tablecolour = colourDeg.get(layoutInfo)
+            const styleTable = {
+              filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
+            }
+            if(data.id == tableInfo){
+              
+              return (
+                  <div
+                  style={{position: 'absolute', top: data.top, left: data.left}}
+                  id={data.id}
 
+                >
+                  <div 
+                    className = "logo"
+                  
+                  >
+                    <img 
+                      style = {styleTable}
+                      src={data.icon}
+                      className="editor-item cursor rotate-north"
+                      draggable="false"
+                      
+                      />
+                  </div>
+                </div>
+              )
+            }
             return (
+    
                 <div
                   style={{position: 'absolute', top: data.top, left: data.left}}
                   id={data.id}
+  
                 >
                   <div 
                     className = "logo"
                   >
-                    <img
+                    <img 
                       src={data.icon}
                       className="editor-item cursor rotate-north"
                       draggable="false"
+                      
                       />
                   </div>
                 </div>
@@ -130,7 +165,7 @@ export default function Home({ update, layoutInfo }: Home) {
         </div>
         </div>
         <div id="layout-content">
-          <Layout colour={layoutInfo} />
+          <Layout ID={tableInfo} colour={layoutInfo}  />
         </div>
       </div>
     </div>

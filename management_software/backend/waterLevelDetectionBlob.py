@@ -31,14 +31,14 @@ def waterLevel(imgcopy, bbox,status):
     y1 = bbox[1]
     w1 = bbox[2]
     h1 = bbox[3]
-    crop_img = imgcopy[y1:h1, x1:w1]
+    crop_img = imgcopy[y1:h1, x1-10:w1+10]
     height, width = crop_img.shape[:2]
     statuswater = status
     if not crop_img.all():
         gray = cv2.cvtColor(crop_img, cv2.COLOR_RGBA2GRAY)
-        cv2.imshow("gray", gray)
+        # cv2.imshow("gray", gray)
         blurred = cv2.GaussianBlur(gray,(5,5),0)
-        th3 = cv2.adaptiveThreshold(blurred,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY_INV, 21,5)
+        th3 = cv2.adaptiveThreshold(blurred,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY_INV, 15,9)
         #cv2.imshow("th3", th3)
         edges = cv2.Canny(th3, 100, 250, apertureSize = 7)
         #cv2.imshow("edges",edges)
@@ -48,24 +48,23 @@ def waterLevel(imgcopy, bbox,status):
         contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contoursimage = crop_img.copy()
         cv2.drawContours(contoursimage, contours, -1, (0, 255, 0), 2)
-        #cv2.imshow("Contours", contoursimage)
+        # cv2.imshow("Contours", contoursimage)
+        
         areaArray = []
-        for c in enumerate(contours):
+        
+        for i, c in enumerate(contours):
             area = cv2.contourArea(c)
             areaArray.append(area)
-        print(areaArray)
         avg_area = statistics.mean(areaArray)
-
         for c in areaArray:
             if len(areaArray) > 3:
                 areaArray.remove(min(areaArray))
             if c < (avg_area/3) and c in areaArray:
-                print(c)
                 areaArray.remove(c)
         if len(areaArray) > 2:
             
             sorteddata = sorted(zip(areaArray, contours), key=lambda x: x[0], reverse=True)
-            print(sorteddata)
+            # print(sorteddata)
             waterLevel = sorteddata[0][1]
             x,y,w,h = cv2.boundingRect(waterLevel)
 
@@ -80,11 +79,11 @@ def waterLevel(imgcopy, bbox,status):
             midPointArray = [horizontalMidPoint, horizontalMidPoint2, horizontalMidPoint3]
 
             midPointArray.sort()
-            print(midPointArray)
+            # print(midPointArray)
 
             horizontalMidPoint = midPointArray[1]
             aspectRatio = (height - horizontalMidPoint)/ float(height)
-            print(aspectRatio)
+            # print(aspectRatio)
             if aspectRatio > 0.4:
                 cv2.line(crop_img, (x,horizontalMidPoint),(w,horizontalMidPoint),(255,0,0),2)
                 cv2.putText(imgcopy, "Full", (x1, horizontalMidPoint), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2)
@@ -117,7 +116,7 @@ def waterLevel(imgcopy, bbox,status):
 def run1(img):
 
     bbox, label, conf = cv.detect_common_objects(img)
-    print(bbox)
+    # print(bbox)
     img = draw_bbox(img, bbox, label, conf)
     status = "No Cup"
     # cv2.imshow("image", img)
