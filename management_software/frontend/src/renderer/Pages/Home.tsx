@@ -88,7 +88,7 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
             onClick={update}>
             Update
           </button>
-          {/* <div id="layout-legend">
+          <div id="layout-legend">
             <ul id="layout-legend-elements">
               <li>
                 <span className="legend-colors">
@@ -111,7 +111,7 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
                 Attention
               </li>
             </ul>
-          </div> */}
+          </div>
           <div className="layout-editor-content">
           {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
             let tablecolour = colourDeg.get(layoutInfo)
@@ -163,9 +163,6 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
             
           })}
         </div>
-        </div>
-        <div id="layout-content">
-          <Layout ID={tableInfo} colour={layoutInfo}  />
         </div>
       </div>
     </div>

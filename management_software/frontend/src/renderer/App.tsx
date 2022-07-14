@@ -6,7 +6,7 @@ import Home from './Pages/Home';
 import Menu from './Pages/Menu';
 import Reservations from './Pages/Reservations';
 import LayoutEditor from './Pages/LayoutEditor';
-// import Settings from './Pages/Settings';
+import Settings from './Pages/Settings';
 import './css/App.css';
 
 export default function App() {
@@ -76,6 +76,7 @@ export default function App() {
 					<Route path="/menu" element={<Menu />} />
 					<Route path="/reservations" element={<Reservations />} />
 					<Route path="/layouteditor" element={<LayoutEditor />} />
+                    <Route path="/settings" element={<Settings />} />
 				</Routes>
 			</div>
     </Router>
