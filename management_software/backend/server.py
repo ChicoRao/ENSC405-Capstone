@@ -64,7 +64,7 @@ def value_changed(message, ):
     tempTest = [
         {'status': "Available" , 'colour': "green"},
         {'status': "Occupied" , 'colour': "blue"},
-        # {'status': "Need refill" , 'colour': "red"}
+        {'status': "Need Cleaning" , 'colour': "red"}
     ]
     print("In here")
     while True:
@@ -92,7 +92,7 @@ def value_changed(message, ):
                 people = max(set(occupancyqueue), key=occupancyqueue.count)
                 # emit('update value', people, broadcast=True)
                 decisionqueue.append(people)
-                print(people)
+                # print(people)
                 # waterlevelavg = max(set(waterqueue), key=waterqueue.count)
                 # emit('update value', waterlevelavg, broadcast=True)
                 # decisionqueue.append(waterlevelavg)
@@ -115,7 +115,9 @@ def value_changed(message, ):
                 t0 = time.time()
                 if len(decisionqueue) == 2:
                     print(decisionqueue)
+                    
                     decision_status = decision(decisionqueue)
+                    print(decision_status)
                     objectcolours = colours(decision_status)
                     emit('update value', objectcolours, broadcast=True)
                     decisionqueue.clear()
