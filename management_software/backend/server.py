@@ -1,16 +1,10 @@
-<<<<<<< HEAD
-from flask import Flask, render_template
 from bowlStatusDetection import bowlStatus
 from plateStatusDetection import plateStatus
-from waterRefillDetection import run1
-from bowlStatusDetection import run2
-from plateStatusDetection import run3
-=======
+# from waterLevelDetectionBlob import run1
+from imageComparison import compare
+# from bowlStatusDetection import run2
+# from plateStatusDetection import run3
 from flask import Flask, jsonify, render_template
-# from waterRefillDetection import run1
-from waterLevelDetectionBlob import run1
-from dirtyPlateDetection import run2
->>>>>>> origin/main
 from freeOccupiedDetection import freeOccupied
 from colours import colours
 from decision import decision
@@ -59,17 +53,18 @@ def test_connect():
 def value_changed(message, ):
     t0 = time.time()
     t1 = time.time()
-    waterqueue = []
-    bowlqueue = []
-    platequeue = []
+    # waterqueue = []
+    # bowlqueue = []
+    # platequeue = []
     occupancyqueue = []
+    comparisonqueue  = []
     decisionqueue=[]
     calibration_img = capture_photo()
     i = 0
     tempTest = [
         {'status': "Available" , 'colour': "green"},
         {'status': "Occupied" , 'colour': "blue"},
-        {'status': "Need refill" , 'colour': "red"}
+        # {'status': "Need refill" , 'colour': "red"}
     ]
     print("In here")
     while True:
@@ -83,37 +78,42 @@ def value_changed(message, ):
         img = cv2.imdecode(imgnp,-1)
         # print(img)
         if not img.all():
-            water_level = run1(img)
-            waterqueue.append(water_level) 
+            # water_level = run1(img)
+            # waterqueue.append(water_level) 
             occupancy = freeOccupied(img)
             occupancyqueue.append(occupancy)
-            bowlStatus  = run2(img)
-            bowlqueue.append(bowlStatus)
-            plateStatus = run3(img)
-            platequeue.append(plateStatus)
+            comparison = compare(img)
+            comparisonqueue.append(comparison)
+            # bowlStatus  = run2(img)
+            # bowlqueue.append(bowlStatus)
+            # plateStatus = run3(img)
+            # platequeue.append(plateStatus)
             if (time.time() > t0+5):
                 people = max(set(occupancyqueue), key=occupancyqueue.count)
                 # emit('update value', people, broadcast=True)
                 decisionqueue.append(people)
                 print(people)
-                waterlevelavg = max(set(waterqueue), key=waterqueue.count)
+                # waterlevelavg = max(set(waterqueue), key=waterqueue.count)
                 # emit('update value', waterlevelavg, broadcast=True)
-                decisionqueue.append(waterlevelavg)
-                print(waterlevelavg)
-                bowl_stat = max(set(bowlqueue), key=bowlqueue.count)
-                decisionqueue.append(bowl_stat)
-                print(bowl_stat)
+                # decisionqueue.append(waterlevelavg)
+                # print(waterlevelavg)
+                compare_stat = max(set(comparisonqueue), key=comparisonqueue.count)
+                decisionqueue.append(compare_stat)
+                # bowl_stat = max(set(bowlqueue), key=bowlqueue.count)
+                # decisionqueue.append(bowl_stat)
+                # print(bowl_stat)
 
-                plate_stat = max(set(platequeue), key=platequeue.count)
-                decisionqueue.append(plate_stat)
-                print(plate_stat)
+                # plate_stat = max(set(platequeue), key=platequeue.count)
+                # decisionqueue.append(plate_stat)
+                # print(plate_stat)
 
                 occupancyqueue.clear()
-                waterqueue.clear()
-                bowlqueue.clear()
-                platequeue.clear()
+                comparisonqueue.clear()
+                # waterqueue.clear()
+                # bowlqueue.clear()
+                # platequeue.clear()
                 t0 = time.time()
-                if len(decisionqueue) == 4:
+                if len(decisionqueue) == 2:
                     print(decisionqueue)
                     decision_status = decision(decisionqueue)
                     objectcolours = colours(decision_status)
@@ -132,10 +132,10 @@ def randomString():
 def status():
     return{"status": "Available"}
 
-@app.route("/message")
-def message():
+# @app.route("/message")
+# def message():
 
-    return{"message": "Need Refill of Water"}
+#     return{"message": "Need Refill of Water"}
 
 
 @app.route("/SaveLayout", methods = ['POST'])
