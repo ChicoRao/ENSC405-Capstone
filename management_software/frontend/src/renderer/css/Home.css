@@ -3,8 +3,8 @@
 }
 
 #layout-legend {
-    height: 495px;
-    width: 725px;
+    height: 120px;
+    width: 400px;
     margin: 20px;
     margin-left: auto;  /* Aligns it to the right */
     border: 2px solid black;
