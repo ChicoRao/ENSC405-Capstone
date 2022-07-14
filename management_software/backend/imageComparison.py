@@ -6,7 +6,7 @@ import cv2
 import os
 # construct the argument parse and parse the arguments
 
-def freeOccupied(img):
+def compare(img):
     ap = argparse.ArgumentParser()
     # --First and --Sedond are the path of the two images
     #ap.add_argument("-f", "--first", required=True, help="first input image")

@@ -1,5 +1,5 @@
-from bowlStatusDetection import bowlStatus
-from plateStatusDetection import plateStatus
+# from bowlStatusDetection import bowlStatus
+# from plateStatusDetection import plateStatus
 # from waterLevelDetectionBlob import run1
 from imageComparison import compare
 # from bowlStatusDetection import run2
@@ -16,7 +16,7 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-url='http://192.168.1.78/capture?_cb=1649747186380'
+url='http://192.168.1.82/capture?_cb=1649747186380'
 
 SavedLayout = []
 
