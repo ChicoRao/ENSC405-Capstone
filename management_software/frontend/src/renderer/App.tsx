@@ -8,15 +8,17 @@ import Reservations from './Pages/Reservations';
 import LayoutEditor from './Pages/LayoutEditor';
 import Settings from './Pages/Settings';
 import './css/App.css';
+import ReactLoading from "react-loading";
+import LoadingScreen from './Component/Preloader'
 
 export default function App() {
 	let socket = io('http://localhost:5000');
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [layoutInfo, updateLayoutInfo] = useState("white");
     const [tableInfo, updateTableID] = useState('e')
-
+    const [loading, setLoading] = useState(true)
 	useEffect(() => {
-
+        setTimeout(() => setLoading(false), 3000)
         if (!socketConnected) {
             socket.on("connect", () => {
                 console.log(socket.id);
@@ -66,19 +68,40 @@ export default function App() {
             })
         }
     })
-
+    const loader = () => {
+        return (
+          <ReactLoading
+            type={"spokes"}
+            color={"#5433ff"}
+            height={"4%"}
+            width={"4%"}
+          />
+        );
+      };
   return (
+    <>
     <Router>
-			<div id="app">
-				<Sidebar />
-				<Routes>
-					<Route path="/" element={<Home update={update} layoutInfo={layoutInfo} tableInfo={tableInfo}/>} />
-					<Route path="/menu" element={<Menu />} />
-					<Route path="/reservations" element={<Reservations />} />
-					<Route path="/layouteditor" element={<LayoutEditor />} />
+            {loading === false ? (
+                <div id="app">
+                <Sidebar />
+                <Routes>
+                    <Route path="/" element={<Home update={update} layoutInfo={layoutInfo} tableInfo={tableInfo}/>} />
+                    <Route path="/menu" element={<Menu />} />
+                    <Route path="/reservations" element={<Reservations />} />
+                    <Route path="/layouteditor" element={<LayoutEditor />} />
                     <Route path="/settings" element={<Settings />} />
-				</Routes>
-			</div>
+                </Routes>
+                </div>
+            ): (
+                <div className='Loading'>
+                    <LoadingScreen/>
+                </div>
+                
+            )
+        }
+
     </Router>
+    </>
+    
   );
 }
