@@ -80,14 +80,6 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
       <Tabs isEdit={false} />
       <div id="layout">
         <div id="layout-legend-content">
-          <button id="triggerr" onClick={UpdateLayout}>
-            Update Layout
-          </button>
-          <button 
-            id="trigger" 
-            onClick={update}>
-            Update
-          </button>
           <div id="layout-legend">
             <ul id="layout-legend-elements">
               <li>
@@ -103,12 +95,7 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
               <li>
                 <span className="legend-colors">
                 </span>
-                Need Cleaning
-              </li>
-              <li>
-                <span className="legend-colors">
-                </span>
-                Attention
+                Dirty
               </li>
             </ul>
           </div>
@@ -163,6 +150,14 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
             
           })}
         </div>
+          <button id="triggerr" onClick={UpdateLayout}>
+            Update Layout
+          </button>
+          <button 
+            id="trigger" 
+            onClick={update}>
+            Update
+          </button>
         </div>
       </div>
     </div>

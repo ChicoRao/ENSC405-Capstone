@@ -17,19 +17,19 @@ export default function Sidebar() {
       <SidebarContent>
         <Menu>
           <MenuItem>
-            Home
+            🏠 Home
             <Link to="/" />
           </MenuItem>
           <MenuItem>
-            🤣 Menu
+            🍴 Menu
             <Link to="/menu" />
           </MenuItem>
           <MenuItem>
-            🤣 Reservations
+            📘 Reservations
             <Link to="/reservations" />
           </MenuItem>
           <MenuItem>
-            Layout Editor
+             🗺️ Layout Editor
             <Link to="/layouteditor" />
           </MenuItem>
         </Menu>

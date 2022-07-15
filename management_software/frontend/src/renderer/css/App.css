@@ -1,6 +1,7 @@
 /*
  * Note: Can group common styling properties here
  */
+ @import '~antd/dist/antd.css';
 * {
   margin: 0;
 }
