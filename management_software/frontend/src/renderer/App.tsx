@@ -2,6 +2,7 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 import Home from './Pages/Home';
 import Menu from './Pages/Menu';
 import Reservations from './Pages/Reservations';
@@ -70,7 +71,8 @@ export default function App() {
   return (
     <Router>
 			<div id="app">
-				<Sidebar />
+				{/* <Sidebar /> */}
+                <Navbar />
 				<Routes>
 					<Route path="/" element={<Home update={update} layoutInfo={layoutInfo} tableInfo={tableInfo}/>} />
 					<Route path="/menu" element={<Menu />} />
@@ -78,6 +80,7 @@ export default function App() {
 					<Route path="/layouteditor" element={<LayoutEditor />} />
                     <Route path="/settings" element={<Settings />} />
 				</Routes>
+                
 			</div>
     </Router>
   );
