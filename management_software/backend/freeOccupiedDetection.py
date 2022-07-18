@@ -16,6 +16,7 @@ def freeOccupied(img):
     bbox, label, conf = cv.detect_common_objects(img)
     img = draw_bbox(img, bbox, label, conf)
     status = "Free"
+    print(label)
     if "person" not in label:
         return status
     else: 
