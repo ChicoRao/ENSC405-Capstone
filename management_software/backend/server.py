@@ -5,6 +5,7 @@ from flask import Flask, render_template, request
 # from bowlStatusDetection import run2
 # from plateStatusDetection import run3
 from flask import Flask, jsonify, render_template
+from ipDetection import ipSearch
 # from waterLevelDetectionBlob import run1
 # from dirtyPlateDetection import run2
 from freeOccupiedDetection import freeOccupied
@@ -19,9 +20,10 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-
 from flask import request
-url='http://192.168.1.82/capture?_cb=1656024603205'
+import subprocess
+
+url = ipSearch()
 
 tableID = "e1"
 SavedLayout = []
