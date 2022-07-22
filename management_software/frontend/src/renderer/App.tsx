@@ -35,11 +35,14 @@ export default function App() {
     })
 
 	socket.on("update value", (msg: Object) => {
-		let colour = msg.colour;
-        let tableID = msg.ID;
-		updateLayoutInfo(colour);
-        updateTableID(tableID);
-		// console.log("COLOUR: ", layoutInfo);
+        for (var val in msg){
+            let colour = msg[val].colour;
+            let tableID = msg[val].ID;
+            updateLayoutInfo(colour);
+            updateTableID(tableID);
+        }
+
+        // console.log("COLOUR: ", layoutInfo);
         // console.log("TableID: ", tableInfo);
 	})
 

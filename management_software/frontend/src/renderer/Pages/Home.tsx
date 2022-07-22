@@ -106,7 +106,8 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
               filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
             }
             if(data.id == tableInfo){
-              
+              console.log(tableInfo)
+              console.log(layoutInfo)
               return (
                   <div
                   style={{position: 'absolute', top: data.top, left: data.left}}
