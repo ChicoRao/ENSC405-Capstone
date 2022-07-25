@@ -9,4 +9,4 @@ def colours(decisionstatus, tableID):
         colour = 'yellow'
     elif decisionstatus == 'Occupied':
         colour = 'blue'
-    return {'ID': tableID, 'status': decisionstatus , 'colour':colour}
+    return colour

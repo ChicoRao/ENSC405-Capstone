@@ -55,12 +55,11 @@ let colourDeg = new Map<string, string>([
 
 interface Home {
   update: () => void
-  layoutInfo: string
-  tableInfo: string
+  tableInfo: Map<string,string>
 }
 
 //Layout tabs will soon be replaced with dynamic version
-export default function Home({ update, layoutInfo, tableInfo }: Home) {
+export default function Home({ update, tableInfo }: Home) {
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
   const [GetLayout, setLayout] = useState()
@@ -101,13 +100,19 @@ export default function Home({ update, layoutInfo, tableInfo }: Home) {
           </div>
           <div className="layout-editor-content">
           {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
-            let tablecolour = colourDeg.get(layoutInfo)
-            const styleTable = {
-              filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
-            }
-            if(data.id == tableInfo){
-              console.log(tableInfo)
-              console.log(layoutInfo)
+            console.log(tableInfo)
+            console.log(data.id)
+            // let tablecolour = colourDeg.get(tableInfo.get(data.id))
+            // const styleTable = {
+            //   filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
+            // }
+            if(data.id in tableInfo){
+              console.log(tableInfo[data.id])
+
+              let tablecolour = colourDeg.get(tableInfo[data.id])
+              const styleTable = {
+                filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
+              }
               return (
                   <div
                   style={{position: 'absolute', top: data.top, left: data.left}}

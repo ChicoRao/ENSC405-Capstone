@@ -6,7 +6,7 @@ import cv2
 import os
 # construct the argument parse and parse the arguments
 
-def compare(img):
+def compare(img, imageName):
     ap = argparse.ArgumentParser()
     # --First and --Sedond are the path of the two images
     #ap.add_argument("-f", "--first", required=True, help="first input image")
@@ -15,7 +15,7 @@ def compare(img):
 
     # load the two input images
 
-    imageB = cv2.imread(r'base_photo_.png') #might need to change the path
+    imageB = cv2.imread(imageName) #might need to change the path
 
     # convert the images to grayscale
     grayA = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

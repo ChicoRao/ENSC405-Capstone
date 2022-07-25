@@ -11,10 +11,10 @@ import Settings from './Pages/Settings';
 import './css/App.css';
 
 export default function App() {
-	let socket = io('http://localhost:5000');
+	let socket = io('http://localhost:5000/');
 	const [socketConnected, setSocketConnected] = useState(false);
-	const [layoutInfo, updateLayoutInfo] = useState("white");
-    const [tableInfo, updateTableID] = useState('e')
+    const initialObject = {'e1': 'green', 'e2': 'green'}
+    const [tableInfo, updateTable] = useState(initialObject)
 
 	useEffect(() => {
 
@@ -35,13 +35,8 @@ export default function App() {
     })
 
 	socket.on("update value", (msg: Object) => {
-        for (var val in msg){
-            let colour = msg[val].colour;
-            let tableID = msg[val].ID;
-            updateLayoutInfo(colour);
-            updateTableID(tableID);
-        }
-
+        console.log(msg)
+        updateTable(msg)
         // console.log("COLOUR: ", layoutInfo);
         // console.log("TableID: ", tableInfo);
 	})
@@ -77,7 +72,7 @@ export default function App() {
 				{/* <Sidebar /> */}
                 <Navbar />
 				<Routes>
-					<Route path="/" element={<Home update={update} layoutInfo={layoutInfo} tableInfo={tableInfo}/>} />
+					<Route path="/" element={<Home update={update} tableInfo={tableInfo}/>} />
 					<Route path="/menu" element={<Menu />} />
 					<Route path="/reservations" element={<Reservations />} />
 					<Route path="/layouteditor" element={<LayoutEditor />} />

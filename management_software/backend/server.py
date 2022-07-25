@@ -67,21 +67,14 @@ def test_connect():
 @socketio.on('Slider value changed')
 def value_changed(message, ):
     t0 = time.time()
-    t1 = time.time()
     occupancyqueue1 = []
     comparisonqueue1  = []
     decisionqueue1=[]
     occupancyqueue2 = []
     comparisonqueue2  = []
     decisionqueue2=[]
-    sendingQueue = []
-    # calibration_img = capture_photo()
-    i = 0
-    tempTest = [
-        {'status': "Available" , 'colour': "green"},
-        {'status': "Occupied" , 'colour': "blue"},
-        {'status': "Need Cleaning" , 'colour': "red"}
-    ]
+    sendingDict = dict()
+    capture_photo()
 
     url1 = urlList[0]
     url2 = urlList[1]
@@ -99,8 +92,8 @@ def value_changed(message, ):
             occupancy2 = freeOccupied(img2)
             occupancyqueue1.append(occupancy1)
             occupancyqueue2.append(occupancy2)
-            comparison1 = compare(img1)
-            comparison2 = compare(img2)
+            comparison1 = compare(img1, "base_photo_1.png")
+            comparison2 = compare(img2, "base_photo_2.png")
             comparisonqueue1.append(comparison1) 
             comparisonqueue2.append(comparison2)
             
@@ -124,16 +117,14 @@ def value_changed(message, ):
                     print("camera2 ", decisionqueue2)
                     decision_status1 = decision(decisionqueue1)
                     decision_status2 = decision(decisionqueue2)
-                    # print(decision_status1)
                     objectcolours1 = colours(decision_status1, tableID1)
                     objectcolours2 = colours(decision_status2, tableID2)
-                    sendingQueue.append(objectcolours1)
-                    sendingQueue.append(objectcolours2)
-                    emit('update value', sendingQueue, broadcast=True)
-                    time.sleep(3)
+                    sendingDict[tableID1] = objectcolours1
+                    sendingDict[tableID2] = objectcolours2
+                    emit('update value', sendingDict, broadcast=True)
                     decisionqueue1.clear()
                     decisionqueue2.clear()
-                    sendingQueue.clear()
+                    sendingDict.clear()
 
 
 
