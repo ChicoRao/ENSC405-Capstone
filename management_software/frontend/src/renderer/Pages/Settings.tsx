@@ -4,8 +4,13 @@ import '../css/Settings.css';
 export default function Settings() {
 
     function save(){
-        document.getElementById('wifiName').value = "";
-        document.getElementById('wifiPassword').value = "";
+        const name = document.getElementById('wifiName').value;
+        const password = document.getElementById('wifiPassword').value;
+        fetch('http://127.0.0.1:5000/SavePassword', {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(JSON.parse('{"username": "'+ name + '", "password": "' + password + '"}'))
+        })
     }
 
 	return(
