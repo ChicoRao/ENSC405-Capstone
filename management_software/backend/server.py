@@ -1,18 +1,11 @@
 from flask import Flask, render_template, request
-# from bowlStatusDetection import bowlStatus
-# from plateStatusDetection import plateStatus
-# from waterRefillDetection import run1
-# from bowlStatusDetection import run2
-# from plateStatusDetection import run3
 from flask import Flask, jsonify, render_template
 from ipDetection import ipSearch
-# from waterLevelDetectionBlob import run1
-# from dirtyPlateDetection import run2
 from freeOccupiedDetection import freeOccupied
 from imageComparison import compare
 from colours import colours
 from decision import decision
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, send
 from random import random
 from time import sleep
 from flask_cors import CORS
@@ -35,10 +28,6 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 cors = CORS(app)
 
 # app.register_blueprint(water)
-values = {
-    'slider1': 25,
-    'slider2': 0,
-}
 
 @app.route("/capture")
 def capture_photo():
@@ -54,18 +43,13 @@ def capture_photo():
     img_name2 = "base_photo_2.png"
     cv2.imwrite(img_name1, img1)
     cv2.imwrite(img_name2, img2)
-    # return img
-
-@app.route("/")
-def index():
-    return render_template('index.html', **values)
 
 @socketio.on('connect')
 def test_connect():
     emit('after connect',  {'data':'Connected'})
 
-@socketio.on('Slider value changed')
-def value_changed(message, ):
+@socketio.on('start stream')
+def value_changed(message):
     t0 = time.time()
     occupancyqueue1 = []
     comparisonqueue1  = []
@@ -80,7 +64,6 @@ def value_changed(message, ):
     url2 = urlList[1]
 
     while True:
-        
         img_resp1=urllib.request.urlopen(url1)
         imgnp1=np.array(bytearray(img_resp1.read()),dtype=np.uint8)
         img1 = cv2.imdecode(imgnp1,-1)
@@ -121,7 +104,7 @@ def value_changed(message, ):
                     objectcolours2 = colours(decision_status2, tableID2)
                     sendingDict[tableID1] = objectcolours1
                     sendingDict[tableID2] = objectcolours2
-                    emit('update value', sendingDict, broadcast=True)
+                    emit('update value', sendingDict)
                     decisionqueue1.clear()
                     decisionqueue2.clear()
                     sendingDict.clear()
@@ -131,7 +114,7 @@ def value_changed(message, ):
 def randomString():
     #infinite loop of magical random numbers
     number = round(random()*10, 3)
-    return str(number)
+    return number
 
 
 @app.route("/status")
@@ -148,17 +131,13 @@ def message():
 def SaveLayout():
     global SavedLayout 
     SavedLayout = request.data
-    # print(SavedLayout)
     print("recieved")
     return{"message": "Received Layout successfully"}
 
 
 @app.route("/GetLayout", methods = ['GET'])
 def GetLayout():
-    # print(SavedLayout)
-    # print("sending")
     return SavedLayout
-    # return{"message": "Received Layout successfully"}
 
 
 if __name__ == "__main__":
