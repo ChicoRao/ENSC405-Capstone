@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
 import Tabs from '../Component/Tabs';
 import tableLogo from '../../../assets/icons/editor/table.svg';
-import chairLogo from '../../../assets/icons/editor/chair.svg';
+//import chairLogo from '../../../assets/icons/editor/chair.svg';
 import cashierLogo from '../../../assets/icons/editor/cashier.png';
 import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
 import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
@@ -61,10 +61,10 @@ const symbolsList = [
     name: "Table",
     icon: tableLogo1
   },
-  {
-    name: "Chair",
-    icon: chairLogo
-  },
+  // {
+  //   name: "Chair",
+  //   icon: chairLogo
+  // },
   {
     name: "Booth Table",
     icon: boothTableLogo
