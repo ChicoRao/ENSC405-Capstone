@@ -5,7 +5,7 @@ from freeOccupiedDetection import freeOccupied
 from imageComparison import compare
 from colours import colours
 from decision import decision
-from flask_socketio import SocketIO, emit, send
+from flask_socketio import SocketIO, emit
 from random import random
 from time import sleep
 from flask_cors import CORS
