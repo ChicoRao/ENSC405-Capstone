@@ -28,8 +28,7 @@
   .img-holder{
     margin: auto;
     width: 1000px;
-    height: 750px;
-    border: 3px black solid;
+    height: 550px;
     border-radius: 5px;
     margin-top: 1rem;
     background-color: rgb(229, 229, 229);
@@ -37,7 +36,7 @@
   }
   .img{
     width: 1000px;
-    height: 750px;
+    height: 550px;
     object-fit: fill;
   }
   #input[type="file"] {
@@ -55,7 +54,7 @@
       height: 25px;
     color: white;
     border-radius: 10px;
-    background-color: rgb(170, 201, 219);
+    background-color: rgb(103, 181, 253);
     text-align: center;
     cursor: pointer;
   }

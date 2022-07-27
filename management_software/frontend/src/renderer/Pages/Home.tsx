@@ -162,7 +162,7 @@ export default function Home({ update, tableInfo }: Home) {
           <button 
             id="trigger" 
             onClick={update}>
-            Update
+            Sync
           </button>
         </div>
       </div>
