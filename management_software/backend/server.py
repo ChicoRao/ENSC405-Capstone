@@ -1,11 +1,6 @@
 from flask import Flask, render_template, request
 from flask import Flask, jsonify, render_template
-<<<<<<< HEAD
-# from waterLevelDetectionBlob import run1
-# from dirtyPlateDetection import run2
-=======
 from ipDetection import ipSearch
->>>>>>> 143d286 (fixed polling and multiple emit on server)
 from freeOccupiedDetection import freeOccupied
 from imageComparison import compare
 from colours import colours
