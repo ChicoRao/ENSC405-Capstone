@@ -11,7 +11,7 @@ import Settings from './Pages/Settings';
 import './css/App.css';
 
 export default function App() {
-	let socket = io('http://localhost:5000/');
+	let socket = io("http://localhost:5000/", { transports: ["websocket"] });;
 	const [socketConnected, setSocketConnected] = useState(false);
     const initialObject = {'e1': 'green', 'e2': 'green'}
     const [tableInfo, updateTable] = useState(initialObject)
@@ -34,17 +34,15 @@ export default function App() {
         }
     })
 
-	socket.on("update value", (msg: Object) => {
+	socket.on("update value", (msg: string) => {
         console.log(msg)
         updateTable(msg)
-        // console.log("COLOUR: ", layoutInfo);
-        // console.log("TableID: ", tableInfo);
 	})
 
     // An event handler for a change of value 
     const update = () => {
-        console.log("Start Update...")
-        socket.emit('Slider value changed', {
+        console.log("Starting Stream")
+        socket.emit('start stream', {
             data: "Please update"
         });
     }
