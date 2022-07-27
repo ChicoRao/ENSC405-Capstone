@@ -50,6 +50,8 @@
     width: 725px;
     /* padding: 6px 4px; */
     position: relative;
+    background-color: rgb(229, 229, 229);
+
 }
 
 .editor-item {

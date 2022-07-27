@@ -32,6 +32,8 @@
     border: 3px black solid;
     border-radius: 5px;
     margin-top: 1rem;
+    background-color: rgb(229, 229, 229);
+
   }
   .img{
     width: 1000px;

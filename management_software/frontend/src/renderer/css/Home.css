@@ -10,6 +10,8 @@
     border: 2px solid black;
     border-radius: 20px;
     font-size: 13px;
+    background-color: rgb(229, 229, 229);
+
 }
 
 #layout-legend-elements {
@@ -19,6 +21,8 @@
     margin: 35px 15px;
     padding: 0;
     list-style-type: none;
+    background-color: rgb(229, 229, 229);
+
 }
 
 #layout-legend-elements li:nth-child(1) span {
