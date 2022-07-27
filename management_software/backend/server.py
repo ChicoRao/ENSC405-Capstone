@@ -13,14 +13,14 @@ import cv2
 import urllib.request
 import numpy as np
 import time
-import json
-
 from flask import request
-url='http://192.168.1.82/capture?_cb=1656024603205'
+import subprocess
 
-tableID = "e1"
+urlList = ipSearch()
+
+tableID1 = "e1"
+tableID2 = "e2"
 SavedLayout = []
-SavedPassword = []
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -51,20 +51,18 @@ def test_connect():
 @socketio.on('start stream')
 def value_changed(message):
     t0 = time.time()
-    t1 = time.time()
-    # waterqueue = []
-    # bowlqueue = []
-    # platequeue = []
-    occupancyqueue = []
-    comparisonqueue  = []
-    decisionqueue=[]
-    calibration_img = capture_photo()
-    i = 0
-    tempTest = [
-        {'status': "Available" , 'colour': "green"},
-        {'status': "Occupied" , 'colour': "blue"},
-        {'status': "Need Cleaning" , 'colour': "red"}
-    ]
+    occupancyqueue1 = []
+    comparisonqueue1  = []
+    decisionqueue1=[]
+    occupancyqueue2 = []
+    comparisonqueue2  = []
+    decisionqueue2=[]
+    sendingDict = dict()
+    capture_photo()
+
+    url1 = urlList[0]
+    url2 = urlList[1]
+
     while True:
         img_resp1=urllib.request.urlopen(url1)
         imgnp1=np.array(bytearray(img_resp1.read()),dtype=np.uint8)
@@ -82,42 +80,20 @@ def value_changed(message):
             comparisonqueue1.append(comparison1) 
             comparisonqueue2.append(comparison2)
             
-            # water_level = run1(img)
-            # waterqueue.append(water_level) 
-            occupancy = freeOccupied(img)
-            occupancyqueue.append(occupancy)
-            comparison = compare(img)
-            comparisonqueue.append(comparison)
-            # bowlStatus  = run2(img)
-            # bowlqueue.append(bowlStatus)
-            # plateStatus = run3(img)
-            # platequeue.append(plateStatus)
 
             if (time.time() > t0+5):
-                people = max(set(occupancyqueue), key=occupancyqueue.count)
-                # emit('update value', people, broadcast=True)
-                decisionqueue.append(people)
-                # print(people)
-                # waterlevelavg = max(set(waterqueue), key=waterqueue.count)
-                # # emit('update value', waterlevelavg, broadcast=True)
-                # decisionqueue.append(waterlevelavg)
-                # # print(waterlevelavg)
-                # bowl_stat = max(set(bowlqueue), key=bowlqueue.count)
-                # decisionqueue.append(bowl_stat)
-                # # print(bowl_stat)
-                compare_stat = max(set(comparisonqueue), key=comparisonqueue.count)
-                decisionqueue.append(compare_stat)
-
-                # plate_stat = max(set(platequeue), key=platequeue.count)
-                # decisionqueue.append(plate_stat)
-                # print(plate_stat)
-
-
-                occupancyqueue.clear()
-                comparisonqueue.clear()
-                # waterqueue.clear()
-                # bowlqueue.clear()
-                # platequeue.clear()
+                people1 = max(set(occupancyqueue1), key=occupancyqueue1.count)
+                people2 = max(set(occupancyqueue2), key=occupancyqueue2.count)
+                decisionqueue1.append(people1)
+                decisionqueue2.append(people2)
+                compare_stat1 = max(set(comparisonqueue1), key=comparisonqueue1.count)
+                compare_stat2 = max(set(comparisonqueue2), key=comparisonqueue2.count)
+                decisionqueue1.append(compare_stat1)
+                decisionqueue2.append(compare_stat2)
+                occupancyqueue1.clear()
+                comparisonqueue2.clear()
+                occupancyqueue1.clear()
+                comparisonqueue2.clear()
                 t0 = time.time()
                 if len(decisionqueue1) == 2 or len(decisionqueue2) == 2:
                     print("camera1 ", decisionqueue1)
@@ -168,7 +144,6 @@ def SavePassword():
     f.write(request.data.decode("UTF-8"))
     f.close()
     return{"message": "Received Layout successfully"}
-
 
 @app.route("/GetLayout", methods = ['GET'])
 def GetLayout():
