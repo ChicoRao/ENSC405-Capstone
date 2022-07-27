@@ -134,6 +134,16 @@ def SaveLayout():
     print("recieved")
     return{"message": "Received Layout successfully"}
 
+@app.route("/SavePassword", methods = ['POST'])
+def SavePassword():
+    global SavedPassword
+    SavedPassword = request.data
+    # print(SavedLayout)
+    print(request.data)
+    f = open("password.txt", "w")
+    f.write(request.data.decode("UTF-8"))
+    f.close()
+    return{"message": "Received Layout successfully"}
 
 @app.route("/GetLayout", methods = ['GET'])
 def GetLayout():
