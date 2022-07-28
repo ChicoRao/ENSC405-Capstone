@@ -15,6 +15,7 @@ export default function App() {
 	const [socketConnected, setSocketConnected] = useState(false);
     const initialObject = {'e1': 'green', 'e2': 'green'}
     const [tableInfo, updateTable] = useState(initialObject)
+    const [attention, setAttention] = useState(true);
 
 	useEffect(() => {
 
@@ -37,6 +38,12 @@ export default function App() {
 	socket.on("update value", (msg: string) => {
         console.log(msg)
         updateTable(msg)
+	})
+
+    socket.on("peace", (attention: boolean) => {
+        console.log("NEED ATTENTION")
+        console.log(attention)
+        setAttention(true);
 	})
 
     // An event handler for a change of value 
@@ -76,7 +83,6 @@ export default function App() {
 					<Route path="/layouteditor" element={<LayoutEditor />} />
                     <Route path="/settings" element={<Settings />} />
 				</Routes>
-                
 			</div>
     </Router>
   );

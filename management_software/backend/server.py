@@ -71,6 +71,11 @@ def value_changed(message):
         _, frame = cap.read()
         
         handGestures = handGesture(frame)
+        if handGestures and time.time() > t0+5:
+            t0 = time.time()
+            attention = True
+            print(handGestures)
+            emit('peace', attention)
 
         # img_resp1=urllib.request.urlopen(url1)
         # imgnp1=np.array(bytearray(img_resp1.read()),dtype=np.uint8)

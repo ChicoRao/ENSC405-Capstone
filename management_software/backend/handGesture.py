@@ -48,5 +48,5 @@ def handGesture(img):
             classID = np.argmax(prediction)
             className = classNames[classID]
     
-    if className:
-        print("Gesture:", className)
+    if className == "peace":
+        return className
