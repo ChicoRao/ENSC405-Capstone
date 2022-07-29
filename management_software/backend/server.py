@@ -81,23 +81,31 @@ def value_changed(message):
             comparisonqueue2.append(comparison2)
             
 
-            if (time.time() > t0+5):
-                people1 = max(set(occupancyqueue1), key=occupancyqueue1.count)
-                people2 = max(set(occupancyqueue2), key=occupancyqueue2.count)
+            if (time.time() > t0+3):
+                print("occupancyqueue1, ", occupancyqueue1)
+                print("occupancyqueue2, ", occupancyqueue2)
+                if "Occupied" in occupancyqueue1:
+                    people1 = "Occupied"
+                else:
+                    people1 = "Free"
+                if "Occupied" in occupancyqueue2:
+                    people2 = "Occupied"
+                else:
+                    people2 = "Free"
+                # people1 = max(occupancyqueue1, key=occupancyqueue1.count)
+                # people2 = max(occupancyqueue2, key=occupancyqueue2.count)
                 decisionqueue1.append(people1)
                 decisionqueue2.append(people2)
-                compare_stat1 = max(set(comparisonqueue1), key=comparisonqueue1.count)
-                compare_stat2 = max(set(comparisonqueue2), key=comparisonqueue2.count)
+                compare_stat1 = max(comparisonqueue1, key=comparisonqueue1.count)
+                compare_stat2 = max(comparisonqueue2, key=comparisonqueue2.count)
                 decisionqueue1.append(compare_stat1)
                 decisionqueue2.append(compare_stat2)
                 occupancyqueue1.clear()
-                comparisonqueue2.clear()
-                occupancyqueue1.clear()
+                comparisonqueue1.clear()
+                occupancyqueue2.clear()
                 comparisonqueue2.clear()
                 t0 = time.time()
                 if len(decisionqueue1) == 2 or len(decisionqueue2) == 2:
-                    print("camera1 ", decisionqueue1)
-                    print("camera2 ", decisionqueue2)
                     decision_status1 = decision(decisionqueue1)
                     decision_status2 = decision(decisionqueue2)
                     objectcolours1 = colours(decision_status1, tableID1)
