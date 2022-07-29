@@ -3,8 +3,8 @@
 }
 
 #layout-legend {
-    height: 120px;
-    width: 400px;
+    height: 220px;
+    width: 200px;
     margin: 20px;
     margin-left: auto;  /* Aligns it to the right */
     border: 2px solid black;
@@ -15,9 +15,9 @@
 }
 
 #layout-legend-elements {
-    display: grid;
+    display: inline;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 15px;
+    grid-gap: 30px;
     margin: 35px 15px;
     padding: 0;
     list-style-type: none;
@@ -48,6 +48,11 @@
     margin: auto 10px;
     display: inline-block;
 }
+.space {
+    width: 15px;
+    height: auto;
+    display: inline-block;
+  }
 
 #layout-content {
     height: 65vh;

@@ -85,11 +85,15 @@ export default function Home({ update, tableInfo }: Home) {
                 <span className="legend-colors">
                 </span>
                 Free
+                <div>
+                </div>
               </li>
               <li>
                 <span className="legend-colors">
                 </span>
                 Occupied
+                <div>
+                </div>
               </li>
               <li>
                 <span className="legend-colors">
@@ -159,6 +163,8 @@ export default function Home({ update, tableInfo }: Home) {
           <button id="triggerr" onClick={UpdateLayout}>
             Update Layout
           </button>
+          <div class="space">
+           </div>
           <button 
             id="trigger" 
             onClick={update}>
