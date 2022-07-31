@@ -3,14 +3,15 @@
 }
 
 #layout-legend {
-    height: 120px;
-    width: 200px;
+    height: 60px;
+    width: 500px;
     margin: 20px;
-    margin-left: auto;  /* Aligns it to the right */
+    margin-right: auto;  /* Aligns it to the right */
     border: 2px solid black;
     border-radius: 20px;
     font-size: 13px;
     background-color: rgb(229, 229, 229);
+    
 
 }
 
@@ -20,17 +21,20 @@
     grid-gap: 30px;
     margin: 35px 15px;
     padding: 0;
-    list-style-type: none;
+    list-style-type: left;
+    
     background-color: rgb(229, 229, 229);
 
 }
 
 #layout-legend-elements li:nth-child(1) span {
     background-color: rgb(0, 218, 0);
+
 }
 
 #layout-legend-elements li:nth-child(2) span {
     background-color: rgb(8, 150, 216);
+
 }
 
 #layout-legend-elements li:nth-child(3) span {
