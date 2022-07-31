@@ -1,10 +1,13 @@
 *{
-    margin: 0;
+    margin-top: 200vh;
+    /* margin: 0; */
     padding: 0;
   }
   
   .page{
-    height: 50vh;
+    margin-top: 2vh;
+    height: 75vh;
+    width:865px;
     background-color: #ffffff;
     display: flex;
     align-items: center;
@@ -13,7 +16,7 @@
   }
   .container{
     height: 300px;
-    width: 300px;
+    width: 200px;
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.5);
     
@@ -27,16 +30,16 @@
   }
   .img-holder{
     margin: auto;
-    width: 1000px;
-    height: 550px;
+    width: 865px;
+    height: 525px;
     border-radius: 5px;
     margin-top: 1rem;
     background-color: rgb(229, 229, 229);
 
   }
   .img{
-    width: 1000px;
-    height: 550px;
+    width: 865px;
+    height: 525px;
     object-fit: fill;
   }
   #input[type="file"] {

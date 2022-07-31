@@ -25,7 +25,7 @@ export class Menu extends Component {
 		return (
 			<div className="page">
 				<div className="container">
-					<h1 className="heading">Menu</h1>
+					{/* <h1 className="heading">Menu</h1> */}
 					<div className="img-holder">
 						<img src={menuImg} alt="" id="img" className="img" />
 					</div>

@@ -6,6 +6,7 @@
 
 .editor-sidetools {
     width: 25vw;
+    height: 54.5vw;
     margin: 10px;
     border: 2px solid black;
     border-radius: 20px;
@@ -46,7 +47,7 @@
 .layout-editor-content {
     margin: 20px 15px;
     border: 3px solid black;
-    height: 495px;
+    height: 630px;
     width: 875px;
     /* padding: 6px 4px; */
     position: relative;

@@ -1,7 +1,11 @@
 #layout-legend-content {
 
 }
-
+body{
+    background-image: url(../../../assets/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
 #layout-legend {
     height: 50px;
     width: 360px;
