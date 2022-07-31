@@ -40,9 +40,9 @@ export default function App() {
         updateTable(msg)
 	})
 
-    socket.on("peace", (attention: boolean) => {
+    socket.on("Action", (handGestures: string) => {
         console.log("NEED ATTENTION")
-        console.log(attention)
+        console.log(handGestures)
         setAttention(true);
 	})
 
