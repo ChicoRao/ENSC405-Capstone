@@ -5,8 +5,8 @@
   }
   
   .page{
-    margin-top: 2vh;
-    height: 75vh;
+    margin-top: 150px;
+    height: 100px;
     width:865px;
     background-color: #ffffff;
     display: flex;
@@ -29,7 +29,7 @@
   
   }
   .img-holder{
-    margin: auto;
+    /* margin-top: 100px; */
     width: 865px;
     height: 525px;
     border-radius: 5px;
