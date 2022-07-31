@@ -29,17 +29,17 @@
   
   }
   .img-holder{
-    /* margin-top: 100px; */
-    width: 865px;
-    height: 525px;
+    margin-top: 100px;
+    width: 1000px;
+    height: 600px;
     border-radius: 5px;
     margin-top: 1rem;
     background-color: rgb(229, 229, 229);
 
   }
   .img{
-    width: 865px;
-    height: 525px;
+    width: 1000px;
+    height: 600px;
     object-fit: fill;
   }
   #input[type="file"] {
