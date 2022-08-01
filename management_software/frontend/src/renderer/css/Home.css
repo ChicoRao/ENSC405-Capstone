@@ -10,8 +10,9 @@ body{
 .button {
     /* position: absolute; */
     /* top:50%; */
-    background-color:#0d3451;
+    background-color:#0c2e48;
     color: rgb(188, 187, 187);
+    padding: 2px;
 }
 #layout-legend {
     height: 50px;
