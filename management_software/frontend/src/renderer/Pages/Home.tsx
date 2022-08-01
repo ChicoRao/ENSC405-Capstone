@@ -19,6 +19,7 @@ interface LayoutDataCell {
   left: string
 }
 
+
 const symbolsList = [
   {
     name: "Table",
@@ -62,6 +63,7 @@ interface Home {
 export default function Home({ update, tableInfo }: Home) {
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
+
   const [GetLayout, setLayout] = useState()
   function UpdateLayout() {
 
@@ -76,6 +78,7 @@ export default function Home({ update, tableInfo }: Home) {
 
   return (
     <div className="right-content">
+    {/* <img src="/icon.jpg" alt="My_Logo"></img> */}
       <Tabs isEdit={false} />
       <div id="layout">
         <div id="layout-legend-content">
@@ -160,14 +163,15 @@ export default function Home({ update, tableInfo }: Home) {
             
           })}
         </div>
-          <button id="triggerr" onClick={UpdateLayout}>
+          <div class="space"></div>
+          <button id="triggerr" onClick={UpdateLayout} class="button">
             Update Layout
           </button>
           <div class="space">
            </div>
-          <button 
+          <button
             id="trigger" 
-            onClick={update}>
+            onClick={update} class="button">
             Sync
           </button>
         </div>

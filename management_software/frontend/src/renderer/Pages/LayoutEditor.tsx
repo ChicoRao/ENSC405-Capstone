@@ -221,7 +221,8 @@ export default function LayoutEditor() {
             
           })}
         </div>
-        <button onClick={SaveLayout}>Save Layout</button>
+        <div class="space"></div>
+        <button onClick={SaveLayout} class="button">Save Layout </button>
       </div>
     </div>
   );
