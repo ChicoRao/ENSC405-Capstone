@@ -13,7 +13,7 @@ import './css/App.css';
 export default function App() {
 	let socket = io("http://localhost:5000/", { transports: ["websocket"] });;
 	const [socketConnected, setSocketConnected] = useState(false);
-    const initialObject = {'e1': 'green', 'e2': 'green'}
+    const initialObject = {'e0': 'green', 'e1': 'green'}
     const [tableInfo, updateTable] = useState(initialObject)
     const [attention, setAttention] = useState(true);
 

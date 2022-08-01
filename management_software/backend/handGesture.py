@@ -25,7 +25,7 @@ def fourImages(img):
     ActionList.append(handGesture(img))
     ActionList.append(handGesture(cv2.rotate(img, cv2.ROTATE_180)))
     ActionList.append(handGesture(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)))
-    print(ActionList)
+    # print(ActionList)
     return ActionList
 
 
@@ -53,7 +53,6 @@ def handGesture(img):
             prediction = model.predict([landmarks])
             classID = np.argmax(prediction)
             className = classNames[classID]
-            print(className)
     
     if className == "peace" or className == "rock":
         return className
