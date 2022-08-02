@@ -50,7 +50,7 @@ const symbolsList = [
 
 let colourDeg = new Map<string, string>([
   ['red', '(0deg)'],
-  ['yellow', '(60deg)'],
+  ['yellow', '(0deg)'],
   ['blue', '(240deg)'],
   ['green', '(120deg)']
 ]);
@@ -60,11 +60,11 @@ interface Home {
   tableInfo: Map<string,string>
   tableAction: Map<string,string>
   attention: Boolean
-  setAttention: any
+  resetActions: () => void
 }
 
 //Layout tabs will soon be replaced with dynamic version
-export default function Home({ update, tableInfo, tableAction, attention, setAttention }: Home) {
+export default function Home({ update, tableInfo, tableAction, attention, resetActions }: Home) {
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
   const [GetLayout, setLayout] = useState()
@@ -77,9 +77,6 @@ export default function Home({ update, tableInfo, tableAction, attention, setAtt
     .catch(err => console.log(err));
     console.log(GetLayout)
   }
-
-
-
 
   return (
     <div className="right-content">
@@ -107,7 +104,7 @@ export default function Home({ update, tableInfo, tableAction, attention, setAtt
           </div>
           
           <div>
-            {attention && <Popup setAttention={setAttention} tableAction = {tableAction}/>}
+            {attention && <Popup resetActions={resetActions} tableAction={tableAction}/>}
           </div>
 
           <div className="layout-editor-content">

@@ -55,6 +55,12 @@ export default function App() {
         });
     }
 
+    const resetActions = () => {
+        console.log("Resetting Actions")
+        setAttention(false);
+        updateAction(new Map());
+    }
+
     socket.on("connect_error", () => {
         socket.connect();
         setSocketConnected(true);
@@ -78,7 +84,7 @@ export default function App() {
 				{/* <Sidebar /> */}
                 <Navbar />
 				<Routes>
-					<Route path="/" element={<Home update={update} tableInfo={tableInfo} tableAction={tableAction} attention={attention}/>} />
+					<Route path="/" element={<Home update={update} tableInfo={tableInfo} tableAction={tableAction} attention={attention} resetActions={resetActions}/>} />
 					<Route path="/menu" element={<Menu />} />
 					<Route path="/reservations" element={<Reservations />} />
 					<Route path="/layouteditor" element={<LayoutEditor />} />
