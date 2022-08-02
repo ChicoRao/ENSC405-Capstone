@@ -15,7 +15,8 @@ export default function App() {
 	const [socketConnected, setSocketConnected] = useState(false);
     const initialObject = {'e0': 'green', 'e1': 'green'}
     const [tableInfo, updateTable] = useState(initialObject)
-    const [attention, setAttention] = useState(true);
+    const [attention, setAttention] = useState(false);
+    const [tableAction, updateAction] = useState(new Map())
 
 	useEffect(() => {
 
@@ -41,9 +42,9 @@ export default function App() {
 	})
 
     socket.on("Action", (handGestures: string) => {
-        console.log("NEED ATTENTION")
         console.log(handGestures)
         setAttention(true);
+        updateAction(handGestures)
 	})
 
     // An event handler for a change of value 
@@ -77,7 +78,7 @@ export default function App() {
 				{/* <Sidebar /> */}
                 <Navbar />
 				<Routes>
-					<Route path="/" element={<Home update={update} tableInfo={tableInfo}/>} />
+					<Route path="/" element={<Home update={update} tableInfo={tableInfo} tableAction={tableAction} attention={attention}/>} />
 					<Route path="/menu" element={<Menu />} />
 					<Route path="/reservations" element={<Reservations />} />
 					<Route path="/layouteditor" element={<LayoutEditor />} />

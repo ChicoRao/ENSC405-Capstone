@@ -44,17 +44,20 @@ def capture_photo():
 
 
 def Gestures(frame, tableNumber):
-    sendingAction = []
+    sendingAction = dict()
     gesture = fourImages(frame)
  
     if gesture:
         if 'rock' in gesture :
-            sendingAction.append(tableNumber)
-            sendingAction.append('Bill')
+            # sendingAction.append(tableNumber)
+            # sendingAction.append('Bill')
+            sendingAction[tableNumber] = 'Bill'
             return sendingAction
+
         elif 'peace' in gesture:
-            sendingAction.append(tableNumber)
-            sendingAction.append('Order')
+            # sendingAction.append(tableNumber)
+            # sendingAction.append('Order')
+            sendingAction[tableNumber] = 'Order'
             return sendingAction
 
 def ChangeColours(img, tableNumber):
