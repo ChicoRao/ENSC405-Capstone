@@ -109,7 +109,9 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
               </li>
             </ul>
           </div>
-          
+          <div>
+            <Popup resetActions={resetActions} tableAction={tableAction}/>
+          </div>
           <div>
             {attention && <Popup resetActions={resetActions} tableAction={tableAction}/>}
           </div>
