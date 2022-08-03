@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/Menu.css';
 //import * as fs from 'browserify-fs';
 //import * as fs from 'fs';
-//import '../../../assets/defaultImage.png';
+import '../../../assets/defaultImage.png';
 
 export class Menu extends Component {
   state={
@@ -25,7 +25,7 @@ export class Menu extends Component {
 		return (
 			<div className="page">
 				<div className="container">
-					<h1 className="heading">Add menu</h1>
+					<h1 className="heading">Menu</h1>
 					<div className="img-holder">
 						<img src={menuImg} alt="" id="img" className="img" />
 					</div>
@@ -46,7 +46,7 @@ export default Menu;
 const KEY_MENU_IMAGE_DATA = "menuImageData"
 
 function getImagePath() {
-  const defaultImagePath = "../../../assets/defaultImage.png"
+  const defaultImagePath = '../../../assets/defaultImage.png';
   // if path exist from local storage use local storage, or else use default image
   let localStoredImage = localStorage.getItem(KEY_MENU_IMAGE_DATA)
   if (localStoredImage != null) {

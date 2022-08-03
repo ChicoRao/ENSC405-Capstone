@@ -6,7 +6,9 @@
 
 .editor-sidetools {
     width: 25vw;
-    margin: 10px;
+    height: 37.9vw;
+    margin-left: 10px;
+    margin-top: 80px;
     border: 2px solid black;
     border-radius: 20px;
     overflow: hidden;
@@ -44,12 +46,14 @@
 }
 
 .layout-editor-content {
-    margin: 50px 15px;
+    margin: 20px 15px;
     border: 3px solid black;
-    height: 495px;
-    width: 725px;
-    /* padding: 6px 4px; */
+    height: 580px;
+    width: 875px;
+    opacity: 0.9;
     position: relative;
+    background-color: rgb(244, 248, 228);
+
 }
 
 .editor-item {
