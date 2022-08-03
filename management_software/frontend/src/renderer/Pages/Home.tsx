@@ -3,6 +3,8 @@ import axios from 'axios';
 import Tabs from '../Component/Tabs';
 import Layout from '../Component/Layout';
 import Popup from '../Component/Popup';
+import PlaceHolder from '../Component/PlaceHolder';
+
 
 import '../css/Home.css';
 import tableLogo from '../../../assets/icons/editor/table.svg';
@@ -110,10 +112,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             </ul>
           </div>
           <div>
-            <Popup resetActions={resetActions} tableAction={tableAction}/>
-          </div>
-          <div>
-            {attention && <Popup resetActions={resetActions} tableAction={tableAction}/>}
+            {attention ? <Popup resetActions={resetActions} tableAction={tableAction} /> : <PlaceHolder/> }
           </div>
 
           <div className="layout-editor-content">
