@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
 import Tabs from '../Component/Tabs';
 import tableLogo from '../../../assets/icons/editor/table.svg';
-import chairLogo from '../../../assets/icons/editor/chair.svg';
+//import chairLogo from '../../../assets/icons/editor/chair.svg';
 import cashierLogo from '../../../assets/icons/editor/cashier.png';
 import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
 import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
@@ -62,25 +62,9 @@ const symbolsList = [
     icon: tableLogo1
   },
   {
-    name: "Chair",
-    icon: chairLogo
-  },
-  {
     name: "Booth Table",
     icon: boothTableLogo
   },
-  {
-    name: "Divider",
-    icon: dividerLogo
-  },
-  {
-    name: "Cashier",
-    icon: cashierLogo
-  },
-  {
-    name: "Door",
-    icon: doorLogo
-  }
 ]
 
 export default function LayoutEditor() {
@@ -221,7 +205,8 @@ export default function LayoutEditor() {
             
           })}
         </div>
-        <button onClick={SaveLayout}>Save Layout</button>
+        <div class="space"></div>
+        <button onClick={SaveLayout} class="button">Save Layout </button>
       </div>
     </div>
   );

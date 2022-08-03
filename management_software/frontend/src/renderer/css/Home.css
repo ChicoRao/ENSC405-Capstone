@@ -1,32 +1,53 @@
 #layout-legend-content {
 
 }
-
+body{
+    background-image: url(../../../assets/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* color: rgba(65, 187, 100, 0.782); */
+}
+.button {
+    /* position: absolute; */
+    /* top:50%; */
+    background-color:#0c2e48;
+    color: rgb(188, 187, 187);
+    padding: 2px;
+}
 #layout-legend {
-    height: 120px;
-    width: 400px;
+    height: 50px;
+    width: 360px;
     margin: 20px;
-    margin-left: auto;  /* Aligns it to the right */
+    margin-right: auto;  /* Aligns it to the right */
     border: 2px solid black;
     border-radius: 20px;
     font-size: 13px;
+    background-color: rgb(229, 229, 229);
+    
+
 }
 
 #layout-legend-elements {
-    display: grid;
+    display: inline;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 15px;
-    margin: 35px 15px;
+    grid-gap: 30px;
+    margin: 12px 15px;
     padding: 0;
-    list-style-type: none;
+    list-style-type: None;
+    display:inline-flex ;
+    background-color: rgb(229, 229, 229);
+
 }
+
 
 #layout-legend-elements li:nth-child(1) span {
     background-color: rgb(0, 218, 0);
+
 }
 
 #layout-legend-elements li:nth-child(2) span {
     background-color: rgb(8, 150, 216);
+
 }
 
 #layout-legend-elements li:nth-child(3) span {
@@ -39,15 +60,20 @@
 
 .legend-colors {
     border: 1px solid black;
-    height: 10px;
-    width: 15px;
+    height: 20px;
+    width: 30px;
     margin: auto 10px;
     display: inline-block;
 }
+.space {
+    width: 15px;
+    height: auto;
+    display: inline-block;
+  }
 
 #layout-content {
     height: 65vh;
     width: 60vw;
     margin: 15px 30px;
-    border: 3px solid black;
+    border: 3px solid rgb(0, 0, 0);
 }

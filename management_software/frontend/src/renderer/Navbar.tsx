@@ -37,10 +37,10 @@ import {
     getItem("" , '12', null),
     getItem("" , '13', null),
     getItem("" , '14', null),
-    getItem("" , '15', null),
-    getItem("" , '16', null),
-    getItem("" , '17', null),
-    getItem("" , '18', null),
+    // getItem("" , '15', null),
+    // getItem("" , '16', null),
+    // getItem("" , '17', null),
+    // getItem("" , '18', null),
     getItem(<Link to="/Settings">Settings</Link> , '20', <SettingOutlined />),
   ];
   

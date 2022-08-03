@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Name=LocalHost
+Icon=utilities-terminal
+Exec=gnome-terminal -e "bash -c '~/Desktop/ENSC405-Capstone/management_software/start.sh;$SHELL'"
+Categories=Application; 
