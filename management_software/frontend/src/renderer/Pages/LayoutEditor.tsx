@@ -61,26 +61,10 @@ const symbolsList = [
     name: "Table",
     icon: tableLogo1
   },
-  // {
-  //   name: "Chair",
-  //   icon: chairLogo
-  // },
   {
     name: "Booth Table",
     icon: boothTableLogo
   },
-  {
-    name: "Divider",
-    icon: dividerLogo
-  },
-  {
-    name: "Cashier",
-    icon: cashierLogo
-  },
-  {
-    name: "Door",
-    icon: doorLogo
-  }
 ]
 
 export default function LayoutEditor() {
