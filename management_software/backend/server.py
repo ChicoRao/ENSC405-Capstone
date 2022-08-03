@@ -48,16 +48,23 @@ def Gestures(frame, tableNumber):
     gesture = fourImages(frame)
  
     if gesture:
-        if 'rock' in gesture :
+        print(gesture)
+        if 'okay' in gesture :
             # sendingAction.append(tableNumber)
             # sendingAction.append('Bill')
+            sendingAction[tableNumber] = 'Order'
+            return sendingAction
+
+        elif 'call me' in gesture:
+            # sendingAction.append(tableNumber)
+            # sendingAction.append('Order')
             sendingAction[tableNumber] = 'Bill'
             return sendingAction
 
         elif 'peace' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'Order'
+            sendingAction[tableNumber] = 'Water'
             return sendingAction
 
 def ChangeColours(img, tableNumber):

@@ -54,7 +54,7 @@ def handGesture(img):
             classID = np.argmax(prediction)
             className = classNames[classID]
     
-    if className == "peace" or className == "rock":
+    if className == "okay" or className == "call me" or className == "peace":
         return className
 
 
