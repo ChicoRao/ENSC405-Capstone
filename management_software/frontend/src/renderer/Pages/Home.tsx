@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Tabs from '../Component/Tabs';
 import Layout from '../Component/Layout';
+import Popup from '../Component/Popup';
+
 import '../css/Home.css';
 import tableLogo from '../../../assets/icons/editor/table.svg';
 import chairLogo from '../../../assets/icons/editor/chair.svg';
@@ -49,7 +51,7 @@ const symbolsList = [
 
 let colourDeg = new Map<string, string>([
   ['red', '(0deg)'],
-  ['yellow', '(60deg)'],
+  ['yellow', '(0deg)'],
   ['blue', '(240deg)'],
   ['green', '(120deg)']
 ]);
@@ -57,16 +59,19 @@ let colourDeg = new Map<string, string>([
 interface Home {
   update: () => void
   tableInfo: Map<string,string>
+  tableAction: Map<string,string>
+  attention: Boolean
+  resetActions: () => void
 }
 
 //Layout tabs will soon be replaced with dynamic version
-export default function Home({ update, tableInfo }: Home) {
+export default function Home({ update, tableInfo, tableAction, attention, resetActions }: Home) {
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
 
   const [GetLayout, setLayout] = useState()
-  function UpdateLayout() {
 
+  function UpdateLayout() {
     axios.get(urlLayout)
     .then(data => {
       setLayout(data.data)
@@ -74,7 +79,6 @@ export default function Home({ update, tableInfo }: Home) {
     .catch(err => console.log(err));
     console.log(GetLayout)
   }
-
 
   return (
     <div className="right-content">
@@ -105,17 +109,16 @@ export default function Home({ update, tableInfo }: Home) {
               </li>
             </ul>
           </div>
+          
+          <div>
+            {attention && <Popup resetActions={resetActions} tableAction={tableAction}/>}
+          </div>
+
           <div className="layout-editor-content">
           {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
-            console.log(tableInfo)
-            console.log(data.id)
-            // let tablecolour = colourDeg.get(tableInfo.get(data.id))
-            // const styleTable = {
-            //   filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
-            // }
+            console.log(attention)
             if(data.id in tableInfo){
               console.log(tableInfo[data.id])
-
               let tablecolour = colourDeg.get(tableInfo[data.id])
               const styleTable = {
                 filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour

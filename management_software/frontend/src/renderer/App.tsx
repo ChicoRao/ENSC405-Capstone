@@ -13,8 +13,10 @@ import './css/App.css';
 export default function App() {
 	let socket = io("http://localhost:5000/", { transports: ["websocket"] });;
 	const [socketConnected, setSocketConnected] = useState(false);
-    const initialObject = {'e1': 'green', 'e2': 'green'}
+    const initialObject = {'e0': 'green', 'e1': 'green'}
     const [tableInfo, updateTable] = useState(initialObject)
+    const [attention, setAttention] = useState(false);
+    const [tableAction, updateAction] = useState(new Map())
 
 	useEffect(() => {
 
@@ -39,12 +41,24 @@ export default function App() {
         updateTable(msg)
 	})
 
+    socket.on("Action", (handGestures: string) => {
+        console.log(handGestures)
+        setAttention(true);
+        updateAction(handGestures)
+	})
+
     // An event handler for a change of value 
     const update = () => {
         console.log("Starting Stream")
         socket.emit('start stream', {
             data: "Please update"
         });
+    }
+
+    const resetActions = () => {
+        console.log("Resetting Actions")
+        setAttention(false);
+        updateAction(new Map());
     }
 
     socket.on("connect_error", () => {
@@ -70,13 +84,12 @@ export default function App() {
 				{/* <Sidebar /> */}
                 <Navbar />
 				<Routes>
-					<Route path="/" element={<Home update={update} tableInfo={tableInfo}/>} />
+					<Route path="/" element={<Home update={update} tableInfo={tableInfo} tableAction={tableAction} attention={attention} resetActions={resetActions}/>} />
 					<Route path="/menu" element={<Menu />} />
 					<Route path="/reservations" element={<Reservations />} />
 					<Route path="/layouteditor" element={<LayoutEditor />} />
                     <Route path="/settings" element={<Settings />} />
 				</Routes>
-                
 			</div>
     </Router>
   );

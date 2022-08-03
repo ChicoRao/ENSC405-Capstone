@@ -3,6 +3,7 @@ from flask import Flask, jsonify, render_template
 from ipDetection import ipSearch
 from freeOccupiedDetection import freeOccupied
 from imageComparison import compare
+from handGesture import fourImages
 from colours import colours
 from decision import decision
 from flask_socketio import SocketIO, emit
@@ -15,34 +16,83 @@ import numpy as np
 import time
 from flask import request
 import subprocess
+# import _thread
+import threading 
+import queue
 
+lock = threading.Lock()
 urlList = ipSearch()
-
-tableID1 = "e1"
-tableID2 = "e2"
 SavedLayout = []
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, async_mode="threading" ,cors_allowed_origins="*")
 cors = CORS(app)
-
-# app.register_blueprint(water)
 
 @app.route("/capture")
 def capture_photo():
-    url1 = urlList[0]
-    url2 = urlList[1]
-    img_resp1=urllib.request.urlopen(url1)
-    img_resp2=urllib.request.urlopen(url2)
-    imgnp1=np.array(bytearray(img_resp1.read()),dtype=np.uint8)
-    imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
-    img1 = cv2.imdecode(imgnp1,-1)
-    img2 = cv2.imdecode(imgnp2,-1)
-    img_name1 = "base_photo_1.png"
-    img_name2 = "base_photo_2.png"
-    cv2.imwrite(img_name1, img1)
-    cv2.imwrite(img_name2, img2)
+    for i in range(len(urlList)):
+        converted_num = str(i)
+        tableNumber = 'e'+ converted_num
+        url = urlList[i]
+        img_resp=urllib.request.urlopen(url)
+        imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
+        img = cv2.imdecode(imgnp,-1)
+        img_name = "base_photo_"+ tableNumber + ".png"
+        cv2.imwrite(img_name, img)
+
+
+
+def Gestures(frame, tableNumber):
+    sendingAction = dict()
+    gesture = fourImages(frame)
+ 
+    if gesture:
+        if 'rock' in gesture :
+            # sendingAction.append(tableNumber)
+            # sendingAction.append('Bill')
+            sendingAction[tableNumber] = 'Bill'
+            return sendingAction
+
+        elif 'peace' in gesture:
+            # sendingAction.append(tableNumber)
+            # sendingAction.append('Order')
+            sendingAction[tableNumber] = 'Order'
+            return sendingAction
+
+def ChangeColours(img, tableNumber):
+    decisionqueue = []
+    sendingDict = dict()
+    people = freeOccupied(img)
+    decisionqueue.append(people)
+    compare_stat = compare(img, "base_photo_"+ tableNumber +".png")
+    decisionqueue.append(compare_stat)
+
+    decision_status = decision(decisionqueue)
+    objectcolours = colours(decision_status, tableNumber)
+    sendingDict[tableNumber] = objectcolours
+    return sendingDict
+
+
+def callingfunctions(q, q2, url, tableNumber):
+    while True:
+        img_resp2=urllib.request.urlopen(url)
+        imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
+        frame = cv2.imdecode(imgnp2,-1) 
+        with lock:
+            hands = Gestures(frame, tableNumber)
+            q.put(hands)
+            colour = ChangeColours(frame,tableNumber)
+            q2.put(colour)    
+
+
+def list_to_dict(ListOfDict):
+    result = {}
+    for d in ListOfDict:
+        result.update(d)
+
+    return result
+
 
 @socketio.on('connect')
 def test_connect():
@@ -50,71 +100,52 @@ def test_connect():
 
 @socketio.on('start stream')
 def value_changed(message):
-    t0 = time.time()
-    occupancyqueue1 = []
-    comparisonqueue1  = []
-    decisionqueue1=[]
-    occupancyqueue2 = []
-    comparisonqueue2  = []
-    decisionqueue2=[]
-    sendingDict = dict()
     capture_photo()
+    q = queue.Queue()
+    q2 = queue.Queue()
+    for i in range(len(urlList)):
+        with app.test_request_context():
+            converted_num = str(i)
+            tableNumber = 'e'+ converted_num
+            print("Starting thread ", tableNumber , 'URl: ', urlList[i])
+            thread = threading.Thread( target = callingfunctions, name = callingfunctions ,args = (q, q2, urlList[i], tableNumber), )
+            thread.start()
 
-    url1 = urlList[0]
-    url2 = urlList[1]
-
+    t0 = time.time()
+    t1 = time.time()
+    gestureList = []
+    tableList = []
     while True:
-        img_resp1=urllib.request.urlopen(url1)
-        imgnp1=np.array(bytearray(img_resp1.read()),dtype=np.uint8)
-        img1 = cv2.imdecode(imgnp1,-1)
-        img_resp2=urllib.request.urlopen(url2)
-        imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
-        img2 = cv2.imdecode(imgnp2,-1)
-        if not img1.all() and not img2.all():
-            occupancy1 = freeOccupied(img1)
-            occupancy2 = freeOccupied(img2)
-            occupancyqueue1.append(occupancy1)
-            occupancyqueue2.append(occupancy2)
-            comparison1 = compare(img1, "base_photo_1.png")
-            comparison2 = compare(img2, "base_photo_2.png")
-            comparisonqueue1.append(comparison1) 
-            comparisonqueue2.append(comparison2)
-            
+        handGestures = q.get()
+        tableColour = q2.get()
+        print(tableColour)
 
-            if (time.time() > t0+5):
-                people1 = max(set(occupancyqueue1), key=occupancyqueue1.count)
-                people2 = max(set(occupancyqueue2), key=occupancyqueue2.count)
-                decisionqueue1.append(people1)
-                decisionqueue2.append(people2)
-                compare_stat1 = max(set(comparisonqueue1), key=comparisonqueue1.count)
-                compare_stat2 = max(set(comparisonqueue2), key=comparisonqueue2.count)
-                decisionqueue1.append(compare_stat1)
-                decisionqueue2.append(compare_stat2)
-                occupancyqueue1.clear()
-                comparisonqueue2.clear()
-                occupancyqueue1.clear()
-                comparisonqueue2.clear()
-                t0 = time.time()
-                if len(decisionqueue1) == 2 or len(decisionqueue2) == 2:
-                    print("camera1 ", decisionqueue1)
-                    print("camera2 ", decisionqueue2)
-                    decision_status1 = decision(decisionqueue1)
-                    decision_status2 = decision(decisionqueue2)
-                    objectcolours1 = colours(decision_status1, tableID1)
-                    objectcolours2 = colours(decision_status2, tableID2)
-                    sendingDict[tableID1] = objectcolours1
-                    sendingDict[tableID2] = objectcolours2
-                    emit('update value', sendingDict)
-                    decisionqueue1.clear()
-                    decisionqueue2.clear()
-                    sendingDict.clear()
+        if handGestures != None:
+            gestureList.append(handGestures)
+        if tableColour != None:
+            tableList.append(tableColour)
 
 
+        if time.time() >= t0 + 3:
+            if gestureList:
+                uniqueAction = []
+                for x in gestureList:
+                    if x not in uniqueAction:
+                        uniqueAction.append(x)
+                for action in uniqueAction:
+                    emit('Action', action)
+                gestureList.clear()
+            if tableList:
+                uniqueTableColour = []
+                for x1 in tableList:
+                    if x1 not in uniqueTableColour:
+                        uniqueTableColour.append(x1)
+                resultDict = list_to_dict(uniqueTableColour)
 
-def randomString():
-    #infinite loop of magical random numbers
-    number = round(random()*10, 3)
-    return number
+                if len(resultDict) >= len(urlList):
+                    emit('update value', resultDict)
+                    tableList.clear()
+            t0 =time.time()
 
 
 @app.route("/status")
