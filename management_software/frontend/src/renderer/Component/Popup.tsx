@@ -1,6 +1,7 @@
 import React from 'react';
 import React, { useState, useEffect } from 'react';
-
+import '../css/PopUp.css';
+import { Button } from 'antd';
 
 // const [action, setAction] = useState(true);
 // const [tableID, setTableID] = useState(true);
@@ -12,16 +13,13 @@ export default function PopUp({resetActions, tableAction}: PopUp) {
     console.log("props value ", Object.values(tableAction))
 
     return (
-        <div >
-            {/* x close window */}
-            <button onClick={resetActions} >X</button>
+        <div className="PopupWindow">
             <div >
-                <h1>Table {Object.keys(tableAction)[0]} requesting for {Object.values(tableAction)[0]}</h1>
+                <h2>Table {Object.keys(tableAction)[0]} requesting for {Object.values(tableAction)[0]}</h2>
             </div>
             {/* button controls */}
             <div>
-                <button onClick={()=> setAttention(false)}> MORE BONES! </button>
-                <button onClick={()=> setAttention(false)}> No, thank you. </button>
+                <Button type="primary" onClick={resetActions}> Dismiss </Button>
             </div> 
         </div>
     );

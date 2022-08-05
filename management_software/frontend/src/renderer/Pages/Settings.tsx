@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 import '../css/Settings.css';
 
 export default function Settings() {
@@ -29,6 +30,9 @@ export default function Settings() {
             <div className="saveWifiButtonDiv">
                 <button className="saveWifiButton" onClick={save}> Save </button>
             </div>
+            {/* <div className="updatebutton">
+                <Button type="primary"> Update </Button>
+            </div> */}
         </div>
     );
 };
