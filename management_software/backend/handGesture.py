@@ -25,6 +25,7 @@ def fourImages(img):
     ActionList.append(handGesture(img))
     ActionList.append(handGesture(cv2.rotate(img, cv2.ROTATE_180)))
     ActionList.append(handGesture(cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)))
+    ActionList = list(filter(None, ActionList))
     # print(ActionList)
     return ActionList
 
@@ -51,10 +52,16 @@ def handGesture(img):
 
             # Predict gesture
             prediction = model.predict([landmarks])
-            classID = np.argmax(prediction)
-            className = classNames[classID]
-    
-    if className == "okay" or className == "call me" or className == "peace":
-        return className
+            print("Max prediction , ", prediction.max())
+            print(np.argmax(prediction))
+            if prediction.max() >= .85:
+                print("inside If")
+                classID = np.argmax(prediction)
+                className = classNames[classID]
+                print(className)
+            else:
+                continue
+
+    return className
 
 

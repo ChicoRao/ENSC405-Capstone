@@ -32,3 +32,9 @@
     text-decoration: none;
     text-shadow: 0px 1px 0px #528ecc;
 }
+
+.updatebutton {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
