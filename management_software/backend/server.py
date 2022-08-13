@@ -66,9 +66,7 @@ def Gestures(frame, tableNumber):
             # sendingAction.append('Order')
             sendingAction[tableNumber] = 'Water'
             return sendingAction
-        else:
-            sendingAction[tableNumber] = 'Other'
-            return sendingAction
+
 
 def ChangeColours(img, tableNumber):
     decisionqueue = []
