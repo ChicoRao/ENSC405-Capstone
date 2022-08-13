@@ -146,8 +146,7 @@ export default function LayoutEditor() {
   return (
     <div className="layout-editor">
       <div className="editor-sidetools">
-        <h3 className="sidetool-title">Symbol</h3>
-        <hr/>
+        <h3 className="sidetool-title">Symbols</h3>
         <div className="sidetool-grid">
           {symbolsList.map((obj) => {
             return (
@@ -177,6 +176,7 @@ export default function LayoutEditor() {
                 bounds="parent"
                 onStop={handleStop}
               >
+                
                 <div
                   style={{position: 'absolute', top: '0px', left: '0px'}}
                   id={data.id}
@@ -186,18 +186,20 @@ export default function LayoutEditor() {
                     onClick={(e) => rotateFunction(data.id,e)}
                     // onMouseUp={()=> console.log()}
                     // onMouseUp={()=> console.log(layoutData)}
-
                   >
-                    <h6>Rotate/Delete</h6>
+                    <h6 className="rotateDelete">Rotate/Delete</h6>
                   </div>
                   <div 
                     className = "logo"
                   >
+                    <h4 className = "TableNumber">Table {data.id}</h4>
                     <img
+                      
                       src={data.icon}
                       className="editor-item cursor rotate-north"
                       draggable="false"
                       />
+                      
                   </div>
                 </div>
               </Draggable>

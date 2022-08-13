@@ -14,9 +14,11 @@
 
 #layout-tabs li.active-tab {
     border-color: rgb(252, 72, 18);
-    color: rgb(252, 72, 18);
+    /* color: rgb(252, 72, 18); */
+    color: rgb(0, 0, 0);
     border-bottom: 3px solid;
-    background-color: rgb(103, 181, 253);
+    /* background-color: rgb(103, 181, 253); */
+
 }
 
 #layout-tabs .edit-tab {
@@ -34,8 +36,7 @@
 }
 
 #layout-tabs li:hover {
-    border-color: rgb(252, 150, 18);
-    color: rgb(252, 150, 18);
+    color: rgb(0, 0, 0, 0.3);
     border-bottom: 3px solid;
 }
 
