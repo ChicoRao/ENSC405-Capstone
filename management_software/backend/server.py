@@ -128,7 +128,7 @@ def value_changed(message):
     while True:
         handGestures = q.get()
         tableColour = q2.get()
-        print(tableColour)
+        # print(tableColour)
 
         if handGestures != None:
             gestureList.append(handGestures)
@@ -145,14 +145,26 @@ def value_changed(message):
                         uniqueAction.append(x)
                 for action in uniqueAction:
                     if action.get(list(action.keys())[0]) == 'Other':
+                        print("Update value BLUE")
                         emit("update value", { list(action.keys())[0] : "blue"})
+                        gestureList.clear()
+                        t0 =time.time()
+                        print('if table',tableList)
+                        tableList.clear()
+                        tableList.append({ list(action.keys())[0] : "blue"})
                         continue
                     else:
                         print("ACTION", action)
                         emit('Action', action)
                         print("Update value")
                         emit("update value", { list(action.keys())[0] : "blue"})
-                gestureList.clear()
+                        print('else table',tableList)
+                        tableList.clear()
+                        tableList.append({ list(action.keys())[0] : "blue"})
+                        gestureList.clear()
+                        t0 =time.time()
+                        continue
+                
             if tableList and not gestureList:
                 uniqueTableColour = []
                 for x1 in tableList:
@@ -161,6 +173,7 @@ def value_changed(message):
                 resultDict = list_to_dict(uniqueTableColour)
 
                 if len(resultDict) >= len(urlList):
+                    print('HERE ', resultDict)
                     emit('update value', resultDict)
                     tableList.clear()
             t0 =time.time()

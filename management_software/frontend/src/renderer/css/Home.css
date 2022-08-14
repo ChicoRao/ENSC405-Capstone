@@ -1,5 +1,5 @@
 #layout-legend-content {
-
+    
 }
 body{
     background-image: url(../../../assets/background.jpg);
@@ -29,6 +29,14 @@ body{
     
 
 }
+.TableNumber {
+    position: absolute;
+    z-index: 100;
+    font-size: medium;
+    left: 20px;
+    top: 20px;
+    color: rgb(188, 187, 187);
+}
 
 #layout-legend-elements {
     display: inline;
@@ -45,20 +53,23 @@ body{
 
 #layout-legend-elements li:nth-child(1) span {
     background-color: rgb(0, 218, 0);
+    border-radius: 8px;
 
 }
 
 #layout-legend-elements li:nth-child(2) span {
     background-color: rgb(8, 150, 216);
-
+    border-radius: 8px;
 }
 
 #layout-legend-elements li:nth-child(3) span {
     background-color: rgb(250, 37, 37);
+    border-radius: 8px;
 }
 
 #layout-legend-elements li:nth-child(4) span {
     background-color: rgb(250, 37, 37);
+    border-radius: 8px;
 }
 
 .legend-colors {
@@ -80,3 +91,9 @@ body{
     margin: 15px 30px;
     border: 3px solid rgb(0, 0, 0);
 }
+
+
+/* .center{
+    align-items: center;
+    justify-content: center;
+} */

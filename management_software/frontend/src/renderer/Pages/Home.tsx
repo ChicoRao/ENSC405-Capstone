@@ -114,6 +114,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
           <div>
             {attention ? <Popup resetActions={resetActions} tableAction={tableAction} /> : <PlaceHolder/> }
           </div>
+          <div className = "center">
 
           <div className="layout-editor-content">
           {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
@@ -134,6 +135,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
                     className = "logo"
                   
                   >
+                    <h4 className = "TableNumber">Table {data.id}</h4>
                     <img 
                       style = {styleTable}
                       src={data.icon}
@@ -178,6 +180,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             onClick={update} class="button">
             Sync
           </button>
+        </div>
         </div>
       </div>
     </div>

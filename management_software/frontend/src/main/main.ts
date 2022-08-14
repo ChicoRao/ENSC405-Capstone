@@ -74,10 +74,10 @@ const createWindow = async () => {
     show: false,
     width: 1100,
     height: 750,
-    // fullscreen: true,
+    fullscreen: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      devTools: false,
+      devTools: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),

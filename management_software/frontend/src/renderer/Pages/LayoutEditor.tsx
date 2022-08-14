@@ -7,6 +7,8 @@ import tableLogo from '../../../assets/icons/editor/table.svg';
 import cashierLogo from '../../../assets/icons/editor/cashier.png';
 import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
 import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
+import circular_table from '../../../assets/icons/editor/Circular_table.svg';
+
 import dividerLogo from '../../../assets/icons/editor/divider.png';
 import doorLogo from '../../../assets/icons/editor/door.png';
 import '../css/LayoutEditor.css';
@@ -62,8 +64,8 @@ const symbolsList = [
     icon: tableLogo1
   },
   {
-    name: "Booth Table",
-    icon: boothTableLogo
+    name: "circular_table",
+    icon: circular_table
   },
 ]
 
