@@ -48,7 +48,7 @@ def Gestures(frame, tableNumber):
     gesture = fourImages(frame)
  
     if gesture:
-        print("GESTURE", gesture)
+        # print("GESTURE", gesture)
         if 'okay' in gesture :
             # sendingAction.append(tableNumber)
             # sendingAction.append('Bill')
@@ -145,20 +145,15 @@ def value_changed(message):
                         uniqueAction.append(x)
                 for action in uniqueAction:
                     if action.get(list(action.keys())[0]) == 'Other':
-                        print("Update value BLUE")
                         emit("update value", { list(action.keys())[0] : "blue"})
                         gestureList.clear()
                         t0 =time.time()
-                        print('if table',tableList)
                         tableList.clear()
                         tableList.append({ list(action.keys())[0] : "blue"})
                         continue
                     else:
-                        print("ACTION", action)
                         emit('Action', action)
-                        print("Update value")
                         emit("update value", { list(action.keys())[0] : "blue"})
-                        print('else table',tableList)
                         tableList.clear()
                         tableList.append({ list(action.keys())[0] : "blue"})
                         gestureList.clear()
@@ -173,7 +168,7 @@ def value_changed(message):
                 resultDict = list_to_dict(uniqueTableColour)
 
                 if len(resultDict) >= len(urlList):
-                    print('HERE ', resultDict)
+                    # print('HERE ', resultDict)
                     emit('update value', resultDict)
                     tableList.clear()
             t0 =time.time()
