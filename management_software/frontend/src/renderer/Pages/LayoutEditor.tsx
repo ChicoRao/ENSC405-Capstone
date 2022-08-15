@@ -7,6 +7,8 @@ import tableLogo from '../../../assets/icons/editor/table.svg';
 import cashierLogo from '../../../assets/icons/editor/cashier.png';
 import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
 import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
+import circular_table from '../../../assets/icons/editor/Circular_table.svg';
+
 import dividerLogo from '../../../assets/icons/editor/divider.png';
 import doorLogo from '../../../assets/icons/editor/door.png';
 import '../css/LayoutEditor.css';
@@ -62,8 +64,8 @@ const symbolsList = [
     icon: tableLogo1
   },
   {
-    name: "Booth Table",
-    icon: boothTableLogo
+    name: "circular_table",
+    icon: circular_table
   },
 ]
 
@@ -146,8 +148,7 @@ export default function LayoutEditor() {
   return (
     <div className="layout-editor">
       <div className="editor-sidetools">
-        <h3 className="sidetool-title">Symbol</h3>
-        <hr/>
+        <h3 className="sidetool-title">Symbols</h3>
         <div className="sidetool-grid">
           {symbolsList.map((obj) => {
             return (
@@ -177,6 +178,7 @@ export default function LayoutEditor() {
                 bounds="parent"
                 onStop={handleStop}
               >
+                
                 <div
                   style={{position: 'absolute', top: '0px', left: '0px'}}
                   id={data.id}
@@ -186,18 +188,20 @@ export default function LayoutEditor() {
                     onClick={(e) => rotateFunction(data.id,e)}
                     // onMouseUp={()=> console.log()}
                     // onMouseUp={()=> console.log(layoutData)}
-
                   >
-                    <h6>Rotate/Delete</h6>
+                    <h6 className="rotateDelete">Rotate/Delete</h6>
                   </div>
                   <div 
                     className = "logo"
                   >
+                    <h4 className = "TableNumber">Table {data.id}</h4>
                     <img
+                      
                       src={data.icon}
                       className="editor-item cursor rotate-north"
                       draggable="false"
                       />
+                      
                   </div>
                 </div>
               </Draggable>
