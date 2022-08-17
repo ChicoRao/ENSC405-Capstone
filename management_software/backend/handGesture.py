@@ -12,10 +12,10 @@ hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 mpDraw = mp.solutions.drawing_utils
 
 # Load the gesture recognizer model
-model = load_model('C:\\Users\\Angus\\Desktop\\ENSC405-Capstone\\management_software\\backend\\mp_hand_gesture')
+model = load_model('C:\\Users\\patrick\\Desktop\\ENSC405-Capstone\\management_software\\backend\\mp_hand_gesture')
 
 # Load class names
-f = open('C:\\Users\\Angus\\Desktop\\ENSC405-Capstone\\management_software\\backend\\gesture.names', 'r')
+f = open('C:\\Users\\patrick\\Desktop\\ENSC405-Capstone\\management_software\\backend\\gesture.names', 'r')
 classNames = f.read().split('\n')
 f.close()
 
