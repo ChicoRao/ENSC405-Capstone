@@ -60,9 +60,9 @@ def findGesture(unknownGesture,knownGestures,keyPoints,gestNames,tol):
     return gesture
 
 
-width=1280
-height=720
-cam=cv2.VideoCapture(4,cv2.CAP_DSHOW)
+width=400  
+height=296
+cam=cv2.VideoCapture(0,cv2.CAP_DSHOW)
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT,height)
 cam.set(cv2.CAP_PROP_FPS, 30)
