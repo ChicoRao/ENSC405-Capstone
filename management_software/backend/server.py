@@ -4,6 +4,7 @@ from ipDetection import ipSearch
 from freeOccupiedDetection import freeOccupied
 from imageComparison import compare
 from handGesture import fourImages
+from handGesture import handGesture
 from colours import colours
 from decision import decision
 from flask_socketio import SocketIO, emit
@@ -19,6 +20,8 @@ import subprocess
 # import _thread
 import threading 
 import queue
+
+
 
 lock = threading.Lock()
 urlList = ipSearch()
@@ -49,22 +52,22 @@ def Gestures(frame, tableNumber):
  
     if gesture:
         # print("GESTURE", gesture)
-        if 'okay' in gesture :
+        if 'Okay' in gesture :
             # sendingAction.append(tableNumber)
             # sendingAction.append('Bill')
-            sendingAction[tableNumber] = 'Order'
+            sendingAction[tableNumber] = 'Peace'
             return sendingAction
 
-        elif 'call me' in gesture:
+        elif 'Call' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'Bill'
+            sendingAction[tableNumber] = 'Ok'
             return sendingAction
 
-        elif 'peace' in gesture:
+        elif 'Peace' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'Water'
+            sendingAction[tableNumber] = 'Call'
             return sendingAction
         else:
             sendingAction[tableNumber] = 'Other'
@@ -110,6 +113,7 @@ def test_connect():
 
 @socketio.on('start stream')
 def value_changed(message):
+    print("testing 1111111111111111111111111111111111111111111")
     capture_photo()
     q = queue.Queue()
     q2 = queue.Queue()
