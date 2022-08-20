@@ -19,6 +19,7 @@ import subprocess
 # import _thread
 import threading 
 import queue
+from QR_calibration import read_qr_code
 
 lock = threading.Lock()
 urlList = ipSearch()
@@ -104,6 +105,16 @@ def list_to_dict(ListOfDict):
         result.update(d)
 
     return result
+
+def checkQR(img,tableNumber,url):
+    result = read_qr_code(img)
+    if result == 'http://LocalHost' :
+        img_resp3=urllib.request.urlopen(url)
+        imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
+        img = cv2.imdecode(imgnp,-1)
+        img_name = "base_photo_"+ tableNumber + ".png"
+        cv2.imwrite(img_name, img)
+    return("captured")
 
 
 @socketio.on('connect')
