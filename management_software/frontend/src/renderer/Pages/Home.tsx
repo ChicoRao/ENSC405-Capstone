@@ -69,6 +69,7 @@ interface Home {
 //Layout tabs will soon be replaced with dynamic version
 export default function Home({ update, tableInfo, tableAction, attention, resetActions }: Home) {
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
+  // const recalibrateURL = "http://127.0.0.1:5000/capture";
 
 
   const [GetLayout, setLayout] = useState()
@@ -80,6 +81,15 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
     })
     .catch(err => console.log(err));
     console.log(GetLayout)
+  }
+  function recalibrate(){
+    console.log("Recalibrating")
+    axios.put("http://127.0.0.1:5000/capture")
+    // fetch('http://127.0.0.1:5000/capture', {
+    //   method: 'PUT',
+    //   mode: 'cors',
+      
+    // })
   }
 
   return (
@@ -179,6 +189,11 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             id="trigger" 
             onClick={update} class="button">
             Sync
+          </button>
+          <button
+            id="trigger" 
+            onClick={recalibrate} class="button">
+            Recalibrate
           </button>
         </div>
         </div>

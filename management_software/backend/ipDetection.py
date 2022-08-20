@@ -2,7 +2,7 @@ import subprocess
 
 def ipSearch():
     try:
-        macList = ['0c-b8-15-c4-e0-f8','e0-e2-e6-aa-84-a4']
+        macList = ['0c-b8-15-f4-9f-38','ec-62-60-9a-8d-a0']
         urlList = []
         for item in macList:
             cmd = 'arp -a | findstr ' + item

@@ -29,8 +29,9 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode="threading" ,cors_allowed_origins="*")
 cors = CORS(app)
 
-@app.route("/capture")
+@app.route("/capture", methods = ["PUT"])
 def capture_photo():
+    print("Capturing")
     for i in range(len(urlList)):
         converted_num = str(i)
         tableNumber = 'e'+ converted_num
@@ -40,6 +41,7 @@ def capture_photo():
         img = cv2.imdecode(imgnp,-1)
         img_name = "base_photo_"+ tableNumber + ".png"
         cv2.imwrite(img_name, img)
+    return("captured")
 
 
 
@@ -49,23 +51,23 @@ def Gestures(frame, tableNumber):
  
     if gesture:
         # print("GESTURE", gesture)
-        if 'okay' in gesture :
-            # sendingAction.append(tableNumber)
-            # sendingAction.append('Bill')
-            sendingAction[tableNumber] = 'Order'
-            return sendingAction
+        # if 'okay' in gesture :
+        #     # sendingAction.append(tableNumber)
+        #     # sendingAction.append('Bill')
+        #     sendingAction[tableNumber] = 'Order'
+        #     return sendingAction
 
-        elif 'call me' in gesture:
+        if 'call me' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'Bill'
+            sendingAction[tableNumber] = 'needs attention'
             return sendingAction
 
-        elif 'peace' in gesture:
-            # sendingAction.append(tableNumber)
-            # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'Water'
-            return sendingAction
+        # elif 'peace' in gesture:
+        #     # sendingAction.append(tableNumber)
+        #     # sendingAction.append('Order')
+        #     sendingAction[tableNumber] = 'Water'
+        #     return sendingAction
         else:
             sendingAction[tableNumber] = 'Other'
             return sendingAction
@@ -145,17 +147,29 @@ def value_changed(message):
                         uniqueAction.append(x)
                 for action in uniqueAction:
                     if action.get(list(action.keys())[0]) == 'Other':
-                        emit("update value", { list(action.keys())[0] : "blue"})
+                        # emit("update value", { list(action.keys())[0] : "blue"})
+                        print(tableList)
+                        # if any((action.keys())[0] in d for d in tableList):
+                        for value in tableList:
+                            print(value)
+                            print(list(action.keys())[0])
+                            if (list(action.keys())[0] in value):
+                                value.update({list(action.keys())[0]:"blue"})
+
                         gestureList.clear()
                         t0 =time.time()
-                        tableList.clear()
-                        tableList.append({ list(action.keys())[0] : "blue"})
+                        # tableList.clear()
+                        # tableList.append({ list(action.keys())[0] : "blue"})
                         continue
                     else:
                         emit('Action', action)
-                        emit("update value", { list(action.keys())[0] : "blue"})
-                        tableList.clear()
-                        tableList.append({ list(action.keys())[0] : "blue"})
+                        # emit("update value", { list(action.keys())[0] : "blue"})
+                        print(tableList)
+                        for value in tableList:
+                            if (list(action.keys())[0] in value):
+                                value.update({list(action.keys())[0]:"blue"})
+                        # tableList.clear()
+                        # tableList.append({ list(action.keys())[0] : "blue"})
                         gestureList.clear()
                         t0 =time.time()
                         continue

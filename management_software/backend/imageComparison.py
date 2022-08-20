@@ -28,7 +28,7 @@ def compare(img, imageName):
     diff = (diff * 255).astype("uint8")
     print("SSIM: {}".format(score))
     status = "clean"
-    if score > 0.9:
+    if score > 0.85:
         return status 
     else:
         status = "dirty"
