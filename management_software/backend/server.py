@@ -52,22 +52,22 @@ def Gestures(frame, tableNumber):
  
     if gesture:
         # print("GESTURE", gesture)
-        if 'Okay' in gesture :
+        if 'Ok' in gesture :
             # sendingAction.append(tableNumber)
             # sendingAction.append('Bill')
-            sendingAction[tableNumber] = 'Peace'
+            sendingAction[tableNumber] = 'bill'
             return sendingAction
 
         elif 'Call' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'Ok'
+            sendingAction[tableNumber] = 'order'
             return sendingAction
 
         elif 'Peace' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'Call'
+            sendingAction[tableNumber] = 'water'
             return sendingAction
         else:
             sendingAction[tableNumber] = 'Other'
