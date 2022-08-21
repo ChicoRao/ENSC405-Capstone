@@ -9,13 +9,13 @@ import csv
 from model import KeyPointClassifier
 import copy
 import itertools
-
+from greyScale import rgb2gray
 
 
 
 # initialize mediapipe
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.85)
+hands = mpHands.Hands(max_num_hands=2, min_detection_confidence=0.85)
 mpDraw = mp.solutions.drawing_utils
 keypoint_classifier = KeyPointClassifier()
 # Load the gesture recognizer model
@@ -53,6 +53,8 @@ def fourImages(img):
 def handGesture(img):
     className =''
     image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    # Image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    # image = rgb2gray(Image) 
     debug_image = copy.deepcopy(img)
     results = hands.process(image)
     if results.multi_hand_landmarks is not None:

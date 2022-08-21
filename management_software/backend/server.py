@@ -20,6 +20,8 @@ import subprocess
 import threading 
 import queue
 from QR_calibration import read_qr_code
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 lock = threading.Lock()
 urlList = ipSearch()
@@ -52,22 +54,22 @@ def Gestures(frame, tableNumber):
  
     if gesture:
         # print("GESTURE", gesture)
-        if 'Ok' in gesture :
+        if 'OK' in gesture :
             # sendingAction.append(tableNumber)
             # sendingAction.append('Bill')
-            sendingAction[tableNumber] = 'bill'
+            sendingAction[tableNumber] = 'requests for bill'
             return sendingAction
 
         elif 'Call' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'order'
+            sendingAction[tableNumber] = 'requests to order'
             return sendingAction
 
         elif 'Peace' in gesture:
             # sendingAction.append(tableNumber)
             # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'water'
+            sendingAction[tableNumber] = 'requests for water refill'
             return sendingAction
         else:
             sendingAction[tableNumber] = 'Other'
@@ -92,6 +94,8 @@ def callingfunctions(q, q2, url, tableNumber):
         img_resp2=urllib.request.urlopen(url)
         imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
         frame = cv2.imdecode(imgnp2,-1) 
+        # FRAME = cv2.imdecode(imgnp2,-1) 
+        # frame = rgb2gray(FRAME) 
         with lock:
             hands = Gestures(frame, tableNumber)
             q.put(hands)
@@ -108,13 +112,14 @@ def list_to_dict(ListOfDict):
 
 def checkQR(img,tableNumber,url):
     result = read_qr_code(img)
-    if result == 'http://LocalHost' :
+    print(result)
+    if result == 'http://LocalHost':
         img_resp3=urllib.request.urlopen(url)
         imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
         img = cv2.imdecode(imgnp,-1)
         img_name = "base_photo_"+ tableNumber + ".png"
         cv2.imwrite(img_name, img)
-    return("captured")
+    # return("captured")
 
 
 @socketio.on('connect')
@@ -126,6 +131,7 @@ def value_changed(message):
     capture_photo()
     q = queue.Queue()
     q2 = queue.Queue()
+    # q3 = queue.Queue()
     for i in range(len(urlList)):
         with app.test_request_context():
             converted_num = str(i)
@@ -138,15 +144,19 @@ def value_changed(message):
     t1 = time.time()
     gestureList = []
     tableList = []
+    # QRList = []
     while True:
         handGestures = q.get()
         tableColour = q2.get()
+        # QR = q3.get()
         # print(tableColour)
 
         if handGestures != None:
             gestureList.append(handGestures)
         if tableColour != None:
             tableList.append(tableColour)
+        # if QRList != None:
+        #     QRList.append(QR)
 
 
         if time.time() >= t0 + 3:

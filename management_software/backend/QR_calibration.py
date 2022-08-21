@@ -2,7 +2,7 @@ import glob
 import cv2
 import pandas as pd
 import pathlib
-
+from pyzbar.pyzbar import decode
 
 
     
@@ -17,13 +17,15 @@ def read_qr_code(img):
         qr (string): Value from QR code
     """
     
-    try:
-        img = cv2.imread(img)
-        detect = cv2.QRCodeDetector()
-        value, points, straight_qrcode = detect.detectAndDecode(img)
-        return value   #if QR_LocalHost.png is on the table and scanned, this will return "http://LocalHost"
-    except:
-        return
+
+    image = cv2.imread(img)
+
+    img = cv2.imread('frame.jpg')
+    print ("qr image read")
+    for barcode in decode (image):
+        print (barcode.data.decode("utf-8"))
+        return barcode.data.decode("utf-8")   #if QR_LocalHost.png is on the table and scanned, this will return "http://LocalHost"
+  
 
 
 
