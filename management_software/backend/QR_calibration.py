@@ -20,7 +20,7 @@ def read_qr_code(img):
 
     image = cv2.imread(img)
 
-    img = cv2.imread('frame.jpg')
+    # img = cv2.imread('frame.jpg')
     print ("qr image read")
     for barcode in decode (image):
         print (barcode.data.decode("utf-8"))
