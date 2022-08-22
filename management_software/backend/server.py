@@ -19,9 +19,11 @@ import subprocess
 # import _thread
 import threading 
 import queue
-from QR_calibration import read_qr_code
+# from QR_calibration import read_qr_code
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+
+from QR_calibration import return_QR_Result
 
 lock = threading.Lock()
 urlList = ipSearch()
@@ -51,6 +53,22 @@ def capture_photo():
 def Gestures(frame, tableNumber):
     sendingAction = dict()
     gesture = fourImages(frame)
+    result = return_QR_Result(frame)
+    print(result)
+    if result:
+        
+        if 'Water' in result:
+            print ('QR is Water')
+            sendingAction[tableNumber] = 'requests for Water (QR)'
+            return sendingAction
+        elif 'Bill' in result:
+            print ('QR is Water')
+            sendingAction[tableNumber] = 'requests for Bill (QR)'
+            return sendingAction
+        elif 'Order' in result:
+            print ('QR is Water')
+            sendingAction[tableNumber] = 'requests for Order (QR)'
+            return sendingAction
  
     if gesture:
         # print("GESTURE", gesture)
@@ -74,6 +92,7 @@ def Gestures(frame, tableNumber):
         else:
             sendingAction[tableNumber] = 'Other'
             return sendingAction
+            
 
 def ChangeColours(img, tableNumber):
     decisionqueue = []
@@ -94,6 +113,7 @@ def callingfunctions(q, q2, url, tableNumber):
         img_resp2=urllib.request.urlopen(url)
         imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
         frame = cv2.imdecode(imgnp2,-1) 
+        # checkQR(frame,tableNumber)
         # FRAME = cv2.imdecode(imgnp2,-1) 
         # frame = rgb2gray(FRAME) 
         with lock:
@@ -101,6 +121,8 @@ def callingfunctions(q, q2, url, tableNumber):
             q.put(hands)
             colour = ChangeColours(frame,tableNumber)
             q2.put(colour)    
+            # QRcode = read_qr_code()
+            # q3.put(QRcode)
 
 
 def list_to_dict(ListOfDict):
@@ -110,15 +132,22 @@ def list_to_dict(ListOfDict):
 
     return result
 
-def checkQR(img,tableNumber,url):
-    result = read_qr_code(img)
-    print(result)
-    if result == 'http://LocalHost':
-        img_resp3=urllib.request.urlopen(url)
-        imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
-        img = cv2.imdecode(imgnp,-1)
-        img_name = "base_photo_"+ tableNumber + ".png"
-        cv2.imwrite(img_name, img)
+# def checkQR(img,tableNumber):
+#     sendingAction = dict()
+
+    # result = return_QR_Result(img)
+    # print(result)
+    # if result:
+        
+    #     if 'http://LocalHost' in result:
+    #         print ('QR is http://LocalHost')
+    #         sendingAction[tableNumber] = 'requests for bill (QR)'
+    #         return sendingAction
+        # img_resp3=urllib.request.urlopen(url)
+        # imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
+        # img = cv2.imdecode(imgnp,-1)
+        # img_name = "base_photo_"+ tableNumber + ".png"
+        # cv2.imwrite(img_name, img)
     # return("captured")
 
 

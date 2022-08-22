@@ -11,6 +11,6 @@
 import cv2
 
 from pyzbar.pyzbar import decode
-img = cv2.imread('frame.jpg')
+img = cv2.imread('Bill.png')
 for barcode in decode (img):
     print (barcode.data.decode("utf-8"))
