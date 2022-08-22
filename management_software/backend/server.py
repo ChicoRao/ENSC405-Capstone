@@ -113,6 +113,7 @@ def callingfunctions(q, q2, url, tableNumber):
         img_resp2=urllib.request.urlopen(url)
         imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
         frame = cv2.imdecode(imgnp2,-1) 
+        checkQRtoRecalibrate(frame,tableNumber,url)
         # checkQR(frame,tableNumber)
         # FRAME = cv2.imdecode(imgnp2,-1) 
         # frame = rgb2gray(FRAME) 
@@ -132,23 +133,19 @@ def list_to_dict(ListOfDict):
 
     return result
 
-# def checkQR(img,tableNumber):
-#     sendingAction = dict()
-
-    # result = return_QR_Result(img)
-    # print(result)
-    # if result:
-        
-    #     if 'http://LocalHost' in result:
-    #         print ('QR is http://LocalHost')
-    #         sendingAction[tableNumber] = 'requests for bill (QR)'
-    #         return sendingAction
-        # img_resp3=urllib.request.urlopen(url)
-        # imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
-        # img = cv2.imdecode(imgnp,-1)
-        # img_name = "base_photo_"+ tableNumber + ".png"
-        # cv2.imwrite(img_name, img)
-    # return("captured")
+def checkQRtoRecalibrate(img,tableNumber,url):
+    result = return_QR_Result(img)
+    print(result)
+    if result:  
+        if 'Calibration' in result:
+            print ('QR is Calibration')
+            # time. sleep(7)
+            img_resp3=urllib.request.urlopen(url)
+            imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
+            img = cv2.imdecode(imgnp,-1)
+            img_name = "base_photo_"+ tableNumber + ".png"
+            cv2.imwrite(img_name, img)
+        return("new base photo captured")
 
 
 @socketio.on('connect')
