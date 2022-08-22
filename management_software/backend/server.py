@@ -62,11 +62,11 @@ def Gestures(frame, tableNumber):
             sendingAction[tableNumber] = 'requests for Water (QR)'
             return sendingAction
         elif 'Bill' in result:
-            print ('QR is Water')
+            print ('QR is Bill')
             sendingAction[tableNumber] = 'requests for Bill (QR)'
             return sendingAction
         elif 'Order' in result:
-            print ('QR is Water')
+            print ('QR is Order')
             sendingAction[tableNumber] = 'requests for Order (QR)'
             return sendingAction
  
