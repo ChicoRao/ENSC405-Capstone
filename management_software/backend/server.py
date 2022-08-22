@@ -139,12 +139,13 @@ def checkQRtoRecalibrate(img,tableNumber,url):
     if result:  
         if 'Calibration' in result:
             print ('QR is Calibration')
-            # time. sleep(7)
+            time. sleep(7)
             img_resp3=urllib.request.urlopen(url)
             imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
             img = cv2.imdecode(imgnp,-1)
             img_name = "base_photo_"+ tableNumber + ".png"
             cv2.imwrite(img_name, img)
+            print('new base photo captured')
         return("new base photo captured")
 
 
