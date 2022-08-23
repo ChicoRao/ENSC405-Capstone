@@ -9,6 +9,7 @@ import Reservations from './Pages/Reservations';
 import LayoutEditor from './Pages/LayoutEditor';
 import Settings from './Pages/Settings';
 import './css/App.css';
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 export default function App() {
 	let socket = io("http://localhost:5000/", { transports: ["websocket"] });;

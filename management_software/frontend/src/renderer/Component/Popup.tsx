@@ -15,7 +15,7 @@ export default function PopUp({resetActions, tableAction}: PopUp) {
     return (
         <div className="PopupWindow">
             <div >
-                <h2>Table {Object.keys(tableAction)[0]} requesting for {Object.values(tableAction)[0]}</h2>
+                <h2>Table {Object.keys(tableAction)[0]} {Object.values(tableAction)[0]}</h2>
             </div>
             {/* button controls */}
             <div>
