@@ -23,7 +23,6 @@ interface LayoutDataCell {
   left: string
 }
 
-
 const symbolsList = [
   {
     name: "Table",
@@ -73,7 +72,10 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
 
 
   const [GetLayout, setLayout] = useState()
-
+  const numbers = [1,2,3,4,5]
+  const listItems = numbers.map((number) =>
+  <li>Table {number} needs attention</li>
+  );
   function UpdateLayout() {
     axios.get(urlLayout)
     .then(data => {
@@ -93,6 +95,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
   }
 
   return (
+    <div style={{display: 'grid', gridTemplateColumns: "repeat(2,1fr)"}}>
     <div className="right-content">
     {/* <img src="/icon.jpg" alt="My_Logo"></img> */}
       <Tabs isEdit={false} />
@@ -125,7 +128,6 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             {attention ? <Popup resetActions={resetActions} tableAction={tableAction} /> : <PlaceHolder/> }
           </div>
           <div className = "center">
-
           <div className="layout-editor-content">
           {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
             console.log(attention)
@@ -176,7 +178,6 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
                   </div>
                 </div>
             )
-            
           })}
         </div>
           <div class="space"></div>
@@ -196,8 +197,21 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             Recalibrate
           </button>
         </div>
+        
         </div>
       </div>
+    
+    </div>
+    <div className='left-content'>
+      <div className='ActionList'>
+            <ul className='List'>
+            {/* <div>
+              {attention ? <Popup resetActions={resetActions} tableAction={tableAction} /> : <PlaceHolder/> }
+            </div> */}
+            {listItems}
+            </ul>
+      </div>
+    </div>
     </div>
   );
 };
