@@ -15,24 +15,13 @@ export default class ActionList extends Component{
         }
     }
     componentDidUpdate(prevProps){
-        console.log(Object.keys(this.props.tableAction)[0])
-        const tableNumber = ['Table' + Object.keys(this.props.tableAction)]
         const NewAction = ['Table ' + Object.keys(this.props.tableAction) + " " +  Object.values(this.props.tableAction)]
-        console.log(NewAction)
         if (this.props.tableAction !== prevProps.tableAction){
-            if (this.state.list.includes(NewAction[0])){
-                console.log("already here")
-            }
-            // else if(this.state.list.includes(tableNumber[0])){
-            //     console.log("Table already request service")
-
-            // }
-            else{
+            if (!this.state.list.includes(NewAction[0])){
                 this.setState(previousState => ({
                     list:[...previousState.list, NewAction[0]]
                 }))
             }
-   
         }
     }
     deleteItem(item){
