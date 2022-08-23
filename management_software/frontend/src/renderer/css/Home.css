@@ -91,7 +91,34 @@ body{
     margin: 15px 30px;
     border: 3px solid rgb(0, 0, 0);
 }
+.left-content {
+    display: flex;
+    /* justify-content: center; */
+    padding: 20px 20px 20px 20px;
+    align-items: center;
+}
+.ActionList {
+    display: flex;
+    font-size: 30px;
 
+    width:auto;
+    align-items: center;
+    color: #333;
+    background-color: rgba(255,255,255,.5);
+    padding: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    
+}
+.List li{
+    list-style: none;
+    color: #333;
+    background-color: rgba(255,255,255,.5);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
 
 /* .center{
     align-items: center;
