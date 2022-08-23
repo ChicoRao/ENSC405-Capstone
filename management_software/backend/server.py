@@ -19,6 +19,11 @@ import subprocess
 # import _thread
 import threading 
 import queue
+# from QR_calibration import read_qr_code
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+from QR_calibration import return_QR_Result
 
 lock = threading.Lock()
 urlList = ipSearch()
@@ -48,29 +53,46 @@ def capture_photo():
 def Gestures(frame, tableNumber):
     sendingAction = dict()
     gesture = fourImages(frame)
+    result = return_QR_Result(frame)
+    print(result)
+    if result:
+        
+        if 'Water' in result:
+            print ('QR is Water')
+            sendingAction[tableNumber] = 'requests for Water (QR)'
+            return sendingAction
+        elif 'Bill' in result:
+            print ('QR is Bill')
+            sendingAction[tableNumber] = 'requests for Bill (QR)'
+            return sendingAction
+        elif 'Order' in result:
+            print ('QR is Order')
+            sendingAction[tableNumber] = 'requests for Order (QR)'
+            return sendingAction
  
     if gesture:
         # print("GESTURE", gesture)
-        # if 'okay' in gesture :
-        #     # sendingAction.append(tableNumber)
-        #     # sendingAction.append('Bill')
-        #     sendingAction[tableNumber] = 'Order'
-        #     return sendingAction
-
-        if 'call me' in gesture:
+        if 'OK' in gesture :
             # sendingAction.append(tableNumber)
-            # sendingAction.append('Order')
-            sendingAction[tableNumber] = 'needs attention'
+            # sendingAction.append('Bill')
+            sendingAction[tableNumber] = 'requests for bill'
             return sendingAction
 
-        # elif 'peace' in gesture:
-        #     # sendingAction.append(tableNumber)
-        #     # sendingAction.append('Order')
-        #     sendingAction[tableNumber] = 'Water'
-        #     return sendingAction
+        elif 'Call' in gesture:
+            # sendingAction.append(tableNumber)
+            # sendingAction.append('Order')
+            sendingAction[tableNumber] = 'requests to order'
+            return sendingAction
+
+        elif 'Peace' in gesture:
+            # sendingAction.append(tableNumber)
+            # sendingAction.append('Order')
+            sendingAction[tableNumber] = 'requests for water refill'
+            return sendingAction
         else:
             sendingAction[tableNumber] = 'Other'
             return sendingAction
+            
 
 def ChangeColours(img, tableNumber):
     decisionqueue = []
@@ -91,11 +113,17 @@ def callingfunctions(q, q2, url, tableNumber):
         img_resp2=urllib.request.urlopen(url)
         imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
         frame = cv2.imdecode(imgnp2,-1) 
+        checkQRtoRecalibrate(frame,tableNumber,url)
+        # checkQR(frame,tableNumber)
+        # FRAME = cv2.imdecode(imgnp2,-1) 
+        # frame = rgb2gray(FRAME) 
         with lock:
             hands = Gestures(frame, tableNumber)
             q.put(hands)
             colour = ChangeColours(frame,tableNumber)
             q2.put(colour)    
+            # QRcode = read_qr_code()
+            # q3.put(QRcode)
 
 
 def list_to_dict(ListOfDict):
@@ -104,6 +132,21 @@ def list_to_dict(ListOfDict):
         result.update(d)
 
     return result
+
+def checkQRtoRecalibrate(img,tableNumber,url):
+    result = return_QR_Result(img)
+    print(result)
+    if result:  
+        if 'Calibration' in result:
+            print ('QR is Calibration')
+            time. sleep(7)
+            img_resp3=urllib.request.urlopen(url)
+            imgnp=np.array(bytearray(img_resp3.read()),dtype=np.uint8)
+            img = cv2.imdecode(imgnp,-1)
+            img_name = "base_photo_"+ tableNumber + ".png"
+            cv2.imwrite(img_name, img)
+            print('new base photo captured')
+        return("new base photo captured")
 
 
 @socketio.on('connect')
@@ -115,6 +158,7 @@ def value_changed(message):
     capture_photo()
     q = queue.Queue()
     q2 = queue.Queue()
+    # q3 = queue.Queue()
     for i in range(len(urlList)):
         with app.test_request_context():
             converted_num = str(i)
@@ -127,15 +171,19 @@ def value_changed(message):
     t1 = time.time()
     gestureList = []
     tableList = []
+    # QRList = []
     while True:
         handGestures = q.get()
         tableColour = q2.get()
+        # QR = q3.get()
         # print(tableColour)
 
         if handGestures != None:
             gestureList.append(handGestures)
         if tableColour != None:
             tableList.append(tableColour)
+        # if QRList != None:
+        #     QRList.append(QR)
 
 
         if time.time() >= t0 + 3:
