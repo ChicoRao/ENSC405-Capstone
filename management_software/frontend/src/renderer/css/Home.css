@@ -1,5 +1,5 @@
 #layout-legend-content {
-    
+    padding-top: 50px;
 }
 body{
     background-image: url(../../../assets/background.jpg);
@@ -99,10 +99,11 @@ body{
 }
 .ActionList {
     display: flex;
-    font-size: 30px;
+    font-size: 20px;
 
-    width:auto;
-    align-items: center;
+    width: 30vw;
+    height: 70vh;
+    align-items: top;
     color: #333;
     background-color: rgba(255,255,255,.5);
     padding: 15px;
@@ -112,7 +113,10 @@ body{
     
 }
 .List li{
+    display:flex;
+
     list-style: none;
+    width: 28vw;
     color: #333;
     background-color: rgba(255,255,255,.5);
     padding: 15px;

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Tabs from '../Component/Tabs';
 import Layout from '../Component/Layout';
 import Popup from '../Component/Popup';
+import ActionList from 'renderer/Component/ActionList';
 import PlaceHolder from '../Component/PlaceHolder';
 
 
@@ -14,6 +15,7 @@ import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
 import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
 import dividerLogo from '../../../assets/icons/editor/divider.png';
 import doorLogo from '../../../assets/icons/editor/door.png';
+import { Action } from 'history';
 
 interface LayoutDataCell {
   id: string,
@@ -72,10 +74,17 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
 
 
   const [GetLayout, setLayout] = useState()
+
   const numbers = [1,2,3,4,5]
   const listItems = numbers.map((number) =>
   <li>Table {number} needs attention</li>
   );
+
+  // function UpdateActionQueue(){
+  //   const newList = 
+  // }
+
+
   function UpdateLayout() {
     axios.get(urlLayout)
     .then(data => {
@@ -123,9 +132,6 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
                 Dirty
               </li>
             </ul>
-          </div>
-          <div>
-            {attention ? <Popup resetActions={resetActions} tableAction={tableAction} /> : <PlaceHolder/> }
           </div>
           <div className = "center">
           <div className="layout-editor-content">
@@ -205,10 +211,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
     <div className='left-content'>
       <div className='ActionList'>
             <ul className='List'>
-            {/* <div>
-              {attention ? <Popup resetActions={resetActions} tableAction={tableAction} /> : <PlaceHolder/> }
-            </div> */}
-            {listItems}
+              {tableAction? <ActionList tableAction = {tableAction}/>: <PlaceHolder/>}
             </ul>
       </div>
     </div>
