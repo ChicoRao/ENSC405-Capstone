@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
+import axios from 'axios';
 import Tabs from '../Component/Tabs';
 import tableLogo from '../../../assets/icons/editor/table.svg';
 //import chairLogo from '../../../assets/icons/editor/chair.svg';
@@ -12,6 +13,7 @@ import circular_table from '../../../assets/icons/editor/Circular_table.svg';
 import dividerLogo from '../../../assets/icons/editor/divider.png';
 import doorLogo from '../../../assets/icons/editor/door.png';
 import '../css/LayoutEditor.css';
+import { isNumberObject } from 'util/types';
 
 /*
 -Tabs re-use
@@ -54,8 +56,9 @@ interface LayoutDataCell {
   id: string,
   type: string,
   icon: string,
-  top: string,
-  left: string
+  top: number,
+  left: number,
+  rotation: string,
 }
 
 const symbolsList = [
@@ -71,8 +74,18 @@ const symbolsList = [
 
 export default function LayoutEditor() {
   let [layoutData, updateLayout] = useState<LayoutDataCell[]>([])
+  let [tempData, updateTempData] = useState<LayoutDataCell[]>([])
+  const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
-
+  useEffect(() => {
+    axios.get(urlLayout)
+    .then(data => {
+      if (data.data.length)
+        updateLayout(data.data)
+        updateTempData(JSON.parse(JSON.stringify((data.data))))
+    })
+    .catch(err => console.log(err));
+  }, []);
 
   // Function that creates the symbol and includes it in the layout data
   let createSymbolData = (name: string, icon: string) => {
@@ -82,12 +95,12 @@ export default function LayoutEditor() {
     console.log(layoutData.length);
 
     let data: LayoutDataCell = {
-      id: 'e' + layoutData.length.toString(),
+      id: 'e' + (isNaN(layoutData.length) ? '0' : layoutData.length.toString()),
       type: name,
       icon: icon,
-      top: '500px',
-      left: '1000px'
-
+      top: 0,
+      left: 0,
+      rotation: 'rotate-north'
     }
 
     //To-do: id naming should be improved
@@ -95,6 +108,7 @@ export default function LayoutEditor() {
     if (layoutData.length <= 100) {
       dataList = [...layoutData, data];
       updateLayout(dataList);
+      updateTempData(JSON.parse(JSON.stringify((dataList))));
     }
   }
 
@@ -102,23 +116,38 @@ export default function LayoutEditor() {
     let idTag = '#' + id;
     let el = document.querySelector(idTag + ' img');
     if (el) {
-      if (e.detail == 1) {      
+      if (e.detail == 1) {
+        let rotation = '';
         if (el.classList.contains('rotate-north')) {
           el.classList.remove('rotate-north');
           el.classList.add('rotate-west');
+          rotation = 'rotate-west';
         }else if (el.classList.contains('rotate-west')) {
           el.classList.remove('rotate-west');
           el.classList.add('rotate-south');
+          rotation = 'rotate-south';
         }else if (el.classList.contains('rotate-south')) {
           el.classList.remove('rotate-south');
           el.classList.add('rotate-east');
+          rotation = 'rotate-east';
         }else if (el.classList.contains('rotate-east')) {
           el.classList.remove('rotate-east');
           el.classList.add('rotate-north');
+          rotation = 'rotate-north';
         }
+        layoutData.forEach(each => {
+          if (each.id === id) {
+            each.rotation = rotation;
+          }
+        })
+        updateTempData(layoutData);
+        // updateLayout(layoutData);
       } else {
         el.remove();
         updateLayout(current => current.filter(rm => {
+          return rm.id !== id;
+        }));
+        updateTempData(current => current.filter(rm => {
           return rm.id !== id;
         }));
       }
@@ -128,16 +157,15 @@ export default function LayoutEditor() {
 
   function handleStop(e, data){
     let index:number = layoutData.findIndex(a => a.id === data.node.id)
-    console.log("Dragged Left " +data.x)
-    console.log("Dragged Top " +data.y)
-    layoutData[index].left = data.x.toString()+"px"
-    layoutData[index].top = data.y.toString()+"px"
+    console.log("Dragged Left " + data.x)
+    console.log("Dragged Top " + data.y)
+    layoutData[index].left = tempData[index].left + data.x
+    layoutData[index].top =  tempData[index].top + data.y
     console.log("Layout Data Left" + layoutData[index].left)
-    console.log("Layout Data Right " +layoutData[index].top)
+    console.log("Layout Data Right " + layoutData[index].top)
   }
 
   function SaveLayout(e, data){
-    console.log(layoutData)
     fetch('http://127.0.0.1:5000/SaveLayout', {
       method: 'POST',
       mode: 'cors',
@@ -150,9 +178,9 @@ export default function LayoutEditor() {
       <div className="editor-sidetools">
         <h3 className="sidetool-title">Symbols</h3>
         <div className="sidetool-grid">
-          {symbolsList.map((obj) => {
+          {symbolsList.map((obj, index) => {
             return (
-              <div
+              <div key={index}
                 onClick={() => createSymbolData(obj.name, obj.icon,)}
               >
                 <img
@@ -169,18 +197,18 @@ export default function LayoutEditor() {
       <div className="right-content layout-editor-right">
         <Tabs isEdit={true} />
         <div className="layout-editor-content">
-          {layoutData.map((data: LayoutDataCell) => {
+          {Array.isArray(layoutData) && layoutData.map((data: LayoutDataCell) => {
             // console.log(data.type)
 
             return (
-              <Draggable
+              <Draggable key={data.id}
                 grid={[25,25]}
                 bounds="parent"
                 onStop={handleStop}
               >
                 
                 <div
-                  style={{position: 'absolute', top: '0px', left: '0px'}}
+                  style={{position: 'absolute', top: data.top + 'px', left: data.left + 'px'}}
                   id={data.id}
                 >
                   <div 
@@ -198,7 +226,7 @@ export default function LayoutEditor() {
                     <img
                       
                       src={data.icon}
-                      className="editor-item cursor rotate-north"
+                      className={"editor-item cursor " + data.rotation}
                       draggable="false"
                       />
                       
