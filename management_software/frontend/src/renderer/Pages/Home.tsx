@@ -3,6 +3,7 @@ import axios from 'axios';
 import Tabs from '../Component/Tabs';
 import Layout from '../Component/Layout';
 import Popup from '../Component/Popup';
+import ActionList from 'renderer/Component/ActionList';
 import PlaceHolder from '../Component/PlaceHolder';
 
 
@@ -14,6 +15,7 @@ import tableLogo1 from '../../../assets/icons/editor/Table1.svg';
 import boothTableLogo from '../../../assets/icons/editor/booth_table.png';
 import dividerLogo from '../../../assets/icons/editor/divider.png';
 import doorLogo from '../../../assets/icons/editor/door.png';
+import { Action } from 'history';
 
 interface LayoutDataCell {
   id: string,
@@ -23,7 +25,6 @@ interface LayoutDataCell {
   left: number,
   rotation: string,
 }
-
 
 const symbolsList = [
   {
@@ -105,6 +106,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
   // }
 
   return (
+    <div style={{display: 'grid', gridTemplateColumns: "repeat(2,1fr)"}}>
     <div className="right-content">
     {/* <img src="/icon.jpg" alt="My_Logo"></img> */}
       <Tabs isEdit={false} />
@@ -133,11 +135,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
               </li>
             </ul>
           </div>
-          <div>
-            {attention ? <Popup resetActions={resetActions} tableAction={tableAction} /> : <PlaceHolder/> }
-          </div>
           <div className = "center">
-
           <div className="layout-editor-content">
           {Array.isArray(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
             console.log(attention);
@@ -188,7 +186,6 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
                   </div>
                 </div>
             )
-            
           })}
         </div>
           <div class="space"></div>
@@ -208,8 +205,18 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             Recalibrate
           </button>
         </div>
+        
         </div>
       </div>
+    
+    </div>
+    <div className='left-content'>
+      <div className='ActionList'>
+            <ul className='List'>
+              {tableAction? <ActionList tableAction = {tableAction}/>: <PlaceHolder/>}
+            </ul>
+      </div>
+    </div>
     </div>
   );
 };
