@@ -74,7 +74,6 @@ const symbolsList = [
 
 export default function LayoutEditor() {
   let [layoutData, updateLayout] = useState<LayoutDataCell[]>([])
-  let [tempData, updateTempData] = useState<LayoutDataCell[]>([])
   const urlLayout = "http://127.0.0.1:5000/GetLayout";
 
   useEffect(() => {
@@ -82,7 +81,6 @@ export default function LayoutEditor() {
     .then(data => {
       if (data.data.length)
         updateLayout(data.data)
-        updateTempData(JSON.parse(JSON.stringify((data.data))))
     })
     .catch(err => console.log(err));
   }, []);
@@ -90,9 +88,6 @@ export default function LayoutEditor() {
   // Function that creates the symbol and includes it in the layout data
   let createSymbolData = (name: string, icon: string) => {
     let dataList: LayoutDataCell[] = [];
-
-    console.log(layoutData);
-    console.log(layoutData.length);
 
     let data: LayoutDataCell = {
       id: 'e' + (isNaN(layoutData.length) ? '0' : layoutData.length.toString()),
@@ -108,7 +103,6 @@ export default function LayoutEditor() {
     if (layoutData.length <= 100) {
       dataList = [...layoutData, data];
       updateLayout(dataList);
-      updateTempData(JSON.parse(JSON.stringify((dataList))));
     }
   }
 
@@ -140,14 +134,10 @@ export default function LayoutEditor() {
             each.rotation = rotation;
           }
         })
-        updateTempData(layoutData);
-        // updateLayout(layoutData);
+        updateLayout(layoutData);
       } else {
         el.remove();
         updateLayout(current => current.filter(rm => {
-          return rm.id !== id;
-        }));
-        updateTempData(current => current.filter(rm => {
           return rm.id !== id;
         }));
       }
@@ -156,20 +146,31 @@ export default function LayoutEditor() {
 
 
   function handleStop(e, data){
+    // if (!data.x && !data.y) return;
+    console.log(data.node.id)
     let index:number = layoutData.findIndex(a => a.id === data.node.id)
     console.log("Dragged Left " + data.x)
     console.log("Dragged Top " + data.y)
-    layoutData[index].left = tempData[index].left + data.x
-    layoutData[index].top =  tempData[index].top + data.y
-    console.log("Layout Data Left" + layoutData[index].left)
-    console.log("Layout Data Right " + layoutData[index].top)
+    layoutData[index].left = data.x
+    layoutData[index].top =  data.y
+    // console.log("Layout Data Left" + tempData[index].left)
+    // console.log("Layout Data Right " + tempData[index].top)
+    updateLayout(layoutData);
   }
 
-  function SaveLayout(e, data){
+  async function SaveLayout(e, data){
+
     fetch('http://127.0.0.1:5000/SaveLayout', {
       method: 'POST',
       mode: 'cors',
       body: JSON.stringify(layoutData)
+    }).finally(()=> {
+      axios.get(urlLayout)
+    .then(data => {
+      if (data.data.length)
+        updateLayout(data.data)
+    })
+    .catch(err => console.log(err));
     })
   }
 
@@ -198,17 +199,18 @@ export default function LayoutEditor() {
         <Tabs isEdit={true} />
         <div className="layout-editor-content">
           {Array.isArray(layoutData) && layoutData.map((data: LayoutDataCell) => {
-            // console.log(data.type)
+            console.log(`transform: translate(${data.left}px, ${data.top}px);`)
 
             return (
               <Draggable key={data.id}
+              defaultPosition={{x:data.left, y:data.top}}
                 grid={[25,25]}
                 bounds="parent"
                 onStop={handleStop}
               >
                 
                 <div
-                  style={{position: 'absolute', top: data.top + 'px', left: data.left + 'px'}}
+                  style={{position: 'absolute'}}
                   id={data.id}
                 >
                   <div 
