@@ -256,7 +256,9 @@ def SaveLayout():
 
 @app.route("/GetLayout", methods = ['GET'])
 def GetLayout():
-    return SavedLayout
+    if SavedLayout:
+        return SavedLayout
+    return {}
 
 
 if __name__ == "__main__":

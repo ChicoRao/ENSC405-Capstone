@@ -21,8 +21,9 @@ interface LayoutDataCell {
   id: string,
   type: string,
   icon: string,
-  top: string,
-  left: string
+  top: number,
+  left: number,
+  rotation: string,
 }
 
 const symbolsList = [
@@ -73,26 +74,18 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
   // const recalibrateURL = "http://127.0.0.1:5000/capture";
 
 
-  const [GetLayout, setLayout] = useState()
+  const [GetLayout, setLayout] = useState<LayoutDataCell[]>([])
 
-  const numbers = [1,2,3,4,5]
-  const listItems = numbers.map((number) =>
-  <li>Table {number} needs attention</li>
-  );
-
-  // function UpdateActionQueue(){
-  //   const newList = 
-  // }
-
-
-  function UpdateLayout() {
+  useEffect(() => {
     axios.get(urlLayout)
     .then(data => {
-      setLayout(data.data)
+      if (data.data.length)
+        setLayout(data.data)
     })
     .catch(err => console.log(err));
-    console.log(GetLayout)
-  }
+  }, []);
+
+
   function recalibrate(){
     console.log("Recalibrating")
     axios.put("http://127.0.0.1:5000/capture")
@@ -102,6 +95,15 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
       
     // })
   }
+
+
+  // function UpdateLayout() {
+  //   axios.get(urlLayout)
+  //   .then(data => {
+  //     setLayout(data.data)
+  //   })
+  //   .catch(err => console.log(err));
+  // }
 
   return (
     <div style={{display: 'grid', gridTemplateColumns: "repeat(2,1fr)"}}>
@@ -135,17 +137,18 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
           </div>
           <div className = "center">
           <div className="layout-editor-content">
-          {(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
-            console.log(attention)
+          {Array.isArray(GetLayout) && GetLayout.map((data: LayoutDataCell) => {
+            console.log(attention);
             if(data.id in tableInfo){
               console.log(tableInfo[data.id])
               let tablecolour = colourDeg.get(tableInfo[data.id])
               const styleTable = {
                 filter: 'invert(.5) sepia(1) saturate(100) hue-rotate'+ tablecolour
               }
+              console.log(data.top)
               return (
-                  <div
-                  style={{position: 'absolute', top: data.top, left: data.left}}
+                  <div key={data.id}
+                  style={{position: 'absolute', top: data.top + 'px', left: data.left + 'px'}}
                   id={data.id}
 
                 >
@@ -157,7 +160,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
                     <img 
                       style = {styleTable}
                       src={data.icon}
-                      className="editor-item cursor rotate-north"
+                      className={"editor-item cursor " + data.rotation}
                       draggable="false"
                       
                       />
@@ -166,9 +169,8 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
               )
             }
             return (
-    
-                <div
-                  style={{position: 'absolute', top: data.top, left: data.left}}
+                <div key={data.id}
+                  style={{position: 'absolute', top: data.top + 'px', left: data.left + 'px'}}
                   id={data.id}
   
                 >
@@ -177,7 +179,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
                   >
                     <img 
                       src={data.icon}
-                      className="editor-item cursor rotate-north"
+                      className={"editor-item cursor " + data.rotation}
                       draggable="false"
                       
                       />
@@ -187,9 +189,9 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
           })}
         </div>
           <div class="space"></div>
-          <button id="triggerr" onClick={UpdateLayout} class="button">
+          {/* <button id="triggerr" onClick={UpdateLayout} class="button">
             Update Layout
-          </button>
+          </button> */}
           <div class="space">
            </div>
           <button
