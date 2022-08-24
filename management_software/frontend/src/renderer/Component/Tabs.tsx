@@ -48,7 +48,7 @@ const Tabs = ({ isEdit }: Tabs): JSX.Element => {
 		<ul id="layout-tabs">
 			{tabsList.map((tab, index) => {
 				return (
-					<Tab 
+					<Tab  key={index}
 						name={tab} 
 						index={index} 
 						isActive={index === activeTab} 
