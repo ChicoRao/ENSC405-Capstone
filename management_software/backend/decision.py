@@ -34,4 +34,6 @@ def decision(decisionQueue):
             result = 'Need Cleaning'
     elif decisionQueue[0] == 'Occupied':    
         result = "Occupied"
+    # elif decisionQueue[0] or decision[2]== 'Occupied':    
+    # result = "Occupied"
     return result

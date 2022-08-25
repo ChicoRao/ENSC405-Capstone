@@ -103,9 +103,11 @@ def ChangeColours(img, tableNumber):
     decisionqueue = []
     sendingDict = dict()
     people = motion_detector(frame_count,img)
+    # people1 = freeOccupied(img)
     decisionqueue.append(people)
     compare_stat = compare(img, "base_photo_"+ tableNumber +".png")
     decisionqueue.append(compare_stat)
+    # decisionqueue.append(people1)
 
     decision_status = decision(decisionqueue)
     objectcolours = colours(decision_status, tableNumber)
@@ -131,6 +133,7 @@ def callingfunctions(q, q2, url, tableNumber):
             q2.put(colour)    
             # QRcode = read_qr_code()
             # q3.put(QRcode)
+            
 
 
 def list_to_dict(ListOfDict):
