@@ -29,6 +29,10 @@ from motion_detection import motion_detector
 lock = threading.Lock()
 urlList = ipSearch()
 SavedLayout = []
+frame_count = 0
+previous_frame = None
+prepared_frame = None
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -98,7 +102,7 @@ def Gestures(frame, tableNumber):
 def ChangeColours(img, tableNumber):
     decisionqueue = []
     sendingDict = dict()
-    people = motion_detector(img)
+    people = motion_detector(frame_count,img)
     decisionqueue.append(people)
     compare_stat = compare(img, "base_photo_"+ tableNumber +".png")
     decisionqueue.append(compare_stat)
@@ -111,6 +115,8 @@ def ChangeColours(img, tableNumber):
 
 def callingfunctions(q, q2, url, tableNumber):
     while True:
+
+        frame_count= frame_count + 1
         img_resp2=urllib.request.urlopen(url)
         imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
         frame = cv2.imdecode(imgnp2,-1) 
