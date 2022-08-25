@@ -212,13 +212,14 @@ def value_changed(message):
                     else:
                         emit('Action', action)
                         # emit("update value", { list(action.keys())[0] : "blue"})
-                        print(tableList)
+                        print('print here', tableList)
                         for value in tableList:
                             if (list(action.keys())[0] in value):
                                 value.update({list(action.keys())[0]:"blue"})
                         # tableList.clear()
                         # tableList.append({ list(action.keys())[0] : "blue"})
                         gestureList.clear()
+                        uniqueAction.clear()
                         t0 =time.time()
                         continue
                 
@@ -230,7 +231,7 @@ def value_changed(message):
                 resultDict = list_to_dict(uniqueTableColour)
 
                 if len(resultDict) >= len(urlList):
-                    # print('HERE ', resultDict)
+                    print('HERE ')
                     emit('update value', resultDict)
                     tableList.clear()
             t0 =time.time()
@@ -250,15 +251,15 @@ def message():
 def SaveLayout():
     global SavedLayout 
     SavedLayout = request.data
+    print("Saved layout data 1", SavedLayout)
     print("recieved")
     return{"message": "Received Layout successfully"}
 
 
 @app.route("/GetLayout", methods = ['GET'])
 def GetLayout():
-    if SavedLayout:
-        return SavedLayout
-    return {}
+    print("Saved layout" , SavedLayout)
+    return SavedLayout
 
 
 if __name__ == "__main__":
