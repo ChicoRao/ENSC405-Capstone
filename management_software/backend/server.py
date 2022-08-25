@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 from QR_calibration import return_QR_Result
+from motion_detection import motion_detector
 
 lock = threading.Lock()
 urlList = ipSearch()
@@ -97,7 +98,7 @@ def Gestures(frame, tableNumber):
 def ChangeColours(img, tableNumber):
     decisionqueue = []
     sendingDict = dict()
-    people = freeOccupied(img)
+    people = motion_detector(img)
     decisionqueue.append(people)
     compare_stat = compare(img, "base_photo_"+ tableNumber +".png")
     decisionqueue.append(compare_stat)
