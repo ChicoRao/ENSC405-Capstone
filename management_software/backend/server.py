@@ -110,11 +110,11 @@ def motion(previous_frame,prepared_frame,img_rgb):
 
     # 4. Dilute the image a bit to make differences more seeable; more suitable for contour detection
     kernel = np.ones((5, 5))
+
     diff_frame = cv2.dilate(diff_frame, kernel, 1)
 
     # 5. Only take different areas that are different enough (>20 / 255)
-    thresh_frame = cv2.threshold(src=diff_frame, thresh=20, maxval=255, type=cv2.THRESH_BINARY)[1]
-
+    thresh_frame = cv2.threshold(src=diff_frame, thresh=20, maxval=255, type=cv2.THRESH_BINARY)[0]
     # 6. Find and optionally draw contours
     contours, _ = cv2.findContours(image=thresh_frame, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
     # Comment below to stop drawing contours
@@ -154,21 +154,24 @@ def ChangeColours(previous_frame,prepared_frame,img,img_rgb, tableNumber):
 def callingfunctions(q, q2, url, tableNumber):
     previous_frame = None
     prepared_frame = None
-    frame_count = 0
+
     # frame_count = 0
     while True:
-        frame_count += 1
-        print ('frame count is', frame_count)
+
+        # print ('frame count is', frame_count)
         img_resp2=urllib.request.urlopen(url)
         imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
         frame = cv2.imdecode(imgnp2,-1) 
+
         img_brg = frame
         img_rgb = cv2.cvtColor(src=img_brg, code=cv2.COLOR_BGR2RGB)
 
     # 2. Prepare image; grayscale and blur
-        if ((frame_count % 2) == 0):
-            prepared_frame = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-            prepared_frame = cv2.GaussianBlur(src=prepared_frame, ksize=(5, 5), sigmaX=0)
+
+        prepared_frame = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+        prepared_frame = cv2.GaussianBlur(src=prepared_frame, ksize=(5, 5), sigmaX=0)
+        prepared_frame = cv2.Canny(prepared_frame, 10, 90)
+
         if (previous_frame is None):
             print ('previous_frame is None')
   # First frame; there is no previous one yet
@@ -182,6 +185,7 @@ def callingfunctions(q, q2, url, tableNumber):
             hands = Gestures(frame, tableNumber)
             q.put(hands)
             colour = ChangeColours(previous_frame,prepared_frame,frame,img_rgb, tableNumber)
+            print('changing colors ran')
             q2.put(colour)    
             # QRcode = read_qr_code()
             # q3.put(QRcode)
