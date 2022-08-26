@@ -1,11 +1,13 @@
 .PopupWindow {
-    position: relative;
-    left: 15%;
+    position: fixed;
+    top: 30%;
+    left: 30%;
     text-align: center;
     border-radius: 20px;
     background-color: white;
     padding: 12px;
-    height: 100px;
+    height: 120px;
     width: 600px;
     border: 1.5px solid black;
+    box-shadow: 5px 5px 5px;
 }

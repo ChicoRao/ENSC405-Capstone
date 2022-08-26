@@ -48,7 +48,20 @@ def capture_photo():
         cv2.imwrite(img_name, img)
     return("captured")
 
-
+@app.route("/captureSelectedTable", methods = ["PUT"])
+def capture_selected_table_photo():
+    print("Capturing")
+    tableId = request.json['tableId']
+    i = int(tableId.replace('e', ''))
+    print("i ", i)
+    print(tableId)
+    url = urlList[i]
+    img_resp=urllib.request.urlopen(url)
+    imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
+    img = cv2.imdecode(imgnp,-1)
+    img_name = "base_photo_"+ tableId + ".png"
+    cv2.imwrite(img_name, img)
+    return("captured")
 
 def Gestures(frame, tableNumber):
     sendingAction = dict()
