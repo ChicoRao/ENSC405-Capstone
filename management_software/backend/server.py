@@ -104,6 +104,7 @@ def motion(previous_frame,prepared_frame,img_rgb):
 
     # 3. Set previous frame and continue if there is None
 
+    status = 'Free'
     # calculate difference and update previous frame
     diff_frame = cv2.absdiff(src1=previous_frame, src2=prepared_frame)
 
@@ -119,21 +120,16 @@ def motion(previous_frame,prepared_frame,img_rgb):
             cv2.THRESH_BINARY,11,2)
     # 6. Find and optionally draw contours
     contours, _ = cv2.findContours(image=th2, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
-    
-    # Comment below to stop drawing contours
-    # cv2.drawContours(image=img_rgb, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+
     for contour in contours:
-        if cv2.contourArea(contour) > 50000:
+        if cv2.contourArea(contour) < 10:
             # too small: skip!
-            print("motion deteced")
+            status = 'Free'
+        elif cv2.contourArea(contour) > 400000:
+            status = 'Free'
+        else: 
             status = 'Occupied'
     return status
-
-
-
-
-
-
 
 def ChangeColours(previous_frame,prepared_frame,img,img_rgb, tableNumber):
     # frame_count= frame_count + 1
@@ -177,8 +173,7 @@ def callingfunctions(q, q2, url, tableNumber):
         # prepared_frame = cv2.Canny(prepared_frame, 10, 90)
 
         if (previous_frame is None):
-            print ('previous_frame is None')
-  # First frame; there is no previous one yet
+          # First frame; there is no previous one yet
             previous_frame = prepared_frame
             continue
         
@@ -191,7 +186,6 @@ def callingfunctions(q, q2, url, tableNumber):
             hands = Gestures(frame, tableNumber)
             q.put(hands)
             colour = ChangeColours(previous_frame,prepared_frame,frame,img_rgb, tableNumber)
-            print('changing colors ran')
             q2.put(colour)    
             # QRcode = read_qr_code()
             # q3.put(QRcode)
@@ -267,9 +261,7 @@ def value_changed(message):
                         uniqueAction.append(x)
                 for action in uniqueAction:
                     if action.get(list(action.keys())[0]) == 'Other':
-                        # emit("update value", { list(action.keys())[0] : "blue"})
                         print(tableList)
-                        # if any((action.keys())[0] in d for d in tableList):
                         for value in tableList:
                             print(value)
                             print(list(action.keys())[0])
@@ -278,13 +270,10 @@ def value_changed(message):
 
                         gestureList.clear()
                         t0 =time.time()
-                        # tableList.clear()
-                        # tableList.append({ list(action.keys())[0] : "blue"})
+                    
                         continue
                     else:
                         emit('Action', action)
-                        # emit("update value", { list(action.keys())[0] : "blue"})
-                        print(tableList)
                         for value in tableList:
                             if (list(action.keys())[0] in value):
                                 value.update({list(action.keys())[0]:"blue"})
@@ -302,7 +291,6 @@ def value_changed(message):
                 resultDict = list_to_dict(uniqueTableColour)
 
                 if len(resultDict) >= len(urlList):
-                    # print('HERE ', resultDict)
                     emit('update value', resultDict)
                     tableList.clear()
             t0 =time.time()
