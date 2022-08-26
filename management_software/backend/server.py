@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 from QR_calibration import return_QR_Result
+from motion_detection import motion_detector
 
 lock = threading.Lock()
 urlList = ipSearch()
@@ -49,7 +50,20 @@ def capture_photo():
         cv2.imwrite(img_name, img)
     return("captured")
 
-
+@app.route("/captureSelectedTable", methods = ["PUT"])
+def capture_selected_table_photo():
+    print("Capturing")
+    tableId = request.json['tableId']
+    i = int(tableId.replace('e', ''))
+    print("i ", i)
+    print(tableId)
+    url = urlList[i]
+    img_resp=urllib.request.urlopen(url)
+    imgnp=np.array(bytearray(img_resp.read()),dtype=np.uint8)
+    img = cv2.imdecode(imgnp,-1)
+    img_name = "base_photo_"+ tableId + ".png"
+    cv2.imwrite(img_name, img)
+    return("captured")
 
 def Gestures(frame, tableNumber):
     sendingAction = dict()
@@ -91,15 +105,54 @@ def Gestures(frame, tableNumber):
             sendingAction[tableNumber] = 'Other'
             return sendingAction
             
+def motion(previous_frame,prepared_frame,img_rgb):
+    # prepared_frame = cv2.cvtColor(prepared_frame, cv2.COLOR_BGR2GRAY)
+    # previous_frame = cv2.cvtColor(previous_frame, cv2.COLOR_BGR2GRAY)
+    # 2. Calculate the difference
 
-def ChangeColours(img, tableNumber):
+    # 3. Set previous frame and continue if there is None
+
+    status = 'Free'
+    # calculate difference and update previous frame
+    diff_frame = cv2.absdiff(src1=previous_frame, src2=prepared_frame)
+
+
+    # 4. Dilute the image a bit to make differences more seeable; more suitable for contour detection
+    kernel = np.ones((5, 5))
+
+    diff_frame = cv2.dilate(diff_frame, kernel, 1)
+
+    # # 5. Only take different areas that are different enough (>20 / 255)
+    # thresh_frame = cv2.threshold(src=diff_frame, thresh=20, maxval=255, type=cv2.THRESH_BINARY)[0]
+    th2 = cv2.adaptiveThreshold(diff_frame,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
+            cv2.THRESH_BINARY,11,2)
+    # 6. Find and optionally draw contours
+    contours, _ = cv2.findContours(image=th2, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours:
+        if cv2.contourArea(contour) < 10:
+            # too small: skip!
+            status = 'Free'
+        elif cv2.contourArea(contour) > 400000:
+            status = 'Free'
+        else: 
+            status = 'Occupied'
+    return status
+
+def ChangeColours(previous_frame,prepared_frame,img,img_rgb, tableNumber):
+    # frame_count= frame_count + 1
     decisionqueue = []
     sendingDict = dict()
+
     people = freeOccupied(img)
+    people1 = motion(previous_frame,prepared_frame,img_rgb)
+
     decisionqueue.append(people)
+    decisionqueue.append(people1)
     compare_stat = compare(img, "base_photo_"+ tableNumber +".png")
     decisionqueue.append(compare_stat)
-
+    # decisionqueue.append(people1)
+    print ('Decision queue is' , decisionqueue)
     decision_status = decision(decisionqueue)
     objectcolours = colours(decision_status, tableNumber)
     sendingDict[tableNumber] = objectcolours
@@ -107,21 +160,44 @@ def ChangeColours(img, tableNumber):
 
 
 def callingfunctions(q, q2, url, tableNumber):
+    previous_frame = None
+    prepared_frame = None
+
+    # frame_count = 0
     while True:
+
+        # print ('frame count is', frame_count)
         img_resp2=urllib.request.urlopen(url)
         imgnp2=np.array(bytearray(img_resp2.read()),dtype=np.uint8)
         frame = cv2.imdecode(imgnp2,-1) 
+
+        img_brg = frame
+        img_rgb = cv2.cvtColor(src=img_brg, code=cv2.COLOR_BGR2RGB)
+
+    # 2. Prepare image; grayscale and blur
+
+        prepared_frame = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+        prepared_frame = cv2.GaussianBlur(src=prepared_frame, ksize=(5, 5), sigmaX=0)
+        # prepared_frame = cv2.Canny(prepared_frame, 10, 90)
+
+        if (previous_frame is None):
+          # First frame; there is no previous one yet
+            previous_frame = prepared_frame
+            continue
+        
         checkQRtoRecalibrate(frame,tableNumber,url)
         # checkQR(frame,tableNumber)
         # FRAME = cv2.imdecode(imgnp2,-1) 
         # frame = rgb2gray(FRAME) 
         with lock:
+            
             hands = Gestures(frame, tableNumber)
             q.put(hands)
-            colour = ChangeColours(frame,tableNumber)
+            colour = ChangeColours(previous_frame,prepared_frame,frame,img_rgb, tableNumber)
             q2.put(colour)    
             # QRcode = read_qr_code()
             # q3.put(QRcode)
+        previous_frame = prepared_frame
 
 
 def list_to_dict(ListOfDict):
@@ -193,9 +269,7 @@ def value_changed(message):
                         uniqueAction.append(x)
                 for action in uniqueAction:
                     if action.get(list(action.keys())[0]) == 'Other':
-                        # emit("update value", { list(action.keys())[0] : "blue"})
                         print(tableList)
-                        # if any((action.keys())[0] in d for d in tableList):
                         for value in tableList:
                             print(value)
                             print(list(action.keys())[0])
@@ -204,13 +278,10 @@ def value_changed(message):
 
                         gestureList.clear()
                         t0 =time.time()
-                        # tableList.clear()
-                        # tableList.append({ list(action.keys())[0] : "blue"})
+                    
                         continue
                     else:
                         emit('Action', action)
-                        # emit("update value", { list(action.keys())[0] : "blue"})
-                        print(tableList)
                         for value in tableList:
                             if (list(action.keys())[0] in value):
                                 value.update({list(action.keys())[0]:"blue"})
@@ -228,7 +299,6 @@ def value_changed(message):
                 resultDict = list_to_dict(uniqueTableColour)
 
                 if len(resultDict) >= len(urlList):
-                    # print('HERE ', resultDict)
                     emit('update value', resultDict)
                     tableList.clear()
             t0 =time.time()

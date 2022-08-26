@@ -75,6 +75,8 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
 
 
   const [GetLayout, setLayout] = useState<LayoutDataCell[]>([])
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedTable, setSelectedTable] = useState("");
 
   useEffect(() => {
     axios.get(urlLayout)
@@ -91,10 +93,23 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
     // fetch('http://127.0.0.1:5000/capture', {
     //   method: 'PUT',
     //   mode: 'cors',
-      
     // })
   }
 
+  const togglePopup = (tableId) => {
+    setIsPopupOpen(!isPopupOpen);
+    setSelectedTable(tableId);
+  }
+
+  const recalibrateSingleTable = () => {
+    console.log(selectedTable);
+    axios.put("http://127.0.0.1:5000/captureSelectedTable", {tableId: selectedTable});
+    togglePopup("");
+  }
+
+  const closePopup = () => {
+    togglePopup("");
+  }
 
   // function UpdateLayout() {
   //   axios.get(urlLayout)
@@ -149,8 +164,8 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
                   <div key={data.id}
                   style={{position: 'absolute', top: data.top + 'px', left: data.left + 'px'}}
                   id={data.id}
-
-                >
+                  onClick={(e) => togglePopup(data.id)}
+                  >
                   <div 
                     className = "logo"
                   
@@ -187,6 +202,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             )
           })}
         </div>
+        {isPopupOpen && <Popup tableId={selectedTable} buttonAction={recalibrateSingleTable} handleClose={closePopup} />}
           <div class="space"></div>
           {/* <button id="triggerr" onClick={UpdateLayout} class="button">
             Update Layout
