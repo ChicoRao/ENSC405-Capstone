@@ -85,7 +85,6 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
     .catch(err => console.log(err));
   }, []);
 
-
   function recalibrate(){
     console.log("Recalibrating")
     axios.put("http://127.0.0.1:5000/capture")
