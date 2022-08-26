@@ -98,31 +98,35 @@ def Gestures(frame, tableNumber):
             return sendingAction
             
 def motion(previous_frame,prepared_frame,img_rgb):
-
-    status = 'free'
+    # prepared_frame = cv2.cvtColor(prepared_frame, cv2.COLOR_BGR2GRAY)
+    # previous_frame = cv2.cvtColor(previous_frame, cv2.COLOR_BGR2GRAY)
     # 2. Calculate the difference
 
     # 3. Set previous frame and continue if there is None
 
     # calculate difference and update previous frame
     diff_frame = cv2.absdiff(src1=previous_frame, src2=prepared_frame)
-    previous_frame = prepared_frame
+
 
     # 4. Dilute the image a bit to make differences more seeable; more suitable for contour detection
     kernel = np.ones((5, 5))
 
     diff_frame = cv2.dilate(diff_frame, kernel, 1)
 
-    # 5. Only take different areas that are different enough (>20 / 255)
-    thresh_frame = cv2.threshold(src=diff_frame, thresh=20, maxval=255, type=cv2.THRESH_BINARY)[0]
+    # # 5. Only take different areas that are different enough (>20 / 255)
+    # thresh_frame = cv2.threshold(src=diff_frame, thresh=20, maxval=255, type=cv2.THRESH_BINARY)[0]
+    th2 = cv2.adaptiveThreshold(diff_frame,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
+            cv2.THRESH_BINARY,11,2)
     # 6. Find and optionally draw contours
-    contours, _ = cv2.findContours(image=thresh_frame, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(image=th2, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
+    
     # Comment below to stop drawing contours
-    cv2.drawContours(image=img_rgb, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
-    if cv2.contourArea(contours) > 3:
-        # too small: skip!
-        print("motion deteced")
-        status = 'Occupied'
+    # cv2.drawContours(image=img_rgb, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+    for contour in contours:
+        if cv2.contourArea(contour) > 50000:
+            # too small: skip!
+            print("motion deteced")
+            status = 'Occupied'
     return status
 
 
@@ -144,7 +148,7 @@ def ChangeColours(previous_frame,prepared_frame,img,img_rgb, tableNumber):
     compare_stat = compare(img, "base_photo_"+ tableNumber +".png")
     decisionqueue.append(compare_stat)
     # decisionqueue.append(people1)
-
+    print ('Decision queue is' , decisionqueue)
     decision_status = decision(decisionqueue)
     objectcolours = colours(decision_status, tableNumber)
     sendingDict[tableNumber] = objectcolours
@@ -170,18 +174,20 @@ def callingfunctions(q, q2, url, tableNumber):
 
         prepared_frame = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
         prepared_frame = cv2.GaussianBlur(src=prepared_frame, ksize=(5, 5), sigmaX=0)
-        prepared_frame = cv2.Canny(prepared_frame, 10, 90)
+        # prepared_frame = cv2.Canny(prepared_frame, 10, 90)
 
         if (previous_frame is None):
             print ('previous_frame is None')
   # First frame; there is no previous one yet
             previous_frame = prepared_frame
+            continue
         
         checkQRtoRecalibrate(frame,tableNumber,url)
         # checkQR(frame,tableNumber)
         # FRAME = cv2.imdecode(imgnp2,-1) 
         # frame = rgb2gray(FRAME) 
         with lock:
+            
             hands = Gestures(frame, tableNumber)
             q.put(hands)
             colour = ChangeColours(previous_frame,prepared_frame,frame,img_rgb, tableNumber)
@@ -189,7 +195,7 @@ def callingfunctions(q, q2, url, tableNumber):
             q2.put(colour)    
             # QRcode = read_qr_code()
             # q3.put(QRcode)
-            
+        previous_frame = prepared_frame
 
 
 def list_to_dict(ListOfDict):

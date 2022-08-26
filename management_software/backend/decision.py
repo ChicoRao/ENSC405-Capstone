@@ -27,12 +27,12 @@
 
 def decision(decisionQueue):
     result= 'Available'
-    if decisionQueue[0] == 'Free':
+    if decisionQueue[0] == 'Free' and decisionQueue[1] == 'Free':
         if decisionQueue[2] == 'clean':  
           result = 'Available'
         elif decisionQueue[2] == 'dirty':
             result = 'Need Cleaning'
-    elif decisionQueue[0] or decisionQueue[1] == 'Occupied':    
+    elif decisionQueue[0] == 'Occupied' or decisionQueue[1] == 'Occupied':    
         result = "Occupied"
     # elif decisionQueue[0] or decision[2]== 'Occupied':    
     # result = "Occupied"
