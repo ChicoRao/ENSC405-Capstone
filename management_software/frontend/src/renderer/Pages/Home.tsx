@@ -213,7 +213,7 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
           <button
             id="trigger" 
             onClick={update} class="button">
-            Sync
+            Connect
           </button>
           &nbsp;&nbsp;&nbsp;
           <button

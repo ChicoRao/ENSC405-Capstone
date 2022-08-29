@@ -24,9 +24,8 @@ body{
     border: 2px solid black;
     border-radius: 20px;
     font-size: 15px;
-    opacity: 0.9;
-    background-color: #828a91;
-    
+    opacity: 0.9; 
+    background-color: #828a91 !important;   
 
 }
 .TableNumber {
