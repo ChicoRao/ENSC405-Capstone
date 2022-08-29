@@ -3,10 +3,16 @@
     /* or absolute */
     top: 40%;
     left: 55%;
-    border: 1px solid;
+    border: 1px solid rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
     padding: 10px;
     height: 150px;
     width: 200px;
+    opacity: 0.8;
+    font-weight: bold;
+    background-color: #828a91!important;
+    border: 2px solid black;
+
 }
 
 .saveWifiButtonDiv {
@@ -17,20 +23,13 @@
 }
 
 .saveWifiButton {
-    box-shadow: inset 0px 1px 0px 0px #dcecfb;
-    background: linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
-    background-color: #bddbfa;
-    border-radius: 6px;
-    border: 1px solid #84bbf3;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-family: Arial;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 6px 24px;
-    text-decoration: none;
-    text-shadow: 0px 1px 0px #528ecc;
+    background-color: #53575a !important;
+    color: rgb(255, 255, 255);
+    font-size: large;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 2px solid black;
+    
 }
 
 .updatebutton {

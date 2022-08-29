@@ -215,10 +215,11 @@ export default function Home({ update, tableInfo, tableAction, attention, resetA
             onClick={update} class="button">
             Sync
           </button>
+          &nbsp;&nbsp;&nbsp;
           <button
             id="trigger" 
             onClick={recalibrate} class="button">
-            Recalibrate
+            Recalibrate All
           </button>
         </div>
         

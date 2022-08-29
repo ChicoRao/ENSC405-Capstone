@@ -25,7 +25,7 @@ import {
   const items: MenuItem[] = [
     getItem(<Link to="/">Home</Link>, '1', <HomeOutlined />),
     getItem(<Link to="/menu">Menu</Link>, '2', <CoffeeOutlined />),
-    getItem(<Link to="/reservations">Reservations</Link>, '3', <BookOutlined />),
+    // getItem(<Link to="/reservations">Reservations</Link>, '3', <BookOutlined />),
     getItem(<Link to="/layouteditor">Layout Editor</Link>, '4', <FormOutlined />),
     // getItem("" , '5', null),
     // getItem("" , '6', null),

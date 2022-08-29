@@ -87,7 +87,7 @@ export default function App() {
 				<Routes>
 					<Route path="/" element={<Home update={update} tableInfo={tableInfo} tableAction={tableAction} attention={attention} resetActions={resetActions}/>} />
 					<Route path="/menu" element={<Menu />} />
-					<Route path="/reservations" element={<Reservations />} />
+					{/* <Route path="/reservations" element={<Reservations />} /> */}
 					<Route path="/layouteditor" element={<LayoutEditor />} />
                     <Route path="/settings" element={<Settings />} />
 				</Routes>

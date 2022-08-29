@@ -1,6 +1,7 @@
 #layout-tabs {
     padding: 11px 0;
-    border-bottom: 1px solid rgb(0, 0, 0, 0.3);
+    color:  #828a91!important;
+    /* color:  #828a91!important; */
     align-items: left;
 }
 
@@ -15,7 +16,8 @@
 #layout-tabs li.active-tab {
     border-color: rgb(252, 72, 18);
     /* color: rgb(252, 72, 18); */
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
     border-bottom: 3px solid;
     /* background-color: rgb(103, 181, 253); */
 
@@ -28,7 +30,7 @@
 }
 
 #layout-tabs .edit-tab:hover {
-    background-color: rgb(201, 201, 201);
+    background-color: rgb(255, 255, 255);
 }
 
 #layout-tabs .read-tab {
