@@ -3,6 +3,7 @@ import cv2
 import pandas as pd
 import pathlib
 from pyzbar.pyzbar import decode
+from kraken import binarization
 
 
     
@@ -16,13 +17,14 @@ def read_qr_code(img):
     Returns:
         qr (string): Value from QR code
     """
-    
+
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     # img = cv2.imread('frame.jpg')
     # print ("qr image read")
-    for barcode in decode (img):
+    bw_im = binarization.nlbin(img)
+    for barcode in decode (bw_im):
         print('QR code detected')
         # print (barcode.data.decode("utf-8"))
         return barcode.data.decode("utf-8")   #if QR_LocalHost.png is on the table and scanned, this will return "http://LocalHost"
