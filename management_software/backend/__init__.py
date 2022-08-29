@@ -1,0 +1,1 @@
+from keypoint_classifier import KeyPointClassifier

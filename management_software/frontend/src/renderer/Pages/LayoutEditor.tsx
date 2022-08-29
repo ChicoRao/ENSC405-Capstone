@@ -67,7 +67,7 @@ const symbolsList = [
     icon: tableLogo1
   },
   {
-    name: "circular_table",
+    name: "Circular Table",
     icon: circular_table
   },
 ]

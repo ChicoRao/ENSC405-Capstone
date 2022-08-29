@@ -4,7 +4,6 @@ import pandas as pd
 import pathlib
 from pyzbar.pyzbar import decode
 
-
     
 
 def read_qr_code(img):
@@ -16,7 +15,6 @@ def read_qr_code(img):
     Returns:
         qr (string): Value from QR code
     """
-    
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 

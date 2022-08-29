@@ -24,10 +24,10 @@ export default function Sidebar() {
             🍴 Menu
             <Link to="/menu" />
           </MenuItem>
-          <MenuItem>
+          {/* <MenuItem>
             📘 Reservations
             <Link to="/reservations" />
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem>
              🗺️ Layout Editor
             <Link to="/layouteditor" />
